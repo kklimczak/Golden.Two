@@ -41,16 +41,16 @@ public class Args {
 			System.out.println(liczba1 + liczba2);
 			break;
 		case "-":
-			System.out.println(liczba1 + liczba2);
+			System.out.println(liczba1 - liczba2);
 			break;
 		case "*":
-			System.out.println(liczba1 + liczba2);
+			System.out.println(liczba1 * liczba2);
 			break;
 		case "/":
-			System.out.println(liczba1 + liczba2);
+			System.out.println(liczba1 / liczba2);
 			break;
 		case "%":
-			System.out.println(liczba1 + liczba2);
+			System.out.println(liczba1 % liczba2);
 			break;
 		default:
 			System.out.println("Nie rozpoznano znaku!");
