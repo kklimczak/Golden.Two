@@ -67,7 +67,7 @@ double Funkcje::f(double x, int nrFunkcji)
     return 0;
 }
 
-double Funkcje::regulaFalsi(double wymagana_dokladnosc, unsigned int maks_iteracji, int wyborFunkcji, double a, double b, int& iter)
+double Funkcje::regulaFalsi(double wymagana_dokladnosc, unsigned int maks_iteracji, int wyborFunkcji, double a, double b, unsigned int& iter)
 {
 
     double x1, x2, fa, fb, f0;
@@ -108,11 +108,10 @@ double Funkcje::regulaFalsi(double wymagana_dokladnosc, unsigned int maks_iterac
 
 }
 
-double Funkcje::metodaBisekcji(double wymagana_dokladnosc, unsigned int maks_iteracji, int wyborFunkcji, double a, double b, int& iter)
+double Funkcje::metodaBisekcji(double wymagana_dokladnosc, unsigned int maks_iteracji, int wyborFunkcji, double a, double b, unsigned int& iter)
 {
-    double x1, x2, fa, f0;
+    double x2, fa, f0;
 
-      //x1 = a;
       x2 = b;
 
       fa = f(a, wyborFunkcji);
@@ -159,6 +158,9 @@ std::string Funkcje::wyswietlMiejscaZerowe(int nrFunkcji)
         return "-3.63318620";
     case 7:
         return "-9.86790999; 2.85791464";
+    default:
+        return 0;
 
     }
+
 }

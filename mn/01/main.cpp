@@ -15,7 +15,8 @@ using namespace std;
 int main() {
 
       double a0, b0, miejsce_zerowe_falsi, miejsce_zerowe_bisekcji;
-      int wyborFunkcji, wybor, czyPowtorzycProgram, iterf, iterb;
+      int wyborFunkcji, wybor, czyPowtorzycProgram;
+      unsigned iterf, iterb;
       bool bladZakresu;
 
 
