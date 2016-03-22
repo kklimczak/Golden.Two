@@ -2,17 +2,12 @@ import javax.swing.*;
 
 public class MyClass {
 
+	
+	
 	public static void wypelnijTrojkat(int[][] t, int nn){
-		if (nn == 1){
-			t[0][0] = 1;
-		}
+
 		
-		if (nn == 2 || nn > 2){
-			t[0][0] = 1;
-			t[1][0] = 1;
-			t[1][1] = 1;
-		}
-		for (int i = 2; i < nn; i++){
+		for (int i = 0; i < nn; i++){
 			for (int j = 0; j < i+1; j++){
 				if (j==0 || j == i ){
 					t[i][j] = 1;
@@ -34,19 +29,22 @@ public class MyClass {
 		}
 	}
 	
-	void public static main(String[] args) {
+    public static void main(String[] args) {
 		
 	String txt; //deklaracja zmiennej tekstowej
-	txt = JOptionPane.showInputDialog("Wprowadz liczbe calkowita");
+	txt = JOptionPane.showInputDialog("Podaj glebokosc trojkata");
 	
-	int	n = Integer.parseInt(txt); 
+	int	n = Integer.parseInt(txt);
+	int x = 0;
 	
-	int[][] tab = new int[n][n];
+	int[][] tab = new int[n][];
+	for (int i = 0; i < n; i++) {
+		  tab[i] = new int[++x];
+		}
 	
 	wypelnijTrojkat(tab,n);
 	
 	wyswietlTrojkat(tab,n);
-	
 
 	
 	}
