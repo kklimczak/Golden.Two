@@ -2,7 +2,15 @@ package com.goldentwo.data.Event;
 
 import java.util.Date;
 
-public class Event {
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(propOrder = {"id", "name", "description", "place", "date"})
+@XmlRootElement(name = "Event")
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+public class EventDto {
 	
 	private int id;
 	private String name;
@@ -10,15 +18,18 @@ public class Event {
 	private String place;
 	private Date date;
 	
-	public Event(String name, String description, String place, Date date) {
+	public EventDto() {};
+	
+	public EventDto(int id, String name, String description, String place, Date date) {
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.place = place;
 		this.date = date;
 	}
 	
-	public EventDto asDto() {
-		return new EventDto(id, name, description, place, date);
+	public Event asDefault() {
+		return new Event(name, description, place, date);
 	}
 
 	public int getId() {
@@ -60,6 +71,4 @@ public class Event {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
-	
 }
