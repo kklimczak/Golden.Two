@@ -7,11 +7,13 @@ public class Event {
 	private int id;
 	private String name;
 	private String description;
+	private String place;
 	private Date date;
 	
-	public Event(String name, String description, Date date) {
+	public Event(String name, String description, String place, Date date) {
 		this.name = name;
 		this.description = description;
+		this.place = place;
 		this.date = date;
 	}
 
@@ -37,6 +39,14 @@ public class Event {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getPlace() {
+		return place;
+	}
+
+	public void setPlace(String place) {
+		this.place = place;
 	}
 
 	public Date getDate() {
