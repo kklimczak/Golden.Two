@@ -1,0 +1,4 @@
+/.apt_generated/
+.project
+.settings/
+bin/
