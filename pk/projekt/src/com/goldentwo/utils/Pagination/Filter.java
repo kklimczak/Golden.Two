@@ -6,7 +6,6 @@ public class Filter {
 	private String value;
 	
 	public Filter(String field, String value) {
-		super();
 		this.field = field;
 		this.value = value;
 	}

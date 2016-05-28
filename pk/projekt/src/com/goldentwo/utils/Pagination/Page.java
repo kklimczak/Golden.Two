@@ -12,7 +12,6 @@ public class Page <T> {
 	private Filter filter;
 
 	public Page(List<T> content, int totalElements, int totalPages, int size, int currentPage, Sort sort, Filter filter) {
-		super();
 		this.content = content;
 		this.totalElements = totalElements;
 		this.totalPages = totalPages;

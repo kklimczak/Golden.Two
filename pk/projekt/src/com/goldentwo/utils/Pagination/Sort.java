@@ -5,7 +5,6 @@ public class Sort {
 	private Direction direction;
 	
 	public Sort(String field, Direction direction) {
-		super();
 		this.field = field;
 		this.direction = direction;
 	}

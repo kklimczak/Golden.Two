@@ -14,6 +14,10 @@ import javax.xml.bind.Unmarshaller;
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.data.Event.EventDto;
 import com.goldentwo.data.Event.EventsDto;
+import com.goldentwo.utils.Pagination.Direction;
+import com.goldentwo.utils.Pagination.Filter;
+import com.goldentwo.utils.Pagination.Page;
+import com.goldentwo.utils.Pagination.Sort;
 
 public class DataServiceImpl implements DataService {
 
@@ -21,6 +25,15 @@ public class DataServiceImpl implements DataService {
 	public List<Event> getAllEvents() {
 		List<Event> events = new ArrayList<>();
 		return events;
+	}
+	
+	@Override
+	public Page<Event> getSortedAndFilteredEvents(Sort sort, Filter filter) {
+		if(sort == null) {
+			sort = new Sort("id", Direction.ASC);
+		}
+		//method to repository
+		return null;
 	}
 
 	@Override
