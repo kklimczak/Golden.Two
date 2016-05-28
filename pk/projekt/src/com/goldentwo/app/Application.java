@@ -1,13 +1,16 @@
 package com.goldentwo.app;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.goldentwo.data.Event.Event;
+import com.goldentwo.data.database.DBConnection;
 import com.goldentwo.service.DataServiceImpl;
 
 public class Application {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		System.out.println("Work!");
 		
 		DataServiceImpl dataServiceImpl = new DataServiceImpl();
@@ -16,9 +19,16 @@ public class Application {
 		
 		dataServiceImpl.allEventsFromXml();
 		
-		dataServiceImpl.oneEventToXml(new Event("String", "String", "Place", new Date()));
+		dataServiceImpl.oneEventToXml(new Event(0, "String", "String", "Place", new Date()));
 		
 		dataServiceImpl.oneEventFromXml("0.String.xml");
+		
+		DBConnection dbc = new DBConnection();
+		ArrayList<Event> list = dbc.getAllEvents();
+		
+		for (Event e : list){
+			System.out.println(e.getId() + " " + e.getDescription() + " " + e.getDate());
+		}
 
 	}
 

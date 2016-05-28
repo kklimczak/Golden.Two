@@ -10,11 +10,12 @@ public class Event {
 	private String place;
 	private Date date;
 	
-	public Event(String name, String description, String place, Date date) {
+	public Event(int id, String name, String description, String place, Date date) {
 		this.name = name;
 		this.description = description;
 		this.place = place;
 		this.date = date;
+		this.id = id;
 	}
 	
 	public EventDto asDto() {

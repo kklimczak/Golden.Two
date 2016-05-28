@@ -29,7 +29,7 @@ public class EventDto {
 	}
 	
 	public Event asDefault() {
-		return new Event(name, description, place, date);
+		return new Event(id, name, description, place, date);
 	}
 
 	public int getId() {
