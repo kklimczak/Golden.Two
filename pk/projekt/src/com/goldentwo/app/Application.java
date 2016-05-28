@@ -7,6 +7,7 @@ import java.util.Date;
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.data.database.DBConnection;
 import com.goldentwo.service.DataServiceImpl;
+import com.goldentwo.view.UserInterface;
 
 public class Application {
 
@@ -29,6 +30,9 @@ public class Application {
 		for (Event e : list){
 			System.out.println(e.getId() + " " + e.getDescription() + " " + e.getDate());
 		}
+		
+		UserInterface ui = new UserInterface();
+		ui.setVisible(true);
 
 	}
 
