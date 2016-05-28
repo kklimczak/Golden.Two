@@ -13,18 +13,23 @@ import javax.xml.bind.Unmarshaller;
 
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.data.Event.EventDto;
+import com.goldentwo.data.Event.EventRepository;
 import com.goldentwo.data.Event.EventsDto;
+import com.goldentwo.data.database.DBConnection;
 import com.goldentwo.utils.Pagination.Direction;
 import com.goldentwo.utils.Pagination.Filter;
 import com.goldentwo.utils.Pagination.Page;
 import com.goldentwo.utils.Pagination.Sort;
 
 public class DataServiceImpl implements DataService {
+	
+	private DBConnection dbc = new DBConnection();
+	
+	private EventRepository eventRepository = new EventRepository(dbc);
 
 	@Override
 	public List<Event> getAllEvents() {
-		List<Event> events = new ArrayList<>();
-		return events;
+		return eventRepository.findAll();
 	}
 	
 	@Override
@@ -49,28 +54,28 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public Event getEventById() {
-		return null;
+	public Event getEventById(int id) {
+		return eventRepository.findOne(id);
 	}
 
 	@Override
 	public void addEvent(Event event) {
-
+		eventRepository.addOne(event);
 	}
 
 	@Override
 	public void updateEvent(Event event) {
-
+		eventRepository.updateOne(event);
 	}
 
 	@Override
 	public void deleteEvent(int id) {
-
+		eventRepository.deleteOne(id);
 	}
 
 	@Override
 	public void deleteEventBeforeDate(Date date) {
-
+		eventRepository.deleteEventsBeforeDate(new java.sql.Date(date.getTime()));
 	}
 	
 	@Override
