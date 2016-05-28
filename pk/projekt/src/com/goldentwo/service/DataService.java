@@ -17,4 +17,6 @@ public interface DataService {
 	void deleteEventBeforeDate(Date date);
 	void allEventsToXml();
 	List<Event> allEventsFromXml();
+	void oneEventToXml(Event event);
+	Event oneEventFromXml(String pathname);
 }

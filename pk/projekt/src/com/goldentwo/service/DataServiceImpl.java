@@ -92,5 +92,34 @@ public class DataServiceImpl implements DataService {
 			return null;
 		}
 	}
+	
+	@Override
+	public void oneEventToXml(Event event) {
+		try {
+			JAXBContext context = JAXBContext.newInstance(event.asDto().getClass());
+			Marshaller marshaller = context.createMarshaller();
+			
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(event.asDto(), new File(event.getId()+"."+event.getName()+".xml"));
+		} catch (JAXBException jaxbException) {
+			jaxbException.printStackTrace();
+		}
+	}
+	
+	@Override
+	public Event oneEventFromXml(String pathname) {
+		EventDto event = new EventDto();
+		try {
+			File file = new File(pathname);
+			JAXBContext context = JAXBContext.newInstance(event.getClass());
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			
+			event = (EventDto) unmarshaller.unmarshal(file);
+			return event.asDefault();
+		} catch (JAXBException jaxbException) {
+			jaxbException.printStackTrace();
+			return null;
+		}
+	}
 
 }

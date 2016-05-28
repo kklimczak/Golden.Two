@@ -1,5 +1,8 @@
 package com.goldentwo.app;
 
+import java.util.Date;
+
+import com.goldentwo.data.Event.Event;
 import com.goldentwo.service.DataServiceImpl;
 
 public class Application {
@@ -12,6 +15,10 @@ public class Application {
 		dataServiceImpl.allEventsToXml();
 		
 		dataServiceImpl.allEventsFromXml();
+		
+		dataServiceImpl.oneEventToXml(new Event("String", "String", "Place", new Date()));
+		
+		dataServiceImpl.oneEventFromXml("0.String.xml");
 
 	}
 
