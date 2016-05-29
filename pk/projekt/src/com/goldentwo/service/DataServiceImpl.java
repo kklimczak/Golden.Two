@@ -51,12 +51,6 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public List<Event> getEventsByName(String name) {
-		List<Event> events = new ArrayList<>();
-		return events;
-	}
-
-	@Override
 	public Event getEventById(int id) {
 		return eventRepository.findOne(id);
 	}
