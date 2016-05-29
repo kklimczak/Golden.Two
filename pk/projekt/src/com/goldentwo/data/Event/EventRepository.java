@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.goldentwo.data.database.DBConnection;
+import com.goldentwo.utils.Logger.Logger;
 import com.goldentwo.utils.Pagination.Direction;
 import com.goldentwo.utils.Pagination.Filter;
 import com.goldentwo.utils.Pagination.Page;
@@ -15,6 +16,8 @@ import com.goldentwo.utils.Pagination.Sort;
 public class EventRepository {
 	
 	private DBConnection db;
+	
+	private Logger logger = new Logger(EventRepository.class);
 	
 	public EventRepository(DBConnection dbConnection) {
 		this.db = dbConnection;
@@ -32,6 +35,7 @@ public class EventRepository {
 		        Date date = resultSet.getDate("date");
 		        events.add(new Event(id, name, description, place, date));
 			}
+			logger.info("findAll() in month: " + month);
 			return events;
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -47,6 +51,7 @@ public class EventRepository {
 		try {
 			ResultSet resultSet = db.getStmt().executeQuery(query);
 			resultSet.next();
+			logger.info("countAllEvent() called");
 			return resultSet.getInt(1);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -77,6 +82,7 @@ public class EventRepository {
 			}
 			int amountOfEvents = countAllEvents(filter);
 			Page<Event> data = new Page<Event>(events, amountOfEvents, (int)Math.ceil(amountOfEvents/10.0), 10, page, sort, filter);
+			logger.info("findEventWithSortAndFilterParams() called and return page: " + page + " with sort: " + sort + " and filter: " + filter);
 			return data;
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -96,6 +102,7 @@ public class EventRepository {
 		        Date date = resultSet.getDate("date");
 		        events.add(new Event(id, name, description, place, date));
 			}
+			logger.info("findAll() called");
 			return events;
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -115,6 +122,7 @@ public class EventRepository {
 		        Date date = resultSet.getDate("date");
 		        events.add(new Event(id, name, description, place, date));
 			}
+			logger.info("findByDateRange() called with dates: " + from + " - " + to);
 			return events;
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -132,6 +140,7 @@ public class EventRepository {
 		        String place = resultSet.getString("place");
 		        Date date = resultSet.getDate("date");
 		        System.out.println(eventId+name+description);
+		        logger.info("findOne() called with id: " + id);
 		        return new Event(eventId, name, description, place, date);
 			}
 			return null;
@@ -144,6 +153,7 @@ public class EventRepository {
 	public void addOne(Event event) {
 		try {
 			db.getStmt().executeUpdate("INSERT INTO `events` VALUES (NULL, '"+event.getName()+"','"+event.getDescription()+"','"+event.getPlace()+"','"+new java.sql.Date(event.getDate().getTime())+"')");
+			logger.info("addOne() called with name: " + event.getName());
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}
@@ -152,6 +162,7 @@ public class EventRepository {
 	public void updateOne(Event event) {
 		try {
 			db.getStmt().executeUpdate("UPDATE `events` SET  name='"+event.getName()+"',description='"+event.getDescription()+"',place='"+event.getPlace()+"',date='"+new java.sql.Date(event.getDate().getTime())+"' WHERE id="+event.getId());
+			logger.info("updateOne() called with id: " + event.getId());
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}
@@ -160,6 +171,7 @@ public class EventRepository {
 	public void deleteOne(int id) {
 		try {
 			db.getStmt().executeUpdate("DELETE FROM `events` WHERE id = " + id);
+			logger.info("deleteOne() called with id: " + id);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		}
@@ -168,6 +180,7 @@ public class EventRepository {
 	public void deleteEventsBeforeDate(Date date) {
 		try {
 			db.getStmt().executeUpdate("DELETE FROM `events` WHERE date < '" + date + "'");
+			logger.info("deleteEventsBeforeDate() called with date: " + date);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		}

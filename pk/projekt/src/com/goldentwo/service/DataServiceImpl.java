@@ -16,6 +16,7 @@ import com.goldentwo.data.Event.EventDto;
 import com.goldentwo.data.Event.EventRepository;
 import com.goldentwo.data.Event.EventsDto;
 import com.goldentwo.data.database.DBConnection;
+import com.goldentwo.utils.Logger.Logger;
 import com.goldentwo.utils.Pagination.Direction;
 import com.goldentwo.utils.Pagination.Filter;
 import com.goldentwo.utils.Pagination.Page;
@@ -26,14 +27,18 @@ public class DataServiceImpl implements DataService {
 	private DBConnection dbc = new DBConnection();
 	
 	private EventRepository eventRepository = new EventRepository(dbc);
+	
+	private Logger logger = new Logger(DataServiceImpl.class);
 
 	@Override
 	public List<Event> getAllEvents(int month) {
+		logger.info("getAllEvents in month: " + month);
 		return eventRepository.findAll(month);
 	}
 
 	@Override
 	public List<Event> getAllEvents() {
+		logger.info("getAllEvents() called");
 		return eventRepository.findAll();
 	}
 	
@@ -42,36 +47,43 @@ public class DataServiceImpl implements DataService {
 		if(sort == null) {
 			sort = new Sort("id", Direction.ASC);
 		}
+		logger.info("getSortedAndFilteredEvents() called");
 		return eventRepository.findEventWithSortAndFilterParams(sort, filter, page);
 	}
 
 	@Override
 	public List<Event> getAllEventsBetweenDates(Date from, Date to) {
+		logger.info("getAllEventsBetweenDates() called");
 		return eventRepository.findByDateRange(new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()));
 	}
 
 	@Override
 	public Event getEventById(int id) {
+		logger.info("getEventById() called");
 		return eventRepository.findOne(id);
 	}
 
 	@Override
 	public void addEvent(Event event) {
+		logger.info("addEvent() called");
 		eventRepository.addOne(event);
 	}
 
 	@Override
 	public void updateEvent(Event event) {
+		logger.info("updateEvent() called");
 		eventRepository.updateOne(event);
 	}
 
 	@Override
 	public void deleteEvent(int id) {
+		logger.info("deleteEvent() called");
 		eventRepository.deleteOne(id);
 	}
 
 	@Override
 	public void deleteEventBeforeDate(Date date) {
+		logger.info("deleteEventsBeforeDate() called");
 		eventRepository.deleteEventsBeforeDate(new java.sql.Date(date.getTime()));
 	}
 	
@@ -79,15 +91,14 @@ public class DataServiceImpl implements DataService {
 	public void allEventsToXml() {
 		EventsDto eventsDto = new EventsDto(new ArrayList<>());
 		
-		for(int i = 0; i < 10; i++) {
-			eventsDto.getEventDtos().add(new EventDto(i, "name", "desc", "place", new Date()));
-		}
+		eventsDto.setEventDtos(getAllEvents().stream().map(Event::asDto).collect(Collectors.toList()));
 		try {
 			JAXBContext context = JAXBContext.newInstance(eventsDto.getClass());
 			Marshaller marshaller = context.createMarshaller();
 			
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(eventsDto, new File ("events.xml"));
+			logger.info("Export all events to xml file: events.xml with " + eventsDto.getEventDtos().size() + " elements" );
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
 		}
@@ -101,6 +112,7 @@ public class DataServiceImpl implements DataService {
 			JAXBContext context = JAXBContext.newInstance(eventsDto.getClass());
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			eventsDto = (EventsDto) unmarshaller.unmarshal(file);
+			logger.info("Import all events from file: events.xml with " + eventsDto.getEventDtos().size() + " elements");
 			return eventsDto.getEventDtos().stream().map(EventDto::asDefault).collect(Collectors.toList());
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
@@ -116,6 +128,7 @@ public class DataServiceImpl implements DataService {
 			
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(event.asDto(), new File(event.getId()+"."+event.getName()+".xml"));
+			logger.info("Export event with name: " + event.getName() + " and id: " + event.getId() + " to " + event.getId()+"."+event.getName()+".xml");
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
 		}
@@ -130,6 +143,7 @@ public class DataServiceImpl implements DataService {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			
 			event = (EventDto) unmarshaller.unmarshal(file);
+			logger.info("Import event from: " + pathname + " as event with name: " + event.getName() + " and id: " + event.getId());
 			return event.asDefault();
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
