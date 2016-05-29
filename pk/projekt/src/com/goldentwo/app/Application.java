@@ -12,11 +12,18 @@ import com.goldentwo.utils.Pagination.Sort;
 import com.goldentwo.view.UserInterface;
 
 public class Application {
+	
+	public static String profile;
 
 	public static void main(String[] args) {
+		
+		profile = args[0];
+		
 		Logger logger = new Logger(Application.class);
 		
 		logger.info("Aplication started!");
+		
+		logger.info("Load profile: " + args[0]);
 		
 		DataServiceImpl dataServiceImpl = new DataServiceImpl();
 		
