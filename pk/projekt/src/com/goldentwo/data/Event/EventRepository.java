@@ -56,7 +56,7 @@ public class EventRepository {
 	
 	public void addOne(Event event) {
 		try {
-			db.getStmt().executeUpdate("INSERT INTO `events` VALUES ("+event.getId()+", '"+event.getName()+"','"+event.getDescription()+"','"+event.getPlace()+"','"+new java.sql.Date(event.getDate().getTime())+"')");
+			db.getStmt().executeUpdate("INSERT INTO `events` VALUES (NULL, '"+event.getName()+"','"+event.getDescription()+"','"+event.getPlace()+"','"+new java.sql.Date(event.getDate().getTime())+"')");
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}

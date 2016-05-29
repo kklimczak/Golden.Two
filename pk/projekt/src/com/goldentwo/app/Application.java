@@ -21,16 +21,16 @@ public class Application {
 		
 		dataServiceImpl.oneEventFromXml("0.String.xml");
 		
-		dataServiceImpl.addEvent(new Event(1, "String", "String", "Place", new Date()));
+		//dataServiceImpl.addEvent(new Event(1, "String", "String", "Place", new Date()));
 		
 		dataServiceImpl.updateEvent(new Event(1, "String [edit]", "String", "Place", new Date()));
 		
 		//dataServiceImpl.deleteEvent(1);
 		
-		dataServiceImpl.deleteEventBeforeDate(new Date());
+		//dataServiceImpl.deleteEventBeforeDate(new Date());
 		
 		for(Event event: dataServiceImpl.getAllEvents()) {
-			System.out.println(event.getId() + ": " + event.getDate());
+			System.out.println("[" + event.getId() + "] "+ event.getName() + ": " + event.getDate());
 		}
 		
 		UserInterface ui = new UserInterface();
