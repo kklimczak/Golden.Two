@@ -35,6 +35,25 @@ public class EventRepository {
 		}
 	}
 	
+	public List<Event> findByDateRange(Date from, Date to) {
+		try {
+			List<Event> events = new ArrayList<>();
+			ResultSet resultSet = db.getStmt().executeQuery("Select * FROM events WHERE date >= '" + from + "' AND date <= '" + to + "'");
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+		        String name = resultSet.getString("name");
+		        String description = resultSet.getString("description");
+		        String place = resultSet.getString("place");
+		        Date date = resultSet.getDate("date");
+		        events.add(new Event(id, name, description, place, date));
+			}
+			return events;
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
 	public Event findOne(int id) {
 		try {
 			ResultSet resultSet = db.getStmt().executeQuery("SELECT * FROM events WHERE id = "+id);
@@ -78,7 +97,7 @@ public class EventRepository {
 		}
 	}
 	
-	public void deleteEventsBeforeDate(java.sql.Date date) {
+	public void deleteEventsBeforeDate(Date date) {
 		try {
 			db.getStmt().executeUpdate("DELETE FROM `events` WHERE date < '" + date + "'");
 		} catch (SQLException exception) {

@@ -43,8 +43,7 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public List<Event> getAllEventsBetweenDates(Date from, Date to) {
-		List<Event> events = new ArrayList<>();
-		return events;
+		return eventRepository.findByDateRange(new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()));
 	}
 
 	@Override
