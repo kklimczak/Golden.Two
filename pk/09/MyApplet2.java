@@ -1,3 +1,4 @@
+
 import java.applet.Applet;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
@@ -63,14 +64,30 @@ public class MyApplet2 extends Applet implements ItemListener  {
     	cb3 = new Checkbox("30pt", cbg1, false);
     	cb4 = new Checkbox("40pt", cbg1, false);
     	
-    	cb1.addItemListener(new AnonymousHandler(){
+    	cb1.addItemListener(new ItemListener(){
     		public void itemStateChanged(ItemEvent e){
-    				fontSize = 10;
+    			fontSize = 10;
+    			repaint();
     		}
     	});
-    	cb2.addItemListener(this);
-    	cb3.addItemListener(this);
-    	cb4.addItemListener(this);
+    	cb2.addItemListener(new ItemListener(){
+    		public void itemStateChanged(ItemEvent e){
+				fontSize = 20;
+				repaint();
+		}
+    	});
+    	cb3.addItemListener(new ItemListener(){
+    		public void itemStateChanged(ItemEvent e){
+				fontSize = 30;
+				repaint();
+		}
+    	});
+    	cb4.addItemListener(new ItemListener(){
+    		public void itemStateChanged(ItemEvent e){
+				fontSize = 40;
+				repaint();
+		}
+    	});
     	
     	add(cb1);
     	add(cb2);
@@ -108,18 +125,6 @@ public class MyApplet2 extends Applet implements ItemListener  {
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		
-		if(e.getItemSelectable() == cb2){
-			fontSize = 20;
-		}
-		
-		if(e.getItemSelectable() == cb3){
-			fontSize = 30;
-		}
-		
-		if(e.getItemSelectable() == cb4){
-			fontSize = 40;
-		}
-		
 		if(e.getItemSelectable() == cb11){
 			isBold = !isBold;
 		}
@@ -150,10 +155,5 @@ public class MyApplet2 extends Applet implements ItemListener  {
 		
 	}
 	
-	public class AnonymousHandler implements ItemListener{
-
-		@Override
-		public void itemStateChanged(ItemEvent e) {}
-	}
 	
 }

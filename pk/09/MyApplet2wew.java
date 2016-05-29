@@ -1,3 +1,4 @@
+
 import java.applet.Applet;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
@@ -17,7 +18,7 @@ public class MyApplet2wew extends Applet {
     Color fontColor;
 
 	String fontName;
-	int fontSize;
+	protected int fontSize;
 	boolean isItalic = false,
 			isBold = false;
 	
@@ -63,10 +64,10 @@ public class MyApplet2wew extends Applet {
     	cb3 = new Checkbox("30pt", cbg1, false);
     	cb4 = new Checkbox("40pt", cbg1, false);
     	
-    	cb1.addItemListener(new MyHandler());
-    	cb2.addItemListener(new MyHandler());
-    	cb3.addItemListener(new MyHandler());
-    	cb4.addItemListener(new MyHandler());
+    	cb1.addItemListener(new ExtAdaptClass());
+    	cb2.addItemListener(new ExtAdaptClass());
+    	cb3.addItemListener(new ExtAdaptClass());
+    	cb4.addItemListener(new ExtAdaptClass());
     	
     	add(cb1);
     	add(cb2);
@@ -104,23 +105,7 @@ public class MyApplet2wew extends Applet {
     public class MyHandler implements ItemListener{
     	
     	@Override
-    	public void itemStateChanged(ItemEvent e) {
-    		if(e.getItemSelectable() == cb1){
-    			fontSize = 10;
-    		}
-    		
-    		if(e.getItemSelectable() == cb2){
-    			fontSize = 20;
-    		}
-    		
-    		if(e.getItemSelectable() == cb3){
-    			fontSize = 30;
-    		}
-    		
-    		if(e.getItemSelectable() == cb4){
-    			fontSize = 40;
-    		}
-    		
+    	public void itemStateChanged(ItemEvent e) {    		
     		if(e.getItemSelectable() == cb11){
     			isBold = !isBold;
     		}
@@ -149,6 +134,32 @@ public class MyApplet2wew extends Applet {
     		
     		repaint();
     		
+    	}
+    }
+    
+    public class ExtAdaptClass extends AdaptClass {
+
+    	@Override
+    	public void itemStateChanged(ItemEvent e) {
+    		if(e.getItemSelectable() == cb1){
+    			fontSize = 10;
+    			repaint();
+    		}
+    		
+    		if(e.getItemSelectable() == cb2){
+    			fontSize = 20;
+    			repaint();
+    		}
+    		
+    		if(e.getItemSelectable() == cb3){
+    			fontSize = 30;
+    			repaint();
+    		}
+    		
+    		if(e.getItemSelectable() == cb4){
+    			fontSize = 40;
+    			repaint();
+    		}
     	}
     }
 
