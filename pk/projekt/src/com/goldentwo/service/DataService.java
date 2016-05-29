@@ -14,6 +14,7 @@ public interface DataService {
 	Page<Event> getSortedAndFilteredEvents(Sort sort, Filter filter);
 	List<Event> getAllEventsBetweenDates(Date from, Date to);
 	List<Event> getEventsByName(String name);
+	List<Event> getAllEvents(int month);
 	Event getEventById(int id);
 	void addEvent(Event event);
 	void updateEvent(Event event);

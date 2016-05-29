@@ -28,6 +28,12 @@ public class DataServiceImpl implements DataService {
 	private EventRepository eventRepository = new EventRepository(dbc);
 
 	@Override
+	public List<Event> getAllEvents(int month) {
+		return eventRepository.findAll(month);
+	}
+
+	
+	@Override
 	public List<Event> getAllEvents() {
 		return eventRepository.findAll();
 	}

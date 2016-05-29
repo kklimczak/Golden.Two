@@ -1,12 +1,17 @@
 package com.goldentwo.view;
 
+import java.awt.Button;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.spi.CalendarDataProvider;
 
 import javax.swing.JButton;
@@ -22,45 +27,85 @@ import com.goldentwo.service.DataServiceImpl;
 @SuppressWarnings("serial")
 public class UserInterface extends JFrame implements ActionListener{
 
-	int firstDayOfMonth = 3, lastDayOfMonth = 4;
-	int actualMonth = 5, actualYear = 2016;
+	private DataServiceImpl dataServiceImpl;
+	
+	private Calendar calendar;
+	int actualMonth, actualYear, firstDayOfMonth;
+	int[] daysOfMonths = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	
 	private JLabel monthAndYear;
+	private JLabel monLab, tueLab, wedLab, thuLab, friLab, sunLab, satLab;
 	private JButton day1,  day2,  day3,  day4,  day5,  day6,  day7,
 					day8,  day9,  day10, day11, day12, day13, day14,
 					day15, day16, day17, day18, day19, day20, day21,
 					day22, day23, day24, day25, day26, day27, day28,
-					day29, day30, day31, day32, day33, day34, day35;
-	private ArrayList<JButton> dayList;
+					day29, day30, day31, day32, day33, day34, day35,
+					day36, day37, day38, day39, day40, day41, day42; 
+	private ArrayList<JButton> buttonDayList;
 	private JButton calendarButton, listButton, alarmButton, addButton, deleteButton;
 	private JButton previousMonthButton, nextMonthButton;
 	private JSeparator separatorH, separatorV; 
 	
-	public UserInterface() {
-		dayList = new ArrayList<>();
+	@SuppressWarnings("deprecation")
+	public UserInterface(DataServiceImpl dataServiceImpl) {
+		this.dataServiceImpl = dataServiceImpl;
+		calendar = new GregorianCalendar();
+		actualMonth = calendar.getTime().getMonth();
+		actualYear = calendar.getTime().getYear() + 1900;
+		buttonDayList = new ArrayList<>();
 		init();
 		setLayout(null);
     }
 	
     private void init(){
 	    setTitle("Przykladowe okno");
-	    setSize(850, 600);
+	    setSize(850, 655);
 	    setLocationRelativeTo(null);
 	        
 	    monthAndYear = new JLabel();
-	    monthAndYear.setBounds(380, 20, 250, 50);
+	    monthAndYear.setBounds(400, 20, 280, 50);
 	    monthAndYear.setFont(new Font("Arial", 1, 30));
         add(monthAndYear);
         
         separatorH = new JSeparator(SwingConstants.HORIZONTAL);
-        separatorH.setBounds(200, 80, 590, 5);
+        separatorH.setBounds(200, 80, 630, 5);
         add(separatorH);
         
         separatorV = new JSeparator(SwingConstants.VERTICAL);
-        separatorV.setBounds(200, 5, 5, 540);
+        separatorV.setBounds(200, 5, 5, 640);
         add(separatorV);
         
+        monLab = new JLabel("Pon"); tueLab = new JLabel("Wto"); wedLab = new JLabel("Śro"); 
+        thuLab = new JLabel("Czw"); friLab = new JLabel("Pią"); 
+        satLab = new JLabel("Sob"); sunLab = new JLabel("Nie");
+        
+        monLab.setBounds(265, 90, 50, 50);
+        tueLab.setBounds(345, 90, 50, 50);
+        wedLab.setBounds(425, 90, 50, 50);
+        thuLab.setBounds(505, 90, 50, 50);
+        friLab.setBounds(585, 90, 50, 50);
+        satLab.setBounds(665, 90, 50, 50);
+        sunLab.setBounds(745, 90, 50, 50);
+        
+        monLab.setFont(new Font("Arial", Font.ITALIC, 25));
+        tueLab.setFont(new Font("Arial", Font.ITALIC, 25));
+        wedLab.setFont(new Font("Arial", Font.ITALIC, 25));
+        thuLab.setFont(new Font("Arial", Font.ITALIC, 25));
+        friLab.setFont(new Font("Arial", Font.ITALIC, 25));
+        satLab.setFont(new Font("Arial", Font.ITALIC, 25));
+        sunLab.setFont(new Font("Arial", Font.ITALIC, 25));
+        
+        add(monLab);
+        add(tueLab);
+        add(wedLab);
+        add(thuLab);
+        add(friLab);
+        add(satLab);
+        add(sunLab);
+        
+	setDefaultCloseOperation(EXIT_ON_CLOSE);
         paint();
+        setEventsIntoCalendar();
     }
     
     private void paint(){
@@ -70,8 +115,7 @@ public class UserInterface extends JFrame implements ActionListener{
         generateMonthsButtons();
         fillDayButtons();
     }
-    
-    
+ 
     private void setMonthAndYear(){
     	
        	if(actualMonth == -1){
@@ -127,8 +171,8 @@ public class UserInterface extends JFrame implements ActionListener{
 		previousMonthButton = new JButton("<");
 		nextMonthButton = new JButton(">");
 		
-		previousMonthButton.setBounds(225, 140, 20, 395);
-		nextMonthButton.setBounds(810, 140, 20, 395);
+		previousMonthButton.setBounds(225, 140, 20, 475);
+		nextMonthButton.setBounds(810, 140, 20, 475);
 		
 		previousMonthButton.addActionListener(this);
 		nextMonthButton.addActionListener(this);	
@@ -143,11 +187,11 @@ public class UserInterface extends JFrame implements ActionListener{
     	addButton = new JButton("ADD");
     	deleteButton = new JButton("DELETE");
     	
-    	calendarButton.setBounds(20, 40, 160, 60);
-    	listButton.setBounds(20, 140, 160, 60);
-    	alarmButton.setBounds(20, 240, 160, 60);
-    	addButton.setBounds(20, 340, 160, 60);
-    	deleteButton.setBounds(20, 440, 160, 60);
+    	calendarButton.setBounds(20, 140, 160, 60);
+    	listButton.setBounds(20, 230, 160, 60);
+    	alarmButton.setBounds(20, 330, 160, 60);
+    	addButton.setBounds(20, 480, 160, 60);
+    	deleteButton.setBounds(20, 555, 160, 60);
     	
     	calendarButton.addActionListener(this);
     	listButton.addActionListener(this);
@@ -162,45 +206,53 @@ public class UserInterface extends JFrame implements ActionListener{
     }
     
     private void generateDayButtons(){
-    	day1 = new JButton("1"); dayList.add(day1);
-    	day2 = new JButton("2"); dayList.add(day2);
-    	day3 = new JButton("3"); dayList.add(day3);
-    	day4 = new JButton("4"); dayList.add(day4);
-    	day5 = new JButton("5"); dayList.add(day5);
-    	day6 = new JButton("6"); dayList.add(day6);
-    	day7 = new JButton("7"); dayList.add(day7);
+    	day1 = new JButton("1"); buttonDayList.add(day1);
+    	day2 = new JButton("2"); buttonDayList.add(day2);
+    	day3 = new JButton("3"); buttonDayList.add(day3);
+    	day4 = new JButton("4"); buttonDayList.add(day4);
+    	day5 = new JButton("5"); buttonDayList.add(day5);
+    	day6 = new JButton("6"); buttonDayList.add(day6);
+    	day7 = new JButton("7"); buttonDayList.add(day7);
     	
-    	day8 = new JButton("1"); dayList.add(day8);
-    	day9 = new JButton("2"); dayList.add(day9);
-    	day10 = new JButton("3"); dayList.add(day10);
-    	day11 = new JButton("4"); dayList.add(day11);
-    	day12 = new JButton("5"); dayList.add(day12);
-    	day13 = new JButton("6"); dayList.add(day13);
-    	day14 = new JButton("7"); dayList.add(day14);
+    	day8 = new JButton("1"); buttonDayList.add(day8);
+    	day9 = new JButton("2"); buttonDayList.add(day9);
+    	day10 = new JButton("3"); buttonDayList.add(day10);
+    	day11 = new JButton("4"); buttonDayList.add(day11);
+    	day12 = new JButton("5"); buttonDayList.add(day12);
+    	day13 = new JButton("6"); buttonDayList.add(day13);
+    	day14 = new JButton("7"); buttonDayList.add(day14);
     	
-    	day15 = new JButton("1"); dayList.add(day15);
-    	day16 = new JButton("2"); dayList.add(day16);
-    	day17 = new JButton("3"); dayList.add(day17);
-    	day18 = new JButton("4"); dayList.add(day18);
-    	day19 = new JButton("5"); dayList.add(day19);
-    	day20 = new JButton("6"); dayList.add(day20);
-    	day21 = new JButton("7"); dayList.add(day21);
+    	day15 = new JButton("1"); buttonDayList.add(day15);
+    	day16 = new JButton("2"); buttonDayList.add(day16);
+    	day17 = new JButton("3"); buttonDayList.add(day17);
+    	day18 = new JButton("4"); buttonDayList.add(day18);
+    	day19 = new JButton("5"); buttonDayList.add(day19);
+    	day20 = new JButton("6"); buttonDayList.add(day20);
+    	day21 = new JButton("7"); buttonDayList.add(day21);
      	
-    	day22 = new JButton("1"); dayList.add(day22);
-    	day23 = new JButton("2"); dayList.add(day23);
-    	day24 = new JButton("3"); dayList.add(day24);
-    	day25 = new JButton("4"); dayList.add(day25);
-    	day26 = new JButton("5"); dayList.add(day26);
-    	day27 = new JButton("6"); dayList.add(day27);
-    	day28 = new JButton("7"); dayList.add(day28);
+    	day22 = new JButton("1"); buttonDayList.add(day22);
+    	day23 = new JButton("2"); buttonDayList.add(day23);
+    	day24 = new JButton("3"); buttonDayList.add(day24);
+    	day25 = new JButton("4"); buttonDayList.add(day25);
+    	day26 = new JButton("5"); buttonDayList.add(day26);
+    	day27 = new JButton("6"); buttonDayList.add(day27);
+    	day28 = new JButton("7"); buttonDayList.add(day28);
     
-    	day29 = new JButton("1"); dayList.add(day29);
-    	day30 = new JButton("2"); dayList.add(day30);
-    	day31 = new JButton("3"); dayList.add(day31);
-    	day32 = new JButton("4"); dayList.add(day32);
-    	day33 = new JButton("5"); dayList.add(day33);
-    	day34 = new JButton("6"); dayList.add(day34);
-    	day35 = new JButton("7"); dayList.add(day35);
+    	day29 = new JButton("1"); buttonDayList.add(day29);
+    	day30 = new JButton("2"); buttonDayList.add(day30);
+    	day31 = new JButton("3"); buttonDayList.add(day31);
+    	day32 = new JButton("4"); buttonDayList.add(day32);
+    	day33 = new JButton("5"); buttonDayList.add(day33);
+    	day34 = new JButton("6"); buttonDayList.add(day34);
+    	day35 = new JButton("7"); buttonDayList.add(day35);
+    	
+    	day36 = new JButton("1"); buttonDayList.add(day36);
+    	day37 = new JButton("2"); buttonDayList.add(day37);
+    	day38 = new JButton("3"); buttonDayList.add(day38);
+    	day39 = new JButton("4"); buttonDayList.add(day39);
+    	day40 = new JButton("5"); buttonDayList.add(day40);
+    	day41 = new JButton("6"); buttonDayList.add(day41);
+    	day42 = new JButton("7"); buttonDayList.add(day42);
     	
     	day1.setBounds(250, 140, 75, 75);
     	day2.setBounds(330, 140, 75, 75);
@@ -241,63 +293,91 @@ public class UserInterface extends JFrame implements ActionListener{
     	day33.setBounds(570, 460, 75, 75);
     	day34.setBounds(650, 460, 75, 75);
     	day35.setBounds(730, 460, 75, 75);
-    
-    	add(day1);  add(day2);  add(day3);  add(day4);	add(day5);  add(day6);  add(day7);
-    	add(day8);  add(day9);  add(day10); add(day11); add(day12); add(day13); add(day14);
-    	add(day15); add(day16); add(day17); add(day18); add(day19); add(day20); add(day21);
-    	add(day22); add(day23); add(day24); add(day25); add(day26); add(day27); add(day28);
-    	add(day29); add(day30); add(day31); add(day32); add(day33); add(day34); add(day35);
     	
-    	day1.addActionListener(this);
-    	day2.addActionListener(this);
-    	day3.addActionListener(this);
-    	day4.addActionListener(this);
-    	day5.addActionListener(this);
-    	day6.addActionListener(this);
-    	day7.addActionListener(this);
-    	day8.addActionListener(this);
-    	day9.addActionListener(this);
-    	day10.addActionListener(this);
-    	day11.addActionListener(this);
-    	day12.addActionListener(this);
-    	day13.addActionListener(this);
-    	day14.addActionListener(this);
-    	day15.addActionListener(this);
-    	day16.addActionListener(this);
-    	day17.addActionListener(this);
-    	day18.addActionListener(this);
-    	day19.addActionListener(this);
-    	day20.addActionListener(this);
-    	day21.addActionListener(this);
-    	day22.addActionListener(this);
-    	day23.addActionListener(this);
-    	day24.addActionListener(this);
-    	day25.addActionListener(this);
-    	day26.addActionListener(this);
-    	day27.addActionListener(this);
-    	day28.addActionListener(this);
-    	day29.addActionListener(this);
-    	day30.addActionListener(this);
-    	day31.addActionListener(this);
-    	day32.addActionListener(this);
-    	day33.addActionListener(this);
-    	day34.addActionListener(this);
-    	day35.addActionListener(this);
+    	day36.setBounds(250, 540, 75, 75);
+    	day37.setBounds(330, 540, 75, 75);
+    	day38.setBounds(410, 540, 75, 75);
+    	day39.setBounds(490, 540, 75, 75);
+    	day40.setBounds(570, 540, 75, 75);
+    	day41.setBounds(650, 540, 75, 75);
+    	day42.setBounds(730, 540, 75, 75);
+    
+    	for(JButton button : buttonDayList){
+    		add(button);
+    		button.addActionListener(this);
+    	}
+
     }
 
     private void fillDayButtons(){
-    	
+    	int day = 1;
+    	int findedDay = findFirstDayOfMonth();
+    	for(int i = 0 ; i < 42 ; i++){
+    		
+    		if(i < findedDay || i > daysOfMonths[actualMonth] + findedDay - 1){
+    			buttonDayList.get(i).setText("");
+    			buttonDayList.get(i).setEnabled(false);
+    			buttonDayList.get(i).setBackground(null);
+    		}
+    		else {
+        		buttonDayList.get(i).setText(Integer.toString(day++));
+        		buttonDayList.get(i).setEnabled(true);
+    			buttonDayList.get(i).setBackground(null);
+    		}
+    		
+    	}
     }
     
-	@Override
+    
+    private int findFirstDayOfMonth(){
+    	calendar.set(Calendar.MONTH, actualMonth);
+    	calendar.set(Calendar.YEAR, actualYear);
+    	calendar.set(Calendar.DAY_OF_MONTH, 1);
+    	
+		switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+		case 1:
+			return 6;	
+		case 2:
+			return 0;
+		case 3:
+			return 1;
+		case 4:
+			return 2;
+		case 5:
+			return 3;
+		case 6:
+			return 4;
+		case 7:
+			return 5;
+		}
+    	
+    	return 10;
+    }
+    
+	
+    private void setEventsIntoCalendar(){
+    	List<Event> list = dataServiceImpl.getAllEvents(actualMonth + 1);
+    	int findedDay = findFirstDayOfMonth();
+    	for(Event e : list){
+    		Date date = e.getDate();
+    		calendar.setTime(date);
+    		buttonDayList.get(findedDay + calendar.get(Calendar.DAY_OF_MONTH)).setBackground(Color.red); 
+    	}
+    }
+    
+    @Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == previousMonthButton){
 			actualMonth--;
 			setMonthAndYear();
+			fillDayButtons();
+			setEventsIntoCalendar();
 		}
 		if(e.getSource() == nextMonthButton){
 			actualMonth++;
 			setMonthAndYear();
+			fillDayButtons();
+			setEventsIntoCalendar();
 		}
 	}
 }

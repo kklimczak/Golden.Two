@@ -16,6 +16,25 @@ public class EventRepository {
 		this.db = dbConnection;
 	}
 	
+	public List<Event> findAll(int month) {
+		try {
+			List<Event> events = new ArrayList<>();
+			ResultSet resultSet = db.getStmt().executeQuery("SELECT * FROM events WHERE MONTH(date) = " + month);
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+		        String name = resultSet.getString("name");
+		        String description = resultSet.getString("description");
+		        String place = resultSet.getString("place");
+		        Date date = resultSet.getDate("date");
+		        events.add(new Event(id, name, description, place, date));
+			}
+			return events;
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
 	public List<Event> findAll() {
 		try {
 			List<Event> events = new ArrayList<>();
