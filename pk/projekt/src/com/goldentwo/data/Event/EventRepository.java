@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.goldentwo.data.database.DBConnection;
+import com.goldentwo.utils.Pagination.Direction;
+import com.goldentwo.utils.Pagination.Filter;
+import com.goldentwo.utils.Pagination.Page;
+import com.goldentwo.utils.Pagination.Sort;
 
 public class EventRepository {
 	
@@ -29,6 +33,51 @@ public class EventRepository {
 		        events.add(new Event(id, name, description, place, date));
 			}
 			return events;
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
+	public int countAllEvents(Filter filter) {
+		String query = "SELECT COUNT(*) FROM events";
+		if (filter != null) {
+			query += " WHERE `" + filter.getField() + "` LIKE '%" + filter.getValue() + "%'";
+		}
+		try {
+			ResultSet resultSet = db.getStmt().executeQuery(query);
+			resultSet.next();
+			return resultSet.getInt(1);
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return -1;
+		}
+	}
+	
+	public Page<Event> findEventWithSortAndFilterParams(Sort sort, Filter filter, int page) {
+		String query = "SELECT * FROM events";
+		if (filter != null) {
+			query += " WHERE `" + filter.getField() + "` LIKE '%" + filter.getValue() + "%'";
+		}
+		query += " ORDER BY " + sort.getField();
+		if (sort.getDirection().equals(Direction.DESC)) {
+			query += " DESC";
+		}
+		query += " LIMIT "+ (page-1)*10 + ", 10";
+		try {
+			List<Event> events = new ArrayList<Event>();
+			ResultSet resultSet = db.getStmt().executeQuery(query);
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+		        String name = resultSet.getString("name");
+		        String description = resultSet.getString("description");
+		        String place = resultSet.getString("place");
+		        Date date = resultSet.getDate("date");
+		        events.add(new Event(id, name, description, place, date));
+			}
+			int amountOfEvents = countAllEvents(filter);
+			Page<Event> data = new Page<Event>(events, amountOfEvents, (int)Math.ceil(amountOfEvents/10.0), 10, page, sort, filter);
+			return data;
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 			return null;

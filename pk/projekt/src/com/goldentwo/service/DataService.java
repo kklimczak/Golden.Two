@@ -11,7 +11,7 @@ import com.goldentwo.utils.Pagination.Sort;
 public interface DataService {
 	
 	List<Event> getAllEvents();
-	Page<Event> getSortedAndFilteredEvents(Sort sort, Filter filter);
+	Page<Event> getSortedAndFilteredEvents(Sort sort, Filter filter, int page);
 	List<Event> getAllEventsBetweenDates(Date from, Date to);
 	List<Event> getEventsByName(String name);
 	List<Event> getAllEvents(int month);

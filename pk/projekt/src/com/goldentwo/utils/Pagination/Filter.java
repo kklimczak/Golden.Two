@@ -25,4 +25,11 @@ public class Filter {
 	public void setValue(String value) {
 		this.value = value;
 	}
+
+	@Override
+	public String toString() {
+		return "[field: " + field + ", value: " + value + "]";
+	}
+	
+	
 }

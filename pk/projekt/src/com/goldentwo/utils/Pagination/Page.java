@@ -76,4 +76,12 @@ public class Page <T> {
 	public void setFilter(Filter filter) {
 		this.filter = filter;
 	}
+
+	@Override
+	public String toString() {
+		return "totalElements: " + totalElements + ", totalPages: " + totalPages + ", size: " + size
+				+ ", currentPage: " + currentPage + ", sort: " + sort + ", filter: " + filter;
+	}
+	
+	
 }

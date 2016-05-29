@@ -311,10 +311,10 @@ public class UserInterface extends JFrame implements ActionListener{
 
     private void fillDayButtons(){
     	int day = 1;
-    	int findedDay = findFirstDayOfMonth();
+    	int foundDay = findFirstDayOfMonth();
     	for(int i = 0 ; i < 42 ; i++){
     		
-    		if(i < findedDay || i > daysOfMonths[actualMonth] + findedDay - 1){
+    		if(i < foundDay || i > daysOfMonths[actualMonth] + foundDay - 1){
     			buttonDayList.get(i).setText("");
     			buttonDayList.get(i).setEnabled(false);
     			buttonDayList.get(i).setBackground(null);
@@ -357,11 +357,11 @@ public class UserInterface extends JFrame implements ActionListener{
 	
     private void setEventsIntoCalendar(){
     	List<Event> list = dataServiceImpl.getAllEvents(actualMonth + 1);
-    	int findedDay = findFirstDayOfMonth();
+    	int foundDay = findFirstDayOfMonth();
     	for(Event e : list){
     		Date date = e.getDate();
     		calendar.setTime(date);
-    		buttonDayList.get(findedDay + calendar.get(Calendar.DAY_OF_MONTH)).setBackground(Color.red); 
+    		buttonDayList.get(foundDay - 1 + calendar.get(Calendar.DAY_OF_MONTH)).setBackground(Color.red); 
     	}
     }
     

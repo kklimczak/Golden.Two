@@ -32,19 +32,17 @@ public class DataServiceImpl implements DataService {
 		return eventRepository.findAll(month);
 	}
 
-	
 	@Override
 	public List<Event> getAllEvents() {
 		return eventRepository.findAll();
 	}
 	
 	@Override
-	public Page<Event> getSortedAndFilteredEvents(Sort sort, Filter filter) {
+	public Page<Event> getSortedAndFilteredEvents(Sort sort, Filter filter, int page) {
 		if(sort == null) {
 			sort = new Sort("id", Direction.ASC);
 		}
-		//method to repository
-		return null;
+		return eventRepository.findEventWithSortAndFilterParams(sort, filter, page);
 	}
 
 	@Override

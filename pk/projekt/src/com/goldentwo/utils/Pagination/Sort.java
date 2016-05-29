@@ -24,4 +24,11 @@ public class Sort {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
+
+	@Override
+	public String toString() {
+		return "[field: " + field + ", direction: " + direction + "]";
+	}
+	
+	
 }
