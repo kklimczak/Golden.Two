@@ -31,12 +31,6 @@ public class DataServiceImpl implements DataService {
 	private Logger logger = new Logger(DataServiceImpl.class);
 
 	@Override
-	public List<Event> getAllEvents(int month) {
-		logger.info("getAllEvents in month: " + month);
-		return eventRepository.findAll(month);
-	}
-
-	@Override
 	public List<Event> getAllEvents() {
 		logger.info("getAllEvents() called");
 		return eventRepository.findAll();

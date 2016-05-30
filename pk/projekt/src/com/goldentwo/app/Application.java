@@ -55,10 +55,10 @@ public class Application {
 //			System.out.println(event.getId() + ": " + event.getName() + " " + event.getDate());
 //		}
 		
-		//logger.info("UserInterface initialized successfully!");
-		//UserInterface ui = new UserInterface(dataServiceImpl);
+		logger.info("UserInterface initialized successfully!");
+		UserInterface ui = new UserInterface(dataServiceImpl);
 		
-		//ui.setVisible(true);
+		ui.setVisible(true);
 
 	}
 

@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.data.database.DBConnection;
 import com.goldentwo.service.DataServiceImpl;
+import com.goldentwo.utils.Date.DateConverter;
 
 @SuppressWarnings("serial")
 public class UserInterface extends JFrame implements ActionListener{
@@ -356,7 +357,9 @@ public class UserInterface extends JFrame implements ActionListener{
     
 	
     private void setEventsIntoCalendar(){
-    	List<Event> list = dataServiceImpl.getAllEvents(actualMonth + 1);
+    	List<Event> list = dataServiceImpl.getAllEventsBetweenDates(
+    			DateConverter.stringToDate(actualYear, actualMonth + 1, 1), 
+    			DateConverter.stringToDate(actualYear, actualMonth + 1, daysOfMonths[actualMonth]));
     	int foundDay = findFirstDayOfMonth();
     	for(Event e : list){
     		Date date = e.getDate();
