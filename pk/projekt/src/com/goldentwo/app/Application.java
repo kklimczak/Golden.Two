@@ -3,6 +3,7 @@ package com.goldentwo.app;
 import java.util.Date;
 
 import com.goldentwo.data.Event.Event;
+import com.goldentwo.data.database.DBInit;
 import com.goldentwo.service.DataServiceImpl;
 import com.goldentwo.utils.Logger.Logger;
 import com.goldentwo.utils.Pagination.Direction;
@@ -17,13 +18,15 @@ public class Application {
 
 	public static void main(String[] args) {
 		
-		profile = args[0];
+		profile = args[0]; 
 		
 		Logger logger = new Logger(Application.class);
 		
 		logger.info("Aplication started!");
 		
 		logger.info("Load profile: " + args[0]);
+		
+		DBInit dbInit = new DBInit();
 		
 		DataServiceImpl dataServiceImpl = new DataServiceImpl();
 		

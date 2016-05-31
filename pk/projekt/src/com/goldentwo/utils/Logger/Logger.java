@@ -14,12 +14,12 @@ public class Logger {
 		this.classValue = classValue;
 	}
 	
-	public void info(String message) {
+	private void logger(String message, String type) {
 		Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         SimpleDateFormat sdfDay = new SimpleDateFormat("yyyy-MM-dd");
-		System.out.printf("%s [%-20.20s] INFO | %s%n", sdf.format(cal.getTime()), classValue.getSimpleName()+".java", message);
-		String log = String.format("%s [%-20.20s] INFO | %s%n", sdf.format(cal.getTime()), classValue.getSimpleName()+".java", message);
+		System.out.printf("%s [%-20.20s] %-5s | %s%n", sdf.format(cal.getTime()), classValue.getSimpleName()+".java", type, message);
+		String log = String.format("%s [%-20.20s] %-5s | %s%n", sdf.format(cal.getTime()), classValue.getSimpleName()+".java", type, message);
 		
 		try{
 			FileOutputStream file = new FileOutputStream(sdfDay.format(cal.getTime()) + ".log", true);
@@ -28,5 +28,13 @@ public class Logger {
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
+	}
+	
+	public void error(String message) {
+		logger(message, "ERROR");
+	}
+	
+	public void info (String message) {
+		logger(message, "INFO");
 	}
 }

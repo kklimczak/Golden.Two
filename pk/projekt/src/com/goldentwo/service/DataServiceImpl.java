@@ -111,6 +111,9 @@ public class DataServiceImpl implements DataService {
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
 			return null;
+		} catch (NullPointerException exception) {
+			logger.error("Cannot create XML file: You have empty database");
+			return null;
 		}
 	}
 	

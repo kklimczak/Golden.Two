@@ -21,12 +21,12 @@ public class DBConnection {
 	public DBConnection() {
 	    try {
 	    	con = DriverManager.getConnection(
-					 (String) appConfig.getProperty("url") + "?" + (String) appConfig.getProperty("params"),
+					 (String) appConfig.getProperty("url") + (String) appConfig.getProperty("dbName") + "?" + (String) appConfig.getProperty("params"),
 	                 (String) appConfig.getProperty("user"),
 	                 (String) appConfig.getProperty("password"));
 
 			stmt = con.createStatement();
-			logger.info("Successfully connected to database " + appConfig.getProperty("url") + " as " + appConfig.getProperty("user"));
+			logger.info("Successfully connected to database " + appConfig.getProperty("url") + (String) appConfig.getProperty("dbName") + " as " + appConfig.getProperty("user"));
 	    } catch (SQLException sqlException) {
 	    	sqlException.printStackTrace();
 	    }

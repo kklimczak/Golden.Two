@@ -82,7 +82,7 @@ public class EventRepository {
 			}
 			int amountOfEvents = countAllEvents(filter);
 			Page<Event> data = new Page<Event>(events, amountOfEvents, (int)Math.ceil(amountOfEvents/10.0), 10, page, sort, filter);
-			logger.info("findEventWithSortAndFilterParams() called and return page: " + page + " with sort: " + sort + " and filter: " + filter);
+			logger.info("findEventWithSortAndFilterParams() called and return " + amountOfEvents + " elements on page: " + page + " with sort: " + sort + " and filter: " + filter);
 			return data;
 		} catch (SQLException exception) {
 			exception.printStackTrace();
