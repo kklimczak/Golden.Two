@@ -44,6 +44,15 @@ public class DataServiceImpl implements DataService {
 		logger.info("getSortedAndFilteredEvents() called");
 		return eventRepository.findEventWithSortAndFilterParams(sort, filter, page);
 	}
+	
+	@Override
+	public Page<Event> getSortedAndFilteredEventsWithAlarm(Sort sort, Filter filter, int page) {
+		if(sort == null) {
+			sort = new Sort("id", Direction.ASC);
+		}
+		logger.info("getSortedAndFilteredEventsWithAlarm() called");
+		return eventRepository.findEventWithSortAndFilterParamsAndAlarmNotNull(sort, filter, page);
+	}
 
 	@Override
 	public List<Event> getAllEventsBetweenDates(Date from, Date to) {

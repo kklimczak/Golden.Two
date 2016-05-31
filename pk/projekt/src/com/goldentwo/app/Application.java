@@ -43,11 +43,13 @@ public class Application {
 		
 		dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.stringToDate(2016, 5, 12), null));
 		
+		dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.stringToDate(2016, 5, 12), null));
+		
 //		for(int i = 0; i < 15; i++) {
 //			dataServiceImpl.addEvent(new Event(1, "Name " + i, "Description " + i, "Place " + i, DateConverter.stringToDate(2016, 05, i)));
 //		}
 		
-		dataServiceImpl.updateEvent(new Event(1, "String [edit]", "String", "Place", new Date(), null));
+		dataServiceImpl.updateEvent(new Event(1, "String [edit]", "String", "Place", new Date(), new Date()));
 		
 		//dataServiceImpl.deleteEvent(1);
 		
@@ -55,11 +57,11 @@ public class Application {
 		
 		//dataServiceImpl.getAllEventsBetweenDates(new Date(), new Date());
 		
-		Page<Event> events = dataServiceImpl.getSortedAndFilteredEvents(new Sort("date", Direction.DESC), null, 1);
-//		System.out.println(events);
-//		for(Event event : events.getContent()) {
-//			System.out.println(event.getId() + ": " + event.getName() + " " + event.getDate());
-//		}
+		Page<Event> events = dataServiceImpl.getSortedAndFilteredEventsWithAlarm(new Sort("date", Direction.DESC), new Filter("name", "String"), 1);
+		System.out.println(events);
+		for(Event event : events.getContent()) {
+			System.out.println(event.getId() + ": " + event.getName() + " " + event.getDate());
+		}
 		
 		logger.info("UserInterface initialized successfully!");
 		UserInterface ui = new UserInterface(dataServiceImpl);

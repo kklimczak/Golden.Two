@@ -92,6 +92,54 @@ public class EventRepository {
 		}
 	}
 	
+	public int countAllEventsWithAlarm(Filter filter) {
+		String query = "SELECT * FROM events WHERE `alarm` IS NOT NULL";
+		if (filter != null) {
+			query += " AND `" + filter.getField() + "` LIKE '%" + filter.getValue() + "%'";
+		}
+		try {
+			ResultSet resultSet = db.getStmt().executeQuery(query);
+			resultSet.next();
+			logger.info("countAllEvent() called");
+			return resultSet.getInt(1);
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return -1;
+		}
+	}
+	
+	public Page<Event> findEventWithSortAndFilterParamsAndAlarmNotNull(Sort sort, Filter filter, int page) {
+		String query = "SELECT * FROM events WHERE `alarm` IS NOT NULL";
+		if (filter != null) {
+			query += " AND `" + filter.getField() + "` LIKE '%" + filter.getValue() + "%'";
+		}
+		query += " ORDER BY " + sort.getField();
+		if (sort.getDirection().equals(Direction.DESC)) {
+			query += " DESC";
+		}
+		query += " LIMIT "+ (page-1)*10 + ", 10";
+		try {
+			List<Event> events = new ArrayList<Event>();
+			ResultSet resultSet = db.getStmt().executeQuery(query);
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+		        String name = resultSet.getString("name");
+		        String description = resultSet.getString("description");
+		        String place = resultSet.getString("place");
+		        Date date = resultSet.getDate("date");
+		        Date alarm = resultSet.getDate("alarm");
+		        events.add(new Event(id, name, description, place, date, alarm));
+			}
+			int amountOfEvents = countAllEventsWithAlarm(filter);
+			Page<Event> data = new Page<Event>(events, amountOfEvents, (int)Math.ceil(amountOfEvents/10.0), 10, page, sort, filter);
+			logger.info("findEventWithSortAndFilterParamsAndAlarmNotNull() called and return " + amountOfEvents + " elements on page: " + page + " with sort: " + sort + " and filter: " + filter);
+			return data;
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
 	public List<Event> findAll() {
 		try {
 			List<Event> events = new ArrayList<>();
@@ -162,7 +210,7 @@ public class EventRepository {
 					+event.getPlace()+"','"
 					+new java.sql.Date(event.getDate().getTime())
 					+"', " + (event.getAlarm() != null
-					? "'"+new java.sql.Date(event.getAlarm().getTime()).toString()+"'"
+					? "'"+new java.sql.Date(event.getAlarm().getTime())+"'"
 							: "NULL") +")");
 			logger.info("addOne() called with name: " + event.getName());
 		} catch (SQLException sqlException) {
