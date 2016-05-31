@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(propOrder = {"id", "name", "description", "place", "date"})
+@XmlType(propOrder = {"id", "name", "description", "place", "date", "alarm"})
 @XmlRootElement(name = "Event")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class EventDto {
@@ -17,19 +17,21 @@ public class EventDto {
 	private String description;
 	private String place;
 	private Date date;
+	private Date alarm;
 	
 	public EventDto() {};
 	
-	public EventDto(int id, String name, String description, String place, Date date) {
+	public EventDto(int id, String name, String description, String place, Date date, Date alarm) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.place = place;
 		this.date = date;
+		this.alarm = alarm;
 	}
 	
 	public Event asDefault() {
-		return new Event(id, name, description, place, date);
+		return new Event(id, name, description, place, date, alarm);
 	}
 
 	public int getId() {
@@ -70,5 +72,13 @@ public class EventDto {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public Date getAlarm() {
+		return alarm;
+	}
+
+	public void setAlarm(Date alarm) {
+		this.alarm = alarm;
 	}
 }

@@ -33,7 +33,8 @@ public class EventRepository {
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
 		        Date date = resultSet.getDate("date");
-		        events.add(new Event(id, name, description, place, date));
+		        Date alarm = resultSet.getDate("alarm");
+		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			logger.info("findAll() in month: " + month);
 			return events;
@@ -78,7 +79,8 @@ public class EventRepository {
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
 		        Date date = resultSet.getDate("date");
-		        events.add(new Event(id, name, description, place, date));
+		        Date alarm = resultSet.getDate("alarm");
+		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			int amountOfEvents = countAllEvents(filter);
 			Page<Event> data = new Page<Event>(events, amountOfEvents, (int)Math.ceil(amountOfEvents/10.0), 10, page, sort, filter);
@@ -100,7 +102,8 @@ public class EventRepository {
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
 		        Date date = resultSet.getDate("date");
-		        events.add(new Event(id, name, description, place, date));
+		        Date alarm = resultSet.getDate("alarm");
+		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			logger.info("findAll() called");
 			return events;
@@ -120,7 +123,8 @@ public class EventRepository {
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
 		        Date date = resultSet.getDate("date");
-		        events.add(new Event(id, name, description, place, date));
+		        Date alarm = resultSet.getDate("alarm");
+		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			logger.info("findByDateRange() called with dates: " + from + " - " + to);
 			return events;
@@ -139,9 +143,9 @@ public class EventRepository {
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
 		        Date date = resultSet.getDate("date");
-		        System.out.println(eventId+name+description);
+		        Date alarm = resultSet.getDate("alarm");
 		        logger.info("findOne() called with id: " + id);
-		        return new Event(eventId, name, description, place, date);
+		        return new Event(eventId, name, description, place, date, alarm);
 			}
 			return null;
 		} catch (SQLException exception) {
@@ -152,7 +156,14 @@ public class EventRepository {
 	
 	public void addOne(Event event) {
 		try {
-			db.getStmt().executeUpdate("INSERT INTO `events` VALUES (NULL, '"+event.getName()+"','"+event.getDescription()+"','"+event.getPlace()+"','"+new java.sql.Date(event.getDate().getTime())+"')");
+			db.getStmt().executeUpdate("INSERT INTO `events` VALUES (NULL, '"
+					+event.getName()+"','"
+					+event.getDescription()+"','"
+					+event.getPlace()+"','"
+					+new java.sql.Date(event.getDate().getTime())
+					+"', " + (event.getAlarm() != null
+					? "'"+new java.sql.Date(event.getAlarm().getTime()).toString()+"'"
+							: "NULL") +")");
 			logger.info("addOne() called with name: " + event.getName());
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -161,7 +172,7 @@ public class EventRepository {
 	
 	public void updateOne(Event event) {
 		try {
-			db.getStmt().executeUpdate("UPDATE `events` SET  name='"+event.getName()+"',description='"+event.getDescription()+"',place='"+event.getPlace()+"',date='"+new java.sql.Date(event.getDate().getTime())+"' WHERE id="+event.getId());
+			db.getStmt().executeUpdate("UPDATE `events` SET  name='"+event.getName()+"',description='"+event.getDescription()+"',place='"+event.getPlace()+"',date='"+new java.sql.Date(event.getDate().getTime())+"',alarm=" + (event.getAlarm() != null ? "'"+new java.sql.Date(event.getAlarm().getTime())+"'" : "NULL") +" WHERE id="+event.getId());
 			logger.info("updateOne() called with id: " + event.getId());
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();

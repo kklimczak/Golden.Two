@@ -9,17 +9,19 @@ public class Event {
 	private String description;
 	private String place;
 	private Date date;
+	private Date alarm;
 	
-	public Event(int id, String name, String description, String place, Date date) {
+	public Event(int id, String name, String description, String place, Date date, Date alarm) {
 		this.name = name;
 		this.description = description;
 		this.place = place;
 		this.date = date;
+		this.alarm = alarm;
 		this.id = id;
 	}
 	
 	public EventDto asDto() {
-		return new EventDto(id, name, description, place, date);
+		return new EventDto(id, name, description, place, date, alarm);
 	}
 
 	public int getId() {
@@ -60,6 +62,14 @@ public class Event {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public Date getAlarm() {
+		return alarm;
+	}
+
+	public void setAlarm(Date alarm) {
+		this.alarm = alarm;
 	}
 	
 	

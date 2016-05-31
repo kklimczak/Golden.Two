@@ -44,11 +44,13 @@ public class DBInit {
 				+ "CREATE TABLE IF NOT EXISTS `events` ("
 				+ "`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 				+ "`name` varchar(50) DEFAULT NULL," + "`description` varchar(500) DEFAULT NULL,"
-				+ "`place` varchar(50) DEFAULT NULL," + "`date` date DEFAULT NULL)");
+				+ "`place` varchar(50) DEFAULT NULL," + "`date` date DEFAULT NULL,"
+				+ "`alarm` date DEFAULT NULL)");
 	}
 
 	public void clearDatabase() {
 		try {
+			logger.info("Drop and create new empty database");
 			statement.executeUpdate("DROP SCHEMA IF EXISTS jProject");
 			createDatabase();
 			createEntities();
