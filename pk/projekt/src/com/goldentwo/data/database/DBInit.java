@@ -44,8 +44,8 @@ public class DBInit {
 				+ "CREATE TABLE IF NOT EXISTS `events` ("
 				+ "`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 				+ "`name` varchar(50) DEFAULT NULL," + "`description` varchar(500) DEFAULT NULL,"
-				+ "`place` varchar(50) DEFAULT NULL," + "`date` date DEFAULT NULL,"
-				+ "`alarm` date DEFAULT NULL)");
+				+ "`place` varchar(50) DEFAULT NULL," + "`date` datetime DEFAULT NULL,"
+				+ "`alarm` datetime DEFAULT NULL)");
 	}
 
 	public void clearDatabase() {

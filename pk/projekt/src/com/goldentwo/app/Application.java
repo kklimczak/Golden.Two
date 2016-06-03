@@ -41,9 +41,9 @@ public class Application {
 		
 		dataServiceImpl.oneEventFromXml("0.String.xml");
 		
-		dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.stringToDate(2016, 5, 12), null));
+		dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.convertToDateWithTime(2016, 6, 1, 1, 23, 32), null));
 		
-		dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.stringToDate(2016, 5, 12), null));
+		dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.convertToDateWithTime(2016, 6, 12, 12, 12, 12), null));
 		
 //		for(int i = 0; i < 15; i++) {
 //			dataServiceImpl.addEvent(new Event(1, "Name " + i, "Description " + i, "Place " + i, DateConverter.stringToDate(2016, 05, i)));
@@ -60,7 +60,7 @@ public class Application {
 		Page<Event> events = dataServiceImpl.getSortedAndFilteredEventsWithAlarm(new Sort("date", Direction.DESC), new Filter("name", "String"), 1);
 		System.out.println(events);
 		for(Event event : events.getContent()) {
-			System.out.println(event.getId() + ": " + event.getName() + " " + event.getDate());
+			System.out.println(event.getId() + ": " + event.getName() + " " + DateConverter.dateToMySqlDateTimeString(event.getDate()));
 		}
 		
 		logger.info("UserInterface initialized successfully!");

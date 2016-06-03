@@ -1,12 +1,14 @@
 package com.goldentwo.data.Event;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.goldentwo.data.database.DBConnection;
+import com.goldentwo.utils.Date.DateConverter;
 import com.goldentwo.utils.Logger.Logger;
 import com.goldentwo.utils.Pagination.Direction;
 import com.goldentwo.utils.Pagination.Filter;
@@ -32,8 +34,9 @@ public class EventRepository {
 		        String name = resultSet.getString("name");
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
-		        Date date = resultSet.getDate("date");
-		        Date alarm = resultSet.getDate("alarm");
+		        Date date = new Date(resultSet.getTimestamp("date").getTime());
+		        Timestamp timestamp = resultSet.getTimestamp("alarm"); 
+		        Date alarm = timestamp != null ? new Date (timestamp.getTime()) : null;
 		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			logger.info("findAll() in month: " + month);
@@ -78,8 +81,9 @@ public class EventRepository {
 		        String name = resultSet.getString("name");
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
-		        Date date = resultSet.getDate("date");
-		        Date alarm = resultSet.getDate("alarm");
+		        Date date = new Date(resultSet.getTimestamp("date").getTime());
+		        Timestamp timestamp = resultSet.getTimestamp("alarm"); 
+		        Date alarm = timestamp != null ? new Date (timestamp.getTime()) : null;
 		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			int amountOfEvents = countAllEvents(filter);
@@ -126,8 +130,9 @@ public class EventRepository {
 		        String name = resultSet.getString("name");
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
-		        Date date = resultSet.getDate("date");
-		        Date alarm = resultSet.getDate("alarm");
+		        Date date = new Date(resultSet.getTimestamp("date").getTime());
+		        Timestamp timestamp = resultSet.getTimestamp("alarm"); 
+		        Date alarm = timestamp != null ? new Date (timestamp.getTime()) : null;
 		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			int amountOfEvents = countAllEventsWithAlarm(filter);
@@ -149,8 +154,9 @@ public class EventRepository {
 		        String name = resultSet.getString("name");
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
-		        Date date = resultSet.getDate("date");
-		        Date alarm = resultSet.getDate("alarm");
+		        Date date = new Date(resultSet.getTimestamp("date").getTime());
+		        Timestamp timestamp = resultSet.getTimestamp("alarm"); 
+		        Date alarm = timestamp != null ? new Date (timestamp.getTime()) : null;
 		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			logger.info("findAll() called");
@@ -164,14 +170,15 @@ public class EventRepository {
 	public List<Event> findByDateRange(Date from, Date to) {
 		try {
 			List<Event> events = new ArrayList<>();
-			ResultSet resultSet = db.getStmt().executeQuery("Select * FROM events WHERE date >= '" + from + "' AND date <= '" + to + "'");
+			ResultSet resultSet = db.getStmt().executeQuery("Select * FROM events WHERE date >= '" + new java.sql.Date(from.getTime()) + "' AND date <= '" + new java.sql.Date(to.getTime()) + "'");
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
 		        String name = resultSet.getString("name");
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
-		        Date date = resultSet.getDate("date");
-		        Date alarm = resultSet.getDate("alarm");
+		        Date date = new Date(resultSet.getTimestamp("date").getTime());
+		        Timestamp timestamp = resultSet.getTimestamp("alarm"); 
+		        Date alarm = timestamp != null ? new Date (timestamp.getTime()) : null;
 		        events.add(new Event(id, name, description, place, date, alarm));
 			}
 			logger.info("findByDateRange() called with dates: " + from + " - " + to);
@@ -190,8 +197,9 @@ public class EventRepository {
 		        String name = resultSet.getString("name");
 		        String description = resultSet.getString("description");
 		        String place = resultSet.getString("place");
-		        Date date = resultSet.getDate("date");
-		        Date alarm = resultSet.getDate("alarm");
+		        Date date = new Date(resultSet.getTimestamp("date").getTime());
+		        Timestamp timestamp = resultSet.getTimestamp("alarm"); 
+		        Date alarm = timestamp != null ? new Date (timestamp.getTime()) : null;
 		        logger.info("findOne() called with id: " + id);
 		        return new Event(eventId, name, description, place, date, alarm);
 			}
@@ -208,9 +216,9 @@ public class EventRepository {
 					+event.getName()+"','"
 					+event.getDescription()+"','"
 					+event.getPlace()+"','"
-					+new java.sql.Date(event.getDate().getTime())
+					+DateConverter.dateToMySqlDateTimeString(event.getDate())
 					+"', " + (event.getAlarm() != null
-					? "'"+new java.sql.Date(event.getAlarm().getTime())+"'"
+					? "'"+DateConverter.dateToMySqlDateTimeString(event.getAlarm())+"'"
 							: "NULL") +")");
 			logger.info("addOne() called with name: " + event.getName());
 		} catch (SQLException sqlException) {
@@ -220,7 +228,7 @@ public class EventRepository {
 	
 	public void updateOne(Event event) {
 		try {
-			db.getStmt().executeUpdate("UPDATE `events` SET  name='"+event.getName()+"',description='"+event.getDescription()+"',place='"+event.getPlace()+"',date='"+new java.sql.Date(event.getDate().getTime())+"',alarm=" + (event.getAlarm() != null ? "'"+new java.sql.Date(event.getAlarm().getTime())+"'" : "NULL") +" WHERE id="+event.getId());
+			db.getStmt().executeUpdate("UPDATE `events` SET  name='"+event.getName()+"',description='"+event.getDescription()+"',place='"+event.getPlace()+"',date='"+DateConverter.dateToMySqlDateTimeString(event.getDate())+"',alarm=" + (event.getAlarm() != null ? "'"+DateConverter.dateToMySqlDateTimeString(event.getAlarm())+"'" : "NULL") +" WHERE id="+event.getId());
 			logger.info("updateOne() called with id: " + event.getId());
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -238,7 +246,7 @@ public class EventRepository {
 	
 	public void deleteEventsBeforeDate(Date date) {
 		try {
-			db.getStmt().executeUpdate("DELETE FROM `events` WHERE date < '" + date + "'");
+			db.getStmt().executeUpdate("DELETE FROM `events` WHERE date < '" + DateConverter.dateToMySqlDateTimeString(date) + "'");
 			logger.info("deleteEventsBeforeDate() called with date: " + date);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
