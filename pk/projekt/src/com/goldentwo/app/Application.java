@@ -29,24 +29,24 @@ public class Application {
 		
 		DBInit dbInit = new DBInit();
 		
-		dbInit.clearDatabase();
+	//	dbInit.clearDatabase();
 		
 		DataServiceImpl dataServiceImpl = new DataServiceImpl();
 		
-		dataServiceImpl.allEventsToXml();
+	//	dataServiceImpl.allEventsToXml();
+	//	
+	//	dataServiceImpl.allEventsFromXml();
 		
-		dataServiceImpl.allEventsFromXml();
+	//	dataServiceImpl.oneEventToXml(new Event(0, "String", "String", "Place", new Date(), new Date()));
 		
-		dataServiceImpl.oneEventToXml(new Event(0, "String", "String", "Place", new Date(), new Date()));
+	//	dataServiceImpl.oneEventFromXml("0.String.xml");
 		
-		dataServiceImpl.oneEventFromXml("0.String.xml");
+	//	dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.convertToDateWithTime(2016, 6, 1, 1, 23, 32), null));
 		
-		dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.convertToDateWithTime(2016, 6, 1, 1, 23, 32), null));
+	//	dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.convertToDateWithTime(2016, 6, 12, 12, 12, 12), null));
 		
-		dataServiceImpl.addEvent(new Event(1, "String1", "String", "Place", DateConverter.convertToDateWithTime(2016, 6, 12, 12, 12, 12), null));
-		
-//		for(int i = 0; i < 15; i++) {
-//			dataServiceImpl.addEvent(new Event(1, "Name " + i, "Description " + i, "Place " + i, DateConverter.stringToDate(2016, 05, i)));
+//		for(int i = 0; i < 10; i++) {
+//			dataServiceImpl.addEvent(new Event(1, "Name " + i, "Description " + i, "Place " + i, DateConverter.convertToDateWithTime(2016, 05, i, 11, 12, 13), null));
 //		}
 		
 		dataServiceImpl.updateEvent(new Event(1, "String [edit]", "String", "Place", new Date(), new Date()));

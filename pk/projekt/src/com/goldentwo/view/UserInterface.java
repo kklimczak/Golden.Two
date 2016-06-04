@@ -4,6 +4,9 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,6 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import com.goldentwo.service.DataServiceImpl;
+import com.goldentwo.utils.Pagination.*;
 
 @SuppressWarnings("serial")
 public class UserInterface extends JFrame implements ActionListener{
@@ -25,6 +29,9 @@ public class UserInterface extends JFrame implements ActionListener{
 	ArrayList<Component> calComponentList;
 	ArrayList<Component> listComponentList;
 	
+	Filter filter;
+	Sort sort;
+	
 	private JButton calendarButton, listButton, alarmButton;
 	private JSeparator separatorH, separatorV; 
 	
@@ -33,16 +40,19 @@ public class UserInterface extends JFrame implements ActionListener{
 		buttonDayList = new ArrayList<>();
 		calComponentList = new ArrayList<>();
 		listComponentList = new ArrayList<>();
+		filter = null;
+		sort = null;
 		setLayout(null);
 		listFrame = new ListFrame(this);
 		calendarFrame = new CalendarFrame(this);
+		
 
 		init();
     }
 	
     private void init(){
 	    setTitle("ORGANIZER");
-	    setSize(860, 535);
+	    setSize(860, 540);
 	    setLocationRelativeTo(null);
         
         separatorH = new JSeparator(SwingConstants.HORIZONTAL);
@@ -90,12 +100,14 @@ public class UserInterface extends JFrame implements ActionListener{
 			calendarFrame.setMonthAndYear();
 			calendarFrame.fillDayButtons();
 			calendarFrame.setEventsIntoCalendar();
+			calendarFrame.markTodayDay();
 		}
 		if(e.getSource() == calendarFrame.nextMonthButton){
 			calendarFrame.actualMonth++;
 			calendarFrame.setMonthAndYear();
 			calendarFrame.fillDayButtons();
 			calendarFrame.setEventsIntoCalendar();
+			calendarFrame.markTodayDay();
 		}
 		if(e.getSource() == listButton){
 			for(JButton b : buttonDayList){
@@ -120,6 +132,34 @@ public class UserInterface extends JFrame implements ActionListener{
 				remove(c);
 			}
 			calendarFrame.setMonthAndYear();
+		}
+		if(e.getSource() == listFrame.next){
+			listFrame.currentPage++;
+			listFrame.updateEventCounterLabel();
+			listFrame.fillTable();
+			if(listFrame.totalPages == listFrame.currentPage){
+				listFrame.next.setEnabled(false);
+			}
+			listFrame.prev.setEnabled(true);
+		}
+		if(e.getSource() == listFrame.prev){
+			listFrame.currentPage--;
+			listFrame.updateEventCounterLabel();
+			listFrame.fillTable();
+			if(listFrame.currentPage == 1){
+				listFrame.prev.setEnabled(false);
+			}
+			listFrame.next.setEnabled(true);
+		}
+		if(e.getSource() == calendarFrame.addEventButton){
+			new AddEventFrame(dataServiceImpl).setVisible(true);
+		}
+		if(e.getSource() == calendarFrame.findPresentDayButton){
+			calendarFrame.setPresentDate();
+			calendarFrame.setMonthAndYear();
+			calendarFrame.fillDayButtons();
+			calendarFrame.setEventsIntoCalendar();
+			calendarFrame.markTodayDay();
 		}
 	}
 }

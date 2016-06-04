@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Vector;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -15,39 +17,48 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.goldentwo.data.Event.Event;
+import com.goldentwo.utils.Pagination.*;
 
 public class ListFrame implements ListSelectionListener{
 	
 	private UserInterface ui;
 	private int latestSelectedRow;
-	private int currentPage;
-	Vector<Vector<String>> allEvents;
+	int currentPage;
+	int totalElements, totalPages;
+	Vector<Vector<String>> events;
 	JTable table;
+	JButton prev, next;
+	JLabel eventCounter;
 	
 	public ListFrame(UserInterface ui){
 		this.ui = ui;
-		currentPage = 0;
-		allEvents = new Vector<>();
-		makeJList();
+		currentPage = 1;
+		events = new Vector<>();
+		initJList();
+		generateButtons();
 	}
 	
-	public void makeJList(){
-
-		for(Event e : ui.dataServiceImpl.getAllEvents()){
+	public void initJList(){
+		ui.sort = new Sort("date",Direction.ASC);
+		Page<Event> page = ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage);
+		totalElements = page.getTotalElements();
+		totalPages = page.getTotalPages();
+		
+		for(Event e : page.getContent()){
 			Vector<String> rowData = new Vector<>();
 			rowData.add(e.getName());
 			rowData.add(e.getDate().toString());
-			allEvents.add(rowData);
+			events.add(rowData);
 		}
 		
 		Vector<String> colNames = new Vector<>(2);
 		colNames.add("Name");
 		colNames.add("Data");
 		
-		table = new JTable(getFirstTenEvents(allEvents), colNames);	
-
+		table = new JTable(events, colNames);	
+		fillTable();
+		
 		table.setBounds(225, 140, 605, 300);
-		table.setBackground(null);
 		table.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		table.setRowHeight(30);
 		table.getColumnModel().getColumn(1).setWidth(400);
@@ -69,16 +80,6 @@ public class ListFrame implements ListSelectionListener{
 
 		ui.listComponentList.add(table);
 	}
-	
-	private Vector<Vector<String>> getFirstTenEvents(Vector<Vector<String>> allEvents){
-		Vector<Vector<String>> v = new Vector<Vector<String>>();
-		
-		for(int i = 0; i < 10 && i < allEvents.size() ; i++){
-			v.add(allEvents.get(i));
-		}
-		
-		return v;
-	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
@@ -88,19 +89,45 @@ public class ListFrame implements ListSelectionListener{
 		}
 	}
 	
-	private void fillTable(){
+	void fillTable(){
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
-
-		
-		
-		for(int i = 10 * currentPage ; i < 10 * (currentPage + 1) && i < allEvents.size() ; i++){
+	
+		for(Event e : ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage).getContent()){
 			Vector<Object> row = new Vector<>();
 			
-			row.add(allEvents.get(i).get(0));
-			row.add(allEvents.get(i).get(1)); 
+			row.add(e.getName());
+			row.add(e.getDate()); 
 
 			model.addRow(row);
 		}
 	}
+
+	private void generateButtons(){
+		prev = new JButton("Previous");
+		next = new JButton("Next");
+		
+		prev.setBounds(225, 440, 100, 25);
+		next.setBounds(730, 440, 100, 25);
+		
+		ui.listComponentList.add(prev);
+		ui.listComponentList.add(next);
+		
+		eventCounter = new JLabel("Generated Label");
+		eventCounter.setBounds(500, 440, 100, 25);
+		ui.listComponentList.add(eventCounter);
+		updateEventCounterLabel();
+		prev.addActionListener(ui);
+		next.addActionListener(ui);
+		
+		prev.setEnabled(false);
+		if(totalPages == currentPage){
+			next.setEnabled(false);
+		}
+	}
+	
+    void updateEventCounterLabel(){		
+		eventCounter.setText(10*(currentPage)-9 + " - " + (10*currentPage > totalElements ? totalElements : 10*currentPage)  + " of " + totalElements);
+	}
+	
 }

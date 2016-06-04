@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.utils.Date.DateConverter;
@@ -20,10 +22,10 @@ public class CalendarFrame {
 	Calendar calendar;
 	JLabel monLab, tueLab, wedLab, thuLab, friLab, sunLab, satLab;
 	int actualMonth, actualYear, firstDayOfMonth;
-	JButton previousMonthButton;
-	JButton nextMonthButton;
+	JButton previousMonthButton, nextMonthButton;
+	JButton addEventButton, findPresentDayButton;
 
-	int[] daysOfMonths = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	int[] daysOfMonths = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	
 	public CalendarFrame(UserInterface ui){
 		this.ui = ui;
@@ -36,6 +38,7 @@ public class CalendarFrame {
 		setMonthAndYear();
 		generateMonthsButtons();
 		generateDayButtons();
+		generateAddEventAndFindPresentDayButtons();
 		fillDayButtons();
 		setEventsIntoCalendar();
 	}
@@ -155,7 +158,8 @@ public class CalendarFrame {
 		int x = 250, 
 			y = 140, 
 			width = 75, 
-			height = 50;		
+			height = 50;
+		
     	for(int i = 0 ; i < 42 ; i++){
     		
     		if(i%7 == 0 && i != 0){
@@ -170,6 +174,7 @@ public class CalendarFrame {
     void fillDayButtons(){
     	int day = 1;
     	int foundDay = findFirstDayOfMonth();
+    	daysOfMonths[1] = actualYear % 4 == 0 ? 29 : 28;
     	for(int i = 0 ; i < 42 ; i++){
     		
     		if(i < foundDay || i > daysOfMonths[actualMonth] + foundDay - 1){
@@ -186,6 +191,7 @@ public class CalendarFrame {
     		}
     		
     	}
+    	markTodayDay();
     }
     
     int findFirstDayOfMonth(){
@@ -213,6 +219,18 @@ public class CalendarFrame {
     	return 10;
     }
     	
+    void markTodayDay(){
+		findPresentDayButton.setVisible(true);
+    	Calendar c = new GregorianCalendar();
+    	if(actualYear == c.get(Calendar.YEAR)){
+    		if(actualMonth == c.get(Calendar.MONTH)){
+    			Border thickBorder = new LineBorder(Color.GREEN, 3);
+    			ui.buttonDayList.get(1 + firstDayOfMonth + c.get(Calendar.DAY_OF_MONTH)).setBorder(thickBorder);
+    			findPresentDayButton.setVisible(false);
+    		}
+    	}
+    }
+    
     void setEventsIntoCalendar(){
     	List<Event> list = ui.dataServiceImpl.getAllEventsBetweenDates(
     			DateConverter.stringToDate(actualYear, actualMonth + 1, 1), 
@@ -223,6 +241,26 @@ public class CalendarFrame {
     		calendar.setTime(date);
     		ui.buttonDayList.get(foundDay - 1 + calendar.get(Calendar.DAY_OF_MONTH)).setBackground(Color.red); 
     	}
+    }
+    
+    void generateAddEventAndFindPresentDayButtons(){
+    	addEventButton = new JButton("ADD EVENT");
+    	addEventButton.setBounds(225, 470, 140, 20);
+    	addEventButton.setBackground(Color.green);
+    	addEventButton.addActionListener(ui);
+    	ui.calComponentList.add(addEventButton);
+    	
+    	findPresentDayButton = new JButton("BACK TO PRESENT DAY");
+    	findPresentDayButton.setBounds(630, 470, 200, 20);
+    	findPresentDayButton.addActionListener(ui);
+    	ui.calComponentList.add(findPresentDayButton);
+    	
+    }
+    
+    void setPresentDate(){
+    	Calendar c = new GregorianCalendar();
+		actualMonth = c.get(Calendar.MONTH);
+		actualYear = c.get(Calendar.YEAR);
     }
 
 
