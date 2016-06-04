@@ -193,19 +193,13 @@ public class AddEventFrame extends JFrame implements ActionListener{
 	}
 
 	private boolean dateCheck(String[] date, String[] time) {
-		if(date[0] == "00" || Integer.parseInt(date[0]) > 31){
+		if(date[0] == "00" || Integer.parseInt(date[0]) > 31 || date[1] == "00" || Integer.parseInt(date[1]) > 12){
 			return false;
 		}
-		if(date[1] == "00" || Integer.parseInt(date[1]) > 12){
+
+		if(Integer.parseInt(time[0]) > 23 || Integer.parseInt(time[1]) > 59){
 			return false;
 		}
-		if(Integer.parseInt(time[0]) > 23){
-			return false;
-		}
-		if(Integer.parseInt(time[1]) > 59){
-			return false;
-		}
-		
 		return true;
 		
 	}
@@ -240,12 +234,7 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		}
 		
 		if(source == accept){
-			if(!addNewEvent()){
-				generateMessage(false);
-			}
-			else {
-				generateMessage(true);
-			}
+			generateMessage(addNewEvent());
 		}
 		
 		

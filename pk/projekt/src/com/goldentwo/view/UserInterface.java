@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
@@ -32,7 +33,10 @@ public class UserInterface extends JFrame implements ActionListener{
 	Filter filter;
 	Sort sort;
 	
-	private JButton calendarButton, listButton, alarmButton;
+	boolean isEvents;
+	
+	private JButton calendarButton, listButton;
+	private JComboBox alarmComboBox;
 	private JSeparator separatorH, separatorV; 
 	
 	public UserInterface(DataServiceImpl dataServiceImpl) {
@@ -42,11 +46,12 @@ public class UserInterface extends JFrame implements ActionListener{
 		listComponentList = new ArrayList<>();
 		filter = null;
 		sort = null;
+		isEvents = true;
 		setLayout(null);
 		listFrame = new ListFrame(this);
 		calendarFrame = new CalendarFrame(this);
 		
-
+		setResizable(false);
 		init();
     }
 	
@@ -79,18 +84,19 @@ public class UserInterface extends JFrame implements ActionListener{
 	private void generateLeftSideButtons(){
     	calendarButton = new JButton("Calendar"); 
     	listButton = new JButton("List");
-    	alarmButton = new JButton("Alarms");
+    	String[] str = {"Events", "Alarms"};
+    	alarmComboBox = new JComboBox<>(str);
     	
     	calendarButton.setBounds(20, 140, 160, 60);
     	listButton.setBounds(20, 210, 160, 60);
-    	alarmButton.setBounds(20, 280, 160, 60);
+    	alarmComboBox.setBounds(20, 280, 160, 30);
     	
     	calendarButton.addActionListener(this);
     	listButton.addActionListener(this);
-    	alarmButton.addActionListener(this);
+    	alarmComboBox.addActionListener(this);
     	add(calendarButton);
     	add(listButton);
-    	add(alarmButton);
+    	add(alarmComboBox);
     }
     
     @Override
@@ -132,6 +138,7 @@ public class UserInterface extends JFrame implements ActionListener{
 				remove(c);
 			}
 			calendarFrame.setMonthAndYear();
+			calendarFrame.markTodayDay();
 		}
 		if(e.getSource() == listFrame.next){
 			listFrame.currentPage++;
@@ -160,6 +167,25 @@ public class UserInterface extends JFrame implements ActionListener{
 			calendarFrame.fillDayButtons();
 			calendarFrame.setEventsIntoCalendar();
 			calendarFrame.markTodayDay();
+		}
+		if(e.getSource() == alarmComboBox){
+			if(alarmComboBox.getSelectedItem().equals("Events")){
+				isEvents = true;
+				calendarFrame.fillDayButtons();
+				calendarFrame.setEventsIntoCalendar();
+				listFrame.currentPage = 1;
+				listFrame.fillTable();
+				listFrame.updateEventCounterLabel();
+				listFrame.updateButtons();
+			}else{
+				isEvents = false;
+				calendarFrame.fillDayButtons();
+				calendarFrame.setEventsIntoCalendar();
+				listFrame.currentPage = 1;
+				listFrame.fillTable();
+				listFrame.updateEventCounterLabel();
+				listFrame.updateButtons();
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@ package com.goldentwo.view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -39,8 +40,9 @@ public class ListFrame implements ListSelectionListener{
 	}
 	
 	public void initJList(){
-		ui.sort = new Sort("date",Direction.ASC);
-		Page<Event> page = ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage);
+		Page<Event> page = ui.isEvents ? 
+				ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage) :
+				ui.dataServiceImpl.getSortedAndFilteredEventsWithAlarm(ui.sort, ui.filter, currentPage);
 		totalElements = page.getTotalElements();
 		totalPages = page.getTotalPages();
 		
@@ -90,10 +92,17 @@ public class ListFrame implements ListSelectionListener{
 	}
 	
 	void fillTable(){
+		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
-	
-		for(Event e : ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage).getContent()){
+		Page<Event> list = ui.isEvents ?
+				ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage) :
+				ui.dataServiceImpl.getSortedAndFilteredEventsWithAlarm(ui.sort, ui.filter, currentPage);
+
+		totalElements = list.getTotalElements();
+		totalPages = list.getTotalPages();
+		
+		for(Event e : list.getContent()){
 			Vector<Object> row = new Vector<>();
 			
 			row.add(e.getName());
@@ -120,14 +129,22 @@ public class ListFrame implements ListSelectionListener{
 		prev.addActionListener(ui);
 		next.addActionListener(ui);
 		
-		prev.setEnabled(false);
-		if(totalPages == currentPage){
-			next.setEnabled(false);
-		}
+		updateButtons();
 	}
 	
     void updateEventCounterLabel(){		
 		eventCounter.setText(10*(currentPage)-9 + " - " + (10*currentPage > totalElements ? totalElements : 10*currentPage)  + " of " + totalElements);
 	}
+    
+    void updateButtons(){
+    	prev.setEnabled(false);
+		if(totalPages == currentPage){
+			next.setEnabled(false);
+		}else{
+			next.setEnabled(true);
+		}
+    }
+    
+    
 	
 }

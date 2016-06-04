@@ -33,6 +33,7 @@ public class CalendarFrame {
 		actualMonth = calendar.get(Calendar.MONTH);
 		actualYear = calendar.get(Calendar.YEAR);
 		
+		initComponents();
 		initTopLabel();
 		setDayLabels();
 		setMonthAndYear();
@@ -43,18 +44,27 @@ public class CalendarFrame {
 		setEventsIntoCalendar();
 	}
 	
-	private void initTopLabel(){
+	private void initComponents(){
 	    ui.topTitle = new JLabel();
+	    
+		previousMonthButton = new JButton("<");
+		nextMonthButton = new JButton(">");
+
+        monLab = new JLabel("Mon"); tueLab = new JLabel("Tue"); wedLab = new JLabel("Wed"); 
+        thuLab = new JLabel("Thu"); friLab = new JLabel("Fri"); 
+        satLab = new JLabel("Sat"); sunLab = new JLabel("Sun");
+        
+        addEventButton = new JButton("ADD EVENT");
+    	findPresentDayButton = new JButton("BACK TO PRESENT DAY");
+	}
+	
+	private void initTopLabel(){
 	    ui.topTitle.setBounds(430, 20, 280, 50);
 	    ui.topTitle.setFont(new Font("Arial", 1, 30));
 	    ui.add(ui.topTitle);
 	}
 	
     void setDayLabels(){
-        monLab = new JLabel("Mon"); tueLab = new JLabel("Tue"); wedLab = new JLabel("Wed"); 
-        thuLab = new JLabel("Thu"); friLab = new JLabel("Fri"); 
-        satLab = new JLabel("Sat"); sunLab = new JLabel("Sun");
-        
         monLab.setBounds(265, 90, 50, 50);
         tueLab.setBounds(345, 90, 50, 50);
         wedLab.setBounds(425, 90, 52, 50);
@@ -133,9 +143,6 @@ public class CalendarFrame {
     }
 
     void generateMonthsButtons() {
-		previousMonthButton = new JButton("<");
-		nextMonthButton = new JButton(">");
-		
 		previousMonthButton.setBounds(225, 140, 20, 325);
 		nextMonthButton.setBounds(810, 140, 20, 325);
 		
@@ -234,7 +241,9 @@ public class CalendarFrame {
     void setEventsIntoCalendar(){
     	List<Event> list = ui.dataServiceImpl.getAllEventsBetweenDates(
     			DateConverter.stringToDate(actualYear, actualMonth + 1, 1), 
-    			DateConverter.stringToDate(actualYear, actualMonth + 1, daysOfMonths[actualMonth]));
+    			DateConverter.stringToDate(actualYear, actualMonth + 1, daysOfMonths[actualMonth]),
+    			ui.isEvents);
+    	System.out.println(ui.isEvents);
     	int foundDay = findFirstDayOfMonth();
     	for(Event e : list){
     		Date date = e.getDate();
@@ -244,13 +253,11 @@ public class CalendarFrame {
     }
     
     void generateAddEventAndFindPresentDayButtons(){
-    	addEventButton = new JButton("ADD EVENT");
     	addEventButton.setBounds(225, 470, 140, 20);
     	addEventButton.setBackground(Color.green);
     	addEventButton.addActionListener(ui);
     	ui.calComponentList.add(addEventButton);
     	
-    	findPresentDayButton = new JButton("BACK TO PRESENT DAY");
     	findPresentDayButton.setBounds(630, 470, 200, 20);
     	findPresentDayButton.addActionListener(ui);
     	ui.calComponentList.add(findPresentDayButton);
