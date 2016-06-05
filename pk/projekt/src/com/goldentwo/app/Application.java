@@ -57,7 +57,7 @@ public class Application {
 		
 		//dataServiceImpl.getAllEventsBetweenDates(new Date(), new Date());
 		
-		Page<Event> events = dataServiceImpl.getSortedAndFilteredEventsWithAlarm(new Sort("date", Direction.DESC), new Filter("name", "String"), 1);
+		Page<Event> events = dataServiceImpl.getAllSortedAndFilteredEventsBetweenDates(DateConverter.stringToDate(2016, 6, 1), DateConverter.stringToDate(2020, 12, 3), true, new Sort("date", Direction.DESC), new Filter("name", "String"), 1);
 		System.out.println(events);
 		for(Event event : events.getContent()) {
 			System.out.println(event.getId() + ": " + event.getName() + " " + DateConverter.dateToMySqlDateTimeString(event.getDate()));
@@ -67,7 +67,7 @@ public class Application {
 		UserInterface ui = new UserInterface(dataServiceImpl);
 		
 		ui.setVisible(true);
-
+		
 	}
 
 }

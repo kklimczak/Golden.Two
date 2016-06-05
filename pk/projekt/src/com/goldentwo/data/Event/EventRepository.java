@@ -167,6 +167,41 @@ public class EventRepository {
 		}
 	}
 	
+	public Page<Event> findByDateRangeWithSortAndFilterParams(Date from, Date to, boolean isEvent, Sort sort, Filter filter, int page) {
+		String dateColumn = isEvent ? "date" : "alarm";
+		String query = "SELECT * FROM events";
+		query += " WHERE " +dateColumn+ " >= '" + new java.sql.Date(from.getTime()) + "' AND date <= '" + new java.sql.Date(to.getTime()) + "'";
+		if (filter != null) {
+			query += " AND `" + filter.getField() + "` LIKE '%" + filter.getValue() + "%'";
+		}
+		query += " ORDER BY " + sort.getField();
+		if (sort.getDirection().equals(Direction.DESC)) {
+			query += " DESC";
+		}
+		query += " LIMIT "+ (page-1)*10 + ", 10";
+		try {
+			List<Event> events = new ArrayList<Event>();
+			ResultSet resultSet = db.getStmt().executeQuery(query);
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+		        String name = resultSet.getString("name");
+		        String description = resultSet.getString("description");
+		        String place = resultSet.getString("place");
+		        Date date = new Date(resultSet.getTimestamp("date").getTime());
+		        Timestamp timestamp = resultSet.getTimestamp("alarm"); 
+		        Date alarm = timestamp != null ? new Date (timestamp.getTime()) : null;
+		        events.add(new Event(id, name, description, place, date, alarm));
+			}
+			int amountOfEvents = countAllEvents(filter);
+			Page<Event> data = new Page<Event>(events, amountOfEvents, (int)Math.ceil(amountOfEvents/10.0), 10, page, sort, filter);
+			logger.info("findByDateRangeWithSortAndFilterParams() called and return " + amountOfEvents + " elements on page: " + page + " with sort: " + sort + " and filter: " + filter + "with dates: " + from + " - " + to);
+			return data;
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
 	public List<Event> findByDateRange(Date from, Date to, boolean isEvent) {
 		String dateColumn = isEvent ? "date" : "alarm";
 		try {

@@ -59,6 +59,15 @@ public class DataServiceImpl implements DataService {
 		logger.info("getAllEventsBetweenDates() called");
 		return eventRepository.findByDateRange(new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()), isEvent);
 	}
+	
+	@Override
+	public Page<Event> getAllSortedAndFilteredEventsBetweenDates(Date from, Date to, boolean isEvent, Sort sort, Filter filter, int page) {
+		if(sort == null) {
+			sort = new Sort("id", Direction.ASC);
+		}
+		logger.info("getAllSortedAndFilteredEventsBetweenDates() called");
+		return eventRepository.findByDateRangeWithSortAndFilterParams(from, to, isEvent, sort, filter, page);
+	}
 
 	@Override
 	public Event getEventById(int id) {
