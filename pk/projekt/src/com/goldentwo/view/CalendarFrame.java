@@ -227,7 +227,7 @@ public class CalendarFrame {
     }
     	
     void markTodayDay(){
-		findPresentDayButton.setVisible(true);
+		if(ui.calComponentList.get(0).isVisible())findPresentDayButton.setVisible(true);
     	Calendar c = new GregorianCalendar();
     	if(actualYear == c.get(Calendar.YEAR)){
     		if(actualMonth == c.get(Calendar.MONTH)){

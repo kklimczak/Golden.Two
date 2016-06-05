@@ -3,12 +3,15 @@ package com.goldentwo.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.FileVisitResult;
+import java.text.ParseException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
 import com.goldentwo.utils.Pagination.Direction;
 import com.goldentwo.utils.Pagination.Filter;
@@ -20,6 +23,7 @@ public class FilterFrame extends JFrame implements ActionListener{
 	JCheckBox sortCheckBox, filterCheckBox;
 	JComboBox<Object> sortName, sortDirection, filtrName;
 	JTextField filtrValue;
+	JFormattedTextField dateFrom, dateTo;
 	JButton acceptButton, cancelButton;
 	
 	public FilterFrame(UserInterface ui){
@@ -43,9 +47,11 @@ public class FilterFrame extends JFrame implements ActionListener{
 	     filtrValue = new JTextField();
 	     acceptButton = new JButton("Accept");
 	     cancelButton = new JButton("Cancel");
+	     dateFrom = null;
+	     dateTo = null;
 	     
 	     printCheckBox();
-	     printComboBoxes();
+	     printComponents();
 	     printButtons();
 	}
 
@@ -59,17 +65,20 @@ public class FilterFrame extends JFrame implements ActionListener{
 			sortCheckBox.setSelected(true);
 		}
 		
+		if(ui.filter != null){
+			filterCheckBox.setSelected(true);
+		}
+		
 		add(sortCheckBox);
 		add(filterCheckBox);
 	}
 	
-	private void printComboBoxes() {
+	private void printComponents() {
 		sortName.addItem("ID");
 		sortName.addItem("Name");
 		sortName.addItem("Description");
 		sortName.addItem("Place");
 		sortName.addItem("Date");
-		sortName.addActionListener(this);
 		sortName.setEnabled(sortCheckBox.isSelected());
 		
 		sortDirection.addItem("Descending");
@@ -82,6 +91,7 @@ public class FilterFrame extends JFrame implements ActionListener{
 		filtrName.addItem("Place");
 		filtrName.addItem("Date");
 		filtrName.setEnabled(filterCheckBox.isSelected());
+		filtrName.addActionListener(this);
 		
 		sortName.setBounds(10, 60, 120, 30);
 		sortDirection.setBounds(140, 60, 120, 30);
@@ -90,10 +100,27 @@ public class FilterFrame extends JFrame implements ActionListener{
 		
 		filtrValue.setEnabled(filterCheckBox.isSelected());
 		
+		MaskFormatter dateMask = null;
+		try {
+			dateMask = new MaskFormatter("##-##-####");
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		dateMask.setPlaceholderCharacter('@');
+		dateFrom = new JFormattedTextField(dateMask);
+		dateTo = new JFormattedTextField(dateMask);
+		
+		dateFrom.setBounds(10, 210, 120, 30);
+		dateTo.setBounds(140, 210, 120, 30);
+		dateFrom.setVisible(false);
+		dateTo.setVisible(false);
+		
 		add(sortName);
 		add(sortDirection);
 		add(filtrName);
 		add(filtrValue);
+		add(dateFrom);
+		add(dateTo);
 	}
 	
 	private void printButtons(){
@@ -118,6 +145,20 @@ public class FilterFrame extends JFrame implements ActionListener{
 			filtrValue.setEnabled(!filtrValue.isEnabled());
 		}
 		
+		if(e.getSource() == filtrName){
+			if(filtrName.getSelectedItem().equals("Date")){
+				filtrValue.setVisible(false);
+				dateFrom.setVisible(true);
+				dateTo.setVisible(true);
+			}else{
+				if(!filtrValue.isVisible()){
+					filtrValue.setVisible(true);
+					dateFrom.setVisible(false);
+					dateTo.setVisible(false);
+				}
+			}
+		}
+		
 		if(e.getSource() == cancelButton){
 			dispose();
 		}
@@ -128,6 +169,8 @@ public class FilterFrame extends JFrame implements ActionListener{
 		}
 		
 	}
+	
+	//private void print
 
 	private void update() {
 		if(sortCheckBox.isSelected()){
@@ -143,7 +186,6 @@ public class FilterFrame extends JFrame implements ActionListener{
 		}
 		
 		if(filterCheckBox.isSelected()){
-			ui.listFrame.update();
 			ui.filter = new Filter(null, null);
 			ui.filter.setField((String) filtrName.getSelectedItem());
 			ui.filter.setValue(filtrValue.getText());
@@ -151,8 +193,26 @@ public class FilterFrame extends JFrame implements ActionListener{
 			ui.filter = null;
 		}
 		
-		ui.listFrame.fillTable();
-		ui.listFrame.updateEventCounterLabel();
-		ui.listFrame.updateButtons();
+		ui.listFrame.update();
+	}
+	
+	private boolean dateCheckAndSet(){
+		if(dateFrom.getText().equals("@@-@@-@@@@") || dateTo.getText().equals("@@-@@-@@@@")){
+			return false;
+		}
+		
+		String[] dateFromSplit = dateFrom.getText().split("-");
+		String[] dateToSplit = dateTo.getText().split("-");
+		
+		if(dateFromSplit[0] == "00" || Integer.parseInt(dateFromSplit[0]) > 31 || 
+		   dateFromSplit[1] == "00" || Integer.parseInt(dateFromSplit[1]) > 12 ||
+		   dateToSplit[0] == "00" || Integer.parseInt(dateToSplit[0]) > 31 || 
+		   dateToSplit[1] == "00" || Integer.parseInt(dateToSplit[1]) > 12){
+			
+			return false;
+		}
+		
+		
+		return true;
 	}
 }
