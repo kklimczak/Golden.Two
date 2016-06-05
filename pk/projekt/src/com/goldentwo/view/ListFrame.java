@@ -2,6 +2,7 @@ package com.goldentwo.view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -71,7 +72,7 @@ public class ListFrame implements ListSelectionListener{
 		table.setBounds(225, 140, 605, 300);
 		table.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		table.setRowHeight(30);
-		table.getColumnModel().getColumn(1).setWidth(400);
+		table.getColumnModel().getColumn(0).setPreferredWidth(250);
 		table.setDefaultEditor(Object.class, null);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setBorder(null);
@@ -122,7 +123,8 @@ public class ListFrame implements ListSelectionListener{
 			
 			row.add(e.getName());
 			Date date = ui.isEvents ? e.getDate() : e.getAlarm();
-			row.add(date);
+			String dateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
+			row.add(dateStr);
 
 			model.addRow(row);
 		}

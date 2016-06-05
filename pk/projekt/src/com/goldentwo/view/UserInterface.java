@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
@@ -45,7 +46,7 @@ public class UserInterface extends JFrame implements ActionListener{
 	
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem filterItem, exitItem, deleteOldEventsItem;
+	private JMenuItem filterItem, exitItem, deleteOldEventsItem, saveToXML, loadFromXML;
 	
 	public UserInterface(DataServiceImpl dataServiceImpl) {
 		this.dataServiceImpl = dataServiceImpl;
@@ -95,14 +96,21 @@ public class UserInterface extends JFrame implements ActionListener{
     	menu = new JMenu("Options");
     	filterItem = new JMenuItem("Filter manager");
     	deleteOldEventsItem = new JMenuItem("Delete old events");
+    	saveToXML = new JMenuItem("Save data to XML");
+    	loadFromXML = new JMenuItem("Load data from XML");
     	
     	exitItem = new JMenuItem("Exit");
     	filterItem.addActionListener(this);
     	exitItem.addActionListener(this);
     	deleteOldEventsItem.addActionListener(this);
+    	saveToXML.addActionListener(this);
+    	loadFromXML.addActionListener(this);
     	
     	menu.add(filterItem);
     	menu.add(deleteOldEventsItem);
+    	menu.addSeparator();
+    	menu.add(saveToXML);
+    	menu.add(loadFromXML);
     	menu.addSeparator();
     	menu.add(exitItem);
     	
@@ -130,27 +138,29 @@ public class UserInterface extends JFrame implements ActionListener{
     
     @Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == calendarFrame.previousMonthButton){
+    	Object source = e.getSource();
+    	
+		if(source == calendarFrame.previousMonthButton){
 			calendarFrame.actualMonth--;
 			calendarFrame.setMonthAndYear();
 			calendarFrame.fillDayButtons();
 			calendarFrame.setEventsIntoCalendar();
 			calendarFrame.markTodayDay();
 		}
-		if(e.getSource() == calendarFrame.nextMonthButton){
+		if(source == calendarFrame.nextMonthButton){
 			calendarFrame.actualMonth++;
 			calendarFrame.setMonthAndYear();
 			calendarFrame.fillDayButtons();
 			calendarFrame.setEventsIntoCalendar();
 			calendarFrame.markTodayDay();
 		}
-		if(e.getSource() == exitItem){
+		if(source == exitItem){
 			dispose();
 		}
-		if(e.getSource() == filterItem){
+		if(source == filterItem){
 			new FilterFrame(this).setVisible(true);
 		}
-		if(e.getSource() == listButton){
+		if(source == listButton){
 			for(JButton b : buttonDayList){
 				remove(b);
 			}
@@ -162,7 +172,7 @@ public class UserInterface extends JFrame implements ActionListener{
 			}
 			topTitle.setText("EVENT LIST");
 		}
-		if(e.getSource() == calendarButton){
+		if(source == calendarButton){
 			for(JButton b : buttonDayList){
 				add(b);
 			}
@@ -175,7 +185,7 @@ public class UserInterface extends JFrame implements ActionListener{
 			calendarFrame.setMonthAndYear();
 			calendarFrame.markTodayDay();
 		}
-		if(e.getSource() == listFrame.next){
+		if(source == listFrame.next){
 			listFrame.currentPage++;
 			listFrame.updateEventCounterLabel();
 			listFrame.fillTable();
@@ -184,7 +194,7 @@ public class UserInterface extends JFrame implements ActionListener{
 			}
 			listFrame.prev.setEnabled(true);
 		}
-		if(e.getSource() == listFrame.prev){
+		if(source == listFrame.prev){
 			listFrame.currentPage--;
 			listFrame.updateEventCounterLabel();
 			listFrame.fillTable();
@@ -193,17 +203,17 @@ public class UserInterface extends JFrame implements ActionListener{
 			}
 			listFrame.next.setEnabled(true);
 		}
-		if(e.getSource() == calendarFrame.addEventButton){
+		if(source == calendarFrame.addEventButton){
 			new AddEventFrame(dataServiceImpl, null).setVisible(true);
 		}
-		if(e.getSource() == calendarFrame.findPresentDayButton){
+		if(source == calendarFrame.findPresentDayButton){
 			calendarFrame.setPresentDate();
 			calendarFrame.setMonthAndYear();
 			calendarFrame.fillDayButtons();
 			calendarFrame.setEventsIntoCalendar();
 			calendarFrame.markTodayDay();
 		}
-		if(e.getSource() == alarmComboBox){
+		if(source == alarmComboBox){
 			if(alarmComboBox.getSelectedItem().equals("Events")){
 				isEvents = true;
 				calendarFrame.fillDayButtons();
@@ -216,12 +226,34 @@ public class UserInterface extends JFrame implements ActionListener{
 				listFrame.update();
 			}
 		}
-		if(e.getSource() == deleteOldEventsItem){
+		if(source == deleteOldEventsItem){
 			new DeleteOldEventsFrame(this).setVisible(true);
 		}
-		if(e.getSource() == listFrame.details){
+		if(source == listFrame.details){
 			Event updateEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
 			new AddEventFrame(dataServiceImpl, updateEvent).setVisible(true);
 		}
+		if(source == saveToXML){
+			dataServiceImpl.allEventsToXml();
+			generateMessage(true);
+		}
+		if(source == loadFromXML){
+			generateMessage(!(dataServiceImpl.allEventsFromXml() == null));
+		}
+	}
+    
+	private void generateMessage(boolean flag){
+		if(flag){
+			JOptionPane.showMessageDialog(this,
+					  "Success!",
+					  "Message",
+					  JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(this,
+					  "Cannot load date from XML file!",
+					  "Error",
+					  JOptionPane.ERROR_MESSAGE);
+		}
+
 	}
 }

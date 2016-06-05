@@ -2,6 +2,8 @@ package com.goldentwo.view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -159,7 +161,12 @@ public class CalendarFrame {
     	}
     	
     	for(JButton button : ui.buttonDayList){
-    		button.addActionListener(ui);
+    		button.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					new DayListEventsFrame(getDayEvents(Integer.parseInt(e.getActionCommand()))).setVisible(true);	
+				}
+			});
     	}
 
 		int x = 250, 
@@ -244,8 +251,13 @@ public class CalendarFrame {
     			DateConverter.stringToDate(actualYear, actualMonth + 1, daysOfMonths[actualMonth]),
     			ui.isEvents);
     	int foundDay = findFirstDayOfMonth();
+    	Date date = null;
     	for(Event e : list){
-    		Date date = e.getDate();
+    		if(ui.isEvents){
+    			date = e.getDate();
+    		}else{
+    			date = e.getAlarm();
+    		}
     		calendar.setTime(date);
     		ui.buttonDayList.get(foundDay - 1 + calendar.get(Calendar.DAY_OF_MONTH)).setBackground(Color.red); 
     	}
@@ -267,6 +279,15 @@ public class CalendarFrame {
     	Calendar c = new GregorianCalendar();
 		actualMonth = c.get(Calendar.MONTH);
 		actualYear = c.get(Calendar.YEAR);
+    }
+    
+    List<Event> getDayEvents(int dayNumber){
+    	Date from = DateConverter.stringToDate(actualYear, actualMonth + 1, dayNumber);
+    	Date to = DateConverter.stringToDate(actualYear, actualMonth + 1, dayNumber+1);
+    	
+    	List<Event> list = ui.dataServiceImpl.getAllEventsBetweenDates(from, to, ui.isEvents);
+    	
+    	return list;
     }
 
 
