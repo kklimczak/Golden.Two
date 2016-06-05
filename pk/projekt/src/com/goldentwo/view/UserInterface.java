@@ -44,7 +44,7 @@ public class UserInterface extends JFrame implements ActionListener{
 	
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem filterItem, exitItem;
+	private JMenuItem filterItem, exitItem, deleteOldEventsItem;
 	
 	public UserInterface(DataServiceImpl dataServiceImpl) {
 		this.dataServiceImpl = dataServiceImpl;
@@ -93,11 +93,15 @@ public class UserInterface extends JFrame implements ActionListener{
     	menuBar = new JMenuBar();
     	menu = new JMenu("Options");
     	filterItem = new JMenuItem("Filter manager");
+    	deleteOldEventsItem = new JMenuItem("Delete old events");
+    	
     	exitItem = new JMenuItem("Exit");
     	filterItem.addActionListener(this);
     	exitItem.addActionListener(this);
+    	deleteOldEventsItem.addActionListener(this);
     	
     	menu.add(filterItem);
+    	menu.add(deleteOldEventsItem);
     	menu.addSeparator();
     	menu.add(exitItem);
     	
@@ -210,6 +214,9 @@ public class UserInterface extends JFrame implements ActionListener{
 				calendarFrame.setEventsIntoCalendar();
 				listFrame.update();
 			}
+		}
+		if(e.getSource() == deleteOldEventsItem){
+			new DeleteOldEventsFrame(this).setVisible(true);
 		}
 	}
 }

@@ -211,7 +211,9 @@ public class FilterFrame extends JFrame implements ActionListener{
 			
 			return false;
 		}
-		
+		/*
+		 * TODO SET FILTER : PRINT EVENTS BETWEEN DATES
+		 */
 		
 		return true;
 	}
