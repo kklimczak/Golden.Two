@@ -243,7 +243,6 @@ public class CalendarFrame {
     			DateConverter.stringToDate(actualYear, actualMonth + 1, 1), 
     			DateConverter.stringToDate(actualYear, actualMonth + 1, daysOfMonths[actualMonth]),
     			ui.isEvents);
-    	System.out.println(ui.isEvents);
     	int foundDay = findFirstDayOfMonth();
     	for(Event e : list){
     		Date date = e.getDate();

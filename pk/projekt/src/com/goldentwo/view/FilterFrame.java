@@ -10,9 +10,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
+import com.goldentwo.utils.Date.DateConverter;
 import com.goldentwo.utils.Pagination.Direction;
 import com.goldentwo.utils.Pagination.Filter;
 import com.goldentwo.utils.Pagination.Sort;
@@ -65,7 +67,7 @@ public class FilterFrame extends JFrame implements ActionListener{
 			sortCheckBox.setSelected(true);
 		}
 		
-		if(ui.filter != null){
+		if(ui.filter != null || ui.listFrame.dateFrom != null){
 			filterCheckBox.setSelected(true);
 		}
 		
@@ -186,11 +188,17 @@ public class FilterFrame extends JFrame implements ActionListener{
 		}
 		
 		if(filterCheckBox.isSelected()){
-			ui.filter = new Filter(null, null);
-			ui.filter.setField((String) filtrName.getSelectedItem());
-			ui.filter.setValue(filtrValue.getText());
+			if(filtrName.getSelectedItem().equals("Date")){
+				generateMessage(dateCheckAndSet());
+			}else{
+				ui.filter = new Filter(null, null);
+				ui.filter.setField((String) filtrName.getSelectedItem());
+				ui.filter.setValue(filtrValue.getText());
+			}
 		}else{
 			ui.filter = null;
+			ui.listFrame.dateFrom = null;
+			ui.listFrame.dateTo = null;
 		}
 		
 		ui.listFrame.update();
@@ -211,10 +219,30 @@ public class FilterFrame extends JFrame implements ActionListener{
 			
 			return false;
 		}
-		/*
-		 * TODO SET FILTER : PRINT EVENTS BETWEEN DATES
-		 */
+		
+		ui.filter = null;
+		ui.listFrame.dateFrom = DateConverter.stringToDate(Integer.parseInt(dateFromSplit[2]), 
+														   Integer.parseInt(dateFromSplit[1]), 
+														   Integer.parseInt(dateFromSplit[0]));
+		ui.listFrame.dateTo = DateConverter.stringToDate(Integer.parseInt(dateToSplit[2]), 
+														 Integer.parseInt(dateToSplit[1]), 
+													     Integer.parseInt(dateToSplit[0]));
 		
 		return true;
+	}
+	
+	private void generateMessage(boolean flag){
+		if(flag){
+			JOptionPane.showMessageDialog(this,
+					  "Success!",
+					  "Message",
+					  JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(this,
+					  "Incorrect data!",
+					  "Error",
+					  JOptionPane.ERROR_MESSAGE);
+		}
+
 	}
 }

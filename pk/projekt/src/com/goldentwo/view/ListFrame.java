@@ -2,6 +2,7 @@ package com.goldentwo.view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -31,10 +32,14 @@ public class ListFrame implements ListSelectionListener{
 	JButton prev, next;
 	JLabel eventCounter;
 	
+	Date dateFrom, dateTo;
+	
 	public ListFrame(UserInterface ui){
 		this.ui = ui;
 		currentPage = 1;
 		events = new Vector<>();
+		dateFrom = null;
+		dateTo = null;
 		initJList();
 		generateButtons();
 	}
@@ -95,9 +100,16 @@ public class ListFrame implements ListSelectionListener{
 		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
-		Page<Event> list = ui.isEvents ?
-				ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage) :
-				ui.dataServiceImpl.getSortedAndFilteredEventsWithAlarm(ui.sort, ui.filter, currentPage);
+		Page<Event> list = null;
+		
+		if(dateFrom == null || dateTo == null){
+			list = ui.isEvents ?
+				   ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage) :
+				   ui.dataServiceImpl.getSortedAndFilteredEventsWithAlarm(ui.sort, ui.filter, currentPage);
+		}else{
+			list = ui.dataServiceImpl.getAllSortedAndFilteredEventsBetweenDates(dateFrom, dateTo, ui.isEvents, ui.sort, ui.filter, currentPage);
+		}
+		
 
 		totalElements = list.getTotalElements();
 		totalPages = list.getTotalPages();
@@ -106,7 +118,8 @@ public class ListFrame implements ListSelectionListener{
 			Vector<Object> row = new Vector<>();
 			
 			row.add(e.getName());
-			row.add(e.getDate()); 
+			Date date = ui.isEvents ? e.getDate() : e.getAlarm();
+			row.add(date);
 
 			model.addRow(row);
 		}

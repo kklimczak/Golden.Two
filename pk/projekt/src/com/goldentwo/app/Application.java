@@ -49,13 +49,15 @@ public class Application {
 //			dataServiceImpl.addEvent(new Event(1, "Name " + i, "Description " + i, "Place " + i, DateConverter.convertToDateWithTime(2016, 05, i, 11, 12, 13), null));
 //		}
 		
-		dataServiceImpl.updateEvent(new Event(1, "String [edit]", "String", "Place", new Date(), new Date()));
+		//dataServiceImpl.updateEvent(new Event(1, "String [edit]", "String", "Place", new Date(), new Date()));
 		
 		//dataServiceImpl.deleteEvent(1);
 		
 		//dataServiceImpl.deleteEventBeforeDate(new Date());
 		
 		//dataServiceImpl.getAllEventsBetweenDates(new Date(), new Date());
+		
+		
 		
 		Page<Event> events = dataServiceImpl.getAllSortedAndFilteredEventsBetweenDates(DateConverter.stringToDate(2016, 6, 1), DateConverter.stringToDate(2020, 12, 3), true, new Sort("date", Direction.DESC), new Filter("name", "String"), 1);
 		System.out.println(events);
