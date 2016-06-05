@@ -3,7 +3,9 @@ package com.goldentwo.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -30,10 +32,12 @@ public class AddEventFrame extends JFrame implements ActionListener{
 	private JCheckBox alarmCheckBox;
 	private JLabel nameL, placeL, descL, dateL;
 	private JButton accept, cancel;
-	private JOptionPane message;
+	
+	private Event updateEvent;
 
-	public AddEventFrame(DataServiceImpl ds){
+	public AddEventFrame(DataServiceImpl ds, Event updateEvent){
 		this.ds = ds;
+		this.updateEvent = updateEvent;
 		init();
 	}
 	
@@ -48,6 +52,9 @@ public class AddEventFrame extends JFrame implements ActionListener{
         
         print();
         printButtons();
+        if(updateEvent != null){
+        	getEventProperties();
+        }
 	}
 	
 	private void print(){
@@ -114,7 +121,11 @@ public class AddEventFrame extends JFrame implements ActionListener{
 	}
 	
 	private void printButtons(){
-		accept = new JButton("Accept");
+		if(updateEvent != null){
+			accept = new JButton("Update");
+		}else{
+			accept = new JButton("Accept");
+		}
 		accept.setBounds(10, 420, 100, 40);
 		add(accept);
 		accept.addActionListener(this);
@@ -131,44 +142,34 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		String[] alarmParts = null;
 		String[] aTimeParts = null;
 		String eName, eDesc, ePlace;
-				
-		if(name.getText().isEmpty() || description.getText().isEmpty() || place.getText().isEmpty()) {
-			return false;
-		}
 		
-		if(date.getText().equals("@@-@@-@@@@") || dateTime.getText().equals("$$:$$")){
+		if(!fieldCheck()){
 			return false;
 		}
 		
 		if(alarmCheckBox.isSelected()){
-			if(alarm.getText().equals("@@-@@-@@@@") || alarmTime.getText().equals("$$:$$")){
-				return false;
-			}
-			
 			alarmParts = alarm.getText().split("-");
 			aTimeParts = alarmTime.getText().split(":");
-			
-			if(!dateCheck(alarmParts, aTimeParts)){
-				return false;
-			}
 		}
 		
 		dateParts = date.getText().split("-");
 		timeParts = dateTime.getText().split(":");
-		
-		if(!dateCheck(dateParts, timeParts)){
-			return false;
-		}
+
 		
 		eName = name.getText();
 		eDesc = description.getText();
 		ePlace = place.getText();
 
-		ds.addEvent(createEvent(eName, eDesc, ePlace, dateParts, timeParts, alarmParts, aTimeParts));
+		if(updateEvent == null){
+			ds.addEvent(createEvent(1, eName, eDesc, ePlace, dateParts, timeParts, alarmParts, aTimeParts));
+		}else{
+			ds.updateEvent(createEvent(updateEvent.getId(),eName, eDesc, ePlace, dateParts, timeParts, alarmParts, aTimeParts));
+		}
+		
 		return true;
 	}
 
-	private Event createEvent(String name, String desc, String place, String[] dateParts, String[] timeParts, String[] alarmParts, String[] aTimeParts){
+	private Event createEvent(int id, String name, String desc, String place, String[] dateParts, String[] timeParts, String[] alarmParts, String[] aTimeParts){
 		
 		Date alarmDate = null;
 		Date eventDate = DateConverter.convertToDateWithTime(Integer.parseInt(dateParts[2]), 
@@ -187,9 +188,34 @@ public class AddEventFrame extends JFrame implements ActionListener{
 															0);
 			
 		}
-		System.out.println(alarmDate);
 		
-		return new Event(1, name, desc, place, eventDate, alarmDate);
+		return new Event(id, name, desc, place, eventDate, alarmDate);
+	}
+	
+	private boolean fieldCheck(){
+		if(name.getText().isEmpty() || description.getText().isEmpty() || place.getText().isEmpty()) {
+			return false;
+		}
+		
+		if(date.getText().equals("@@-@@-@@@@") || dateTime.getText().equals("$$:$$")){
+			return false;
+		}
+		
+		if(alarmCheckBox.isSelected()){
+			if(alarm.getText().equals("@@-@@-@@@@") || alarmTime.getText().equals("$$:$$")){
+				return false;
+			}
+			
+			if(!dateCheck(alarm.getText().split("-"), alarmTime.getText().split(":"))){
+				return false;
+			}
+		}
+		
+		if(!dateCheck(date.getText().split("-"), dateTime.getText().split(":"))){
+			return false;
+		}
+		
+		return true;
 	}
 
 	private boolean dateCheck(String[] date, String[] time) {
@@ -218,7 +244,60 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		}
 
 	}
+	
+	private void getEventProperties(){
+		name.setText(updateEvent.getName());
+		description.setText(updateEvent.getDescription());
+		place.setText(updateEvent.getPlace());
+		
+		String day, month, year, hour, minutes;
+		String dateString, timeString;
+		
+		Calendar c = new GregorianCalendar();
+		c.setTime(updateEvent.getDate());
+		
+		day = addZeroStringIfNeed(Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
+		month = addZeroStringIfNeed(Integer.toString(c.get(Calendar.MONTH) + 1));
+		year = Integer.toString(c.get(Calendar.YEAR));
+		hour = addZeroStringIfNeed(Integer.toString(c.get(Calendar.HOUR_OF_DAY)));
+		minutes = addZeroStringIfNeed(Integer.toString(c.get(Calendar.MINUTE)));
+		
+		
+		dateString = day + "-" + month + "-" + year;
+		timeString = hour + ":" + minutes;
+		
+		date.setValue(dateString);
+		dateTime.setValue(timeString);
+		
+		if(updateEvent.getAlarm() != null){
+			alarmCheckBox.setSelected(true);
+			alarm.setVisible(true);
+			alarmTime.setVisible(true);
+			
+			c.setTime(updateEvent.getAlarm());
+			day = addZeroStringIfNeed(Integer.toString(c.get(Calendar.DAY_OF_MONTH)));
+			month = addZeroStringIfNeed(Integer.toString(c.get(Calendar.MONTH) + 1));
+			year = Integer.toString(c.get(Calendar.YEAR));
+			hour = addZeroStringIfNeed(Integer.toString(c.get(Calendar.HOUR_OF_DAY)));
+			minutes = addZeroStringIfNeed(Integer.toString(c.get(Calendar.MINUTE)));
+			
+			
+			dateString = day + "-" + month + "-" + year;
+			timeString = hour + ":" + minutes;
+			
+			alarm.setValue(dateString);
+			alarmTime.setValue(timeString);
+		}
+	}
 
+	private String addZeroStringIfNeed(String str){
+		if(str.length() == 1){
+			str = "0" + str;
+		}
+		
+		return str;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
@@ -237,6 +316,9 @@ public class AddEventFrame extends JFrame implements ActionListener{
 			generateMessage(addNewEvent());
 		}
 		
+		if(source == cancel){
+			dispose();
+		}
 		
 	}
 }

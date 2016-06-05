@@ -94,6 +94,9 @@ public class DeleteOldEventsFrame extends JFrame implements ActionListener {
 			ui.calendarFrame.setEventsIntoCalendar();
 			ui.listFrame.update();
 		}
+		if(e.getSource() == cancel){
+			dispose();
+		}
 		
 	}
 	

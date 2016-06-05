@@ -24,13 +24,14 @@ import com.goldentwo.utils.Pagination.*;
 public class ListFrame implements ListSelectionListener{
 	
 	private UserInterface ui;
-	private int latestSelectedRow;
+	int latestSelectedRow;
 	int currentPage;
 	int totalElements, totalPages;
 	Vector<Vector<String>> events;
 	JTable table;
-	JButton prev, next;
+	JButton prev, next, details;
 	JLabel eventCounter;
+	Page<Event> list;
 	
 	Date dateFrom, dateTo;
 	
@@ -40,6 +41,8 @@ public class ListFrame implements ListSelectionListener{
 		events = new Vector<>();
 		dateFrom = null;
 		dateTo = null;
+		latestSelectedRow = -1;
+		list = null;
 		initJList();
 		generateButtons();
 	}
@@ -93,6 +96,7 @@ public class ListFrame implements ListSelectionListener{
 		if(e.getValueIsAdjusting()){
 			String str = e.getSource().toString();
 			latestSelectedRow = str.charAt(str.length() - 2) - 48;
+			details.setEnabled(true);
 		}
 	}
 	
@@ -100,7 +104,6 @@ public class ListFrame implements ListSelectionListener{
 		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
-		Page<Event> list = null;
 		
 		if(dateFrom == null || dateTo == null){
 			list = ui.isEvents ?
@@ -128,12 +131,15 @@ public class ListFrame implements ListSelectionListener{
 	private void generateButtons(){
 		prev = new JButton("Previous");
 		next = new JButton("Next");
+		details = new JButton("Details");
 		
 		prev.setBounds(225, 440, 100, 25);
 		next.setBounds(730, 440, 100, 25);
+		details.setBounds(730, 100, 100, 25);
 		
 		ui.listComponentList.add(prev);
 		ui.listComponentList.add(next);
+		ui.listComponentList.add(details);
 		
 		eventCounter = new JLabel("Generated Label");
 		eventCounter.setBounds(500, 440, 100, 25);
@@ -141,6 +147,11 @@ public class ListFrame implements ListSelectionListener{
 		updateEventCounterLabel();
 		prev.addActionListener(ui);
 		next.addActionListener(ui);
+		details.addActionListener(ui);
+		
+		if(latestSelectedRow == -1){
+			details.setEnabled(false);
+		}
 		
 		updateButtons();
 	}

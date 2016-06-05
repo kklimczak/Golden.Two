@@ -17,6 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import com.goldentwo.data.Event.Event;
 import com.goldentwo.service.DataServiceImpl;
 import com.goldentwo.utils.Pagination.*;
 
@@ -193,7 +194,7 @@ public class UserInterface extends JFrame implements ActionListener{
 			listFrame.next.setEnabled(true);
 		}
 		if(e.getSource() == calendarFrame.addEventButton){
-			new AddEventFrame(dataServiceImpl).setVisible(true);
+			new AddEventFrame(dataServiceImpl, null).setVisible(true);
 		}
 		if(e.getSource() == calendarFrame.findPresentDayButton){
 			calendarFrame.setPresentDate();
@@ -217,6 +218,10 @@ public class UserInterface extends JFrame implements ActionListener{
 		}
 		if(e.getSource() == deleteOldEventsItem){
 			new DeleteOldEventsFrame(this).setVisible(true);
+		}
+		if(e.getSource() == listFrame.details){
+			Event updateEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
+			new AddEventFrame(dataServiceImpl, updateEvent).setVisible(true);
 		}
 	}
 }
