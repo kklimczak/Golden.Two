@@ -145,6 +145,13 @@ public class ListFrame implements ListSelectionListener{
 		}
     }
     
+    void update(){
+    	currentPage = 1;
+    	fillTable();
+    	updateEventCounterLabel();
+    	updateButtons();
+    }
+    
     
 	
 }

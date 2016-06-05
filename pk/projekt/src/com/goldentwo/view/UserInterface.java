@@ -11,6 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
@@ -38,6 +41,10 @@ public class UserInterface extends JFrame implements ActionListener{
 	private JButton calendarButton, listButton;
 	private JComboBox alarmComboBox;
 	private JSeparator separatorH, separatorV; 
+	
+	private JMenuBar menuBar;
+	private JMenu menu;
+	private JMenuItem filterItem, exitItem;
 	
 	public UserInterface(DataServiceImpl dataServiceImpl) {
 		this.dataServiceImpl = dataServiceImpl;
@@ -78,7 +85,24 @@ public class UserInterface extends JFrame implements ActionListener{
         	add(b);
         }
 
-        generateLeftSideButtons();            
+        generateLeftSideButtons();           
+        generateMenuBar();
+    }
+    
+    private void generateMenuBar(){
+    	menuBar = new JMenuBar();
+    	menu = new JMenu("Options");
+    	filterItem = new JMenuItem("Filter manager");
+    	exitItem = new JMenuItem("Exit");
+    	filterItem.addActionListener(this);
+    	exitItem.addActionListener(this);
+    	
+    	menu.add(filterItem);
+    	menu.addSeparator();
+    	menu.add(exitItem);
+    	
+    	setJMenuBar(menuBar);
+    	menuBar.add(menu);
     }
 
 	private void generateLeftSideButtons(){
@@ -114,6 +138,12 @@ public class UserInterface extends JFrame implements ActionListener{
 			calendarFrame.fillDayButtons();
 			calendarFrame.setEventsIntoCalendar();
 			calendarFrame.markTodayDay();
+		}
+		if(e.getSource() == exitItem){
+			dispose();
+		}
+		if(e.getSource() == filterItem){
+			new FilterFrame(this).setVisible(true);
 		}
 		if(e.getSource() == listButton){
 			for(JButton b : buttonDayList){
@@ -173,18 +203,12 @@ public class UserInterface extends JFrame implements ActionListener{
 				isEvents = true;
 				calendarFrame.fillDayButtons();
 				calendarFrame.setEventsIntoCalendar();
-				listFrame.currentPage = 1;
-				listFrame.fillTable();
-				listFrame.updateEventCounterLabel();
-				listFrame.updateButtons();
+				listFrame.update();
 			}else{
 				isEvents = false;
 				calendarFrame.fillDayButtons();
 				calendarFrame.setEventsIntoCalendar();
-				listFrame.currentPage = 1;
-				listFrame.fillTable();
-				listFrame.updateEventCounterLabel();
-				listFrame.updateButtons();
+				listFrame.update();
 			}
 		}
 	}

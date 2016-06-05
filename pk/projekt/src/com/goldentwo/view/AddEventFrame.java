@@ -39,7 +39,7 @@ public class AddEventFrame extends JFrame implements ActionListener{
 	
 	
 	private void init(){
-	    setTitle("Add new event");
+	    setTitle("Event manager");
 	    setSize(300, 470);
 	    setLocationRelativeTo(null);
 		setLayout(null);
@@ -63,7 +63,7 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		description.setBorder(name.getBorder());
 		description.setLineWrap(true);
 		description.setWrapStyleWord(true);
-		descL = new JLabel("Descripson (max. 500 char)");
+		descL = new JLabel("Description (max. 500 char)");
 		descL.setBounds(10, 80, 280, 20);
 		add(descL);
 		
