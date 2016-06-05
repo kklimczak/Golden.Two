@@ -172,7 +172,7 @@ public class EventRepository {
 		String dateColumn = isEvent ? "date" : "alarm";
 		query += " WHERE " +dateColumn+ " >= '" + new java.sql.Date(from.getTime()) + "' AND date <= '" + new java.sql.Date(to.getTime()) + "'";
 		if (filter != null) {
-			query += " AND WHERE `" + filter.getField() + "` LIKE '%" + filter.getValue() + "%'";
+			query += " AND `" + filter.getField() + "` LIKE '%" + filter.getValue() + "%'";
 		}
 		try {
 			ResultSet resultSet = db.getStmt().executeQuery(query);
