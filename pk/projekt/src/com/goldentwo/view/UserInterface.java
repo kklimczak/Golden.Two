@@ -233,6 +233,19 @@ public class UserInterface extends JFrame implements ActionListener{
 			Event updateEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
 			new AddEventFrame(dataServiceImpl, updateEvent).setVisible(true);
 		}
+		if(source == listFrame.exportToXML){
+			Event exportedEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
+			dataServiceImpl.oneEventToXml(exportedEvent);
+			generateMessage(true);
+		}
+		if(source == listFrame.delete){
+			if(generateQuestion() == 0){
+				Event deletedEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
+				dataServiceImpl.deleteEvent(deletedEvent.getId());
+				generateMessage(true);
+				listFrame.update();	
+			}
+		}
 		if(source == saveToXML){
 			dataServiceImpl.allEventsToXml();
 			generateMessage(true);
@@ -255,5 +268,13 @@ public class UserInterface extends JFrame implements ActionListener{
 					  JOptionPane.ERROR_MESSAGE);
 		}
 
+	}
+	
+	private int generateQuestion(){
+		int choose = JOptionPane.showConfirmDialog(this,
+												  "ARE YOU SURE ?", 
+												  "Warning",
+												  JOptionPane.YES_NO_OPTION);
+		return choose;
 	}
 }

@@ -224,7 +224,7 @@ public class EventRepository {
 		String dateColumn = isEvent ? "date" : "alarm";
 		try {
 			List<Event> events = new ArrayList<>();
-			ResultSet resultSet = db.getStmt().executeQuery("Select * FROM events WHERE " +dateColumn+ " >= '" + new java.sql.Date(from.getTime()) + "' AND date <= '" + new java.sql.Date(to.getTime()) + "'");
+			ResultSet resultSet = db.getStmt().executeQuery("Select * FROM events WHERE " +dateColumn+ " >= '" + new java.sql.Date(from.getTime()) + "' AND "+dateColumn+ " <= '" + new java.sql.Date(to.getTime()) + "'");
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
 		        String name = resultSet.getString("name");

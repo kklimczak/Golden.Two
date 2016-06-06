@@ -286,7 +286,6 @@ public class CalendarFrame {
     	Date to = DateConverter.stringToDate(actualYear, actualMonth + 1, dayNumber+1);
     	
     	List<Event> list = ui.dataServiceImpl.getAllEventsBetweenDates(from, to, ui.isEvents);
-    	
     	return list;
     }
 
