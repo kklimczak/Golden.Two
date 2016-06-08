@@ -74,6 +74,12 @@ public class DataServiceImpl implements DataService {
 		logger.info("getEventById() called");
 		return eventRepository.findOne(id);
 	}
+	
+	@Override
+	public Event getEventWithClosestAlarm() {
+		logger.info("getEventWithClosestAlarm() called");
+		return eventRepository.findOneWithClosestAlarm();
+	}
 
 	@Override
 	public void addEvent(Event event) {

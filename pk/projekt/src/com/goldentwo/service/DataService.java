@@ -17,6 +17,7 @@ public interface DataService {
 	List<Event> getAllEventsBetweenDates(Date from, Date to, boolean isEvent);
 	Page<Event> getAllSortedAndFilteredEventsBetweenDates(Date from, Date to, boolean isEvent, Sort sort, Filter filter, int page);
 	Event getEventById(int id);
+	Event getEventWithClosestAlarm();
 	void addEvent(Event event);
 	void updateEvent(Event event);
 	void deleteEvent(int id);

@@ -264,6 +264,27 @@ public class EventRepository {
 		}
 	}
 	
+	public Event findOneWithClosestAlarm() {
+		try {
+			ResultSet resultSet = db.getStmt().executeQuery("SELECT *, (TIMEDIFF(`alarm`, NOW())*24*60*60) AS diff FROM events WHERE alarm IS NOT NULL AND (TIMEDIFF(`alarm`, NOW())*24*60*60) >= 0 ORDER BY diff LIMIT 1");
+			while(resultSet.next()) {
+				int eventId = resultSet.getInt("id");
+		        String name = resultSet.getString("name");
+		        String description = resultSet.getString("description");
+		        String place = resultSet.getString("place");
+		        Date date = new Date(resultSet.getTimestamp("date").getTime());
+		        Timestamp timestamp = resultSet.getTimestamp("alarm"); 
+		        Date alarm = timestamp != null ? new Date (timestamp.getTime()) : null;
+		        logger.info("findOneWithClosestAlarm() called with id: " + eventId);
+		        return new Event(eventId, name, description, place, date, alarm);
+			}
+			return null;
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
 	public void addOne(Event event) {
 		try {
 			db.getStmt().executeUpdate("INSERT INTO `events` VALUES (NULL, '"
