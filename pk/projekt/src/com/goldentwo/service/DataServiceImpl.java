@@ -117,10 +117,9 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	@Override
-	public List<Event> allEventsFromXml() {
+	public List<Event> allEventsFromXml(File file) {
 		EventsDto eventsDto = new EventsDto();
 		try {
-			File file = new File ("events.xml");
 			JAXBContext context = JAXBContext.newInstance(eventsDto.getClass());
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			eventsDto = (EventsDto) unmarshaller.unmarshal(file);
@@ -150,15 +149,14 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	@Override
-	public Event oneEventFromXml(String pathname) {
+	public Event oneEventFromXml(File file) {
 		EventDto event = new EventDto();
 		try {
-			File file = new File(pathname);
 			JAXBContext context = JAXBContext.newInstance(event.getClass());
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			
 			event = (EventDto) unmarshaller.unmarshal(file);
-			logger.info("Import event from: " + pathname + " as event with name: " + event.getName() + " and id: " + event.getId());
+			logger.info("Import event from: " + file.getAbsolutePath() + " as event with name: " + event.getName() + " and id: " + event.getId());
 			return event.asDefault();
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();

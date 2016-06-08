@@ -1,5 +1,6 @@
 package com.goldentwo.service;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface DataService {
 	void deleteEvent(int id);
 	void deleteEventBeforeDate(Date date);
 	void allEventsToXml();
-	List<Event> allEventsFromXml();
+	List<Event> allEventsFromXml(File file);
 	void oneEventToXml(Event event);
-	Event oneEventFromXml(String pathname);
+	Event oneEventFromXml(File file);
 }

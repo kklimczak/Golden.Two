@@ -3,12 +3,14 @@ package com.goldentwo.view;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -17,6 +19,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.service.DataServiceImpl;
@@ -34,6 +37,8 @@ public class UserInterface extends JFrame implements ActionListener{
 	ArrayList<JButton> buttonDayList;
 	ArrayList<Component> calComponentList;
 	ArrayList<Component> listComponentList;
+	JFileChooser xmlChooser;
+	FileNameExtensionFilter xmlFilter;
 	
 	Filter filter;
 	Sort sort;
@@ -46,7 +51,7 @@ public class UserInterface extends JFrame implements ActionListener{
 	
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem filterItem, exitItem, deleteOldEventsItem, saveToXML, loadFromXML;
+	private JMenuItem filterItem, exitItem, deleteOldEventsItem, saveToXML, loadFromXML, loadOneXML;
 	
 	public UserInterface(DataServiceImpl dataServiceImpl) {
 		this.dataServiceImpl = dataServiceImpl;
@@ -98,6 +103,7 @@ public class UserInterface extends JFrame implements ActionListener{
     	deleteOldEventsItem = new JMenuItem("Delete old events");
     	saveToXML = new JMenuItem("Save data to XML");
     	loadFromXML = new JMenuItem("Load data from XML");
+    	loadOneXML = new JMenuItem("Load one XML event");
     	
     	exitItem = new JMenuItem("Exit");
     	filterItem.addActionListener(this);
@@ -105,6 +111,7 @@ public class UserInterface extends JFrame implements ActionListener{
     	deleteOldEventsItem.addActionListener(this);
     	saveToXML.addActionListener(this);
     	loadFromXML.addActionListener(this);
+    	loadOneXML.addActionListener(this);
     	
     	menu.add(filterItem);
     	menu.add(deleteOldEventsItem);
@@ -112,10 +119,16 @@ public class UserInterface extends JFrame implements ActionListener{
     	menu.add(saveToXML);
     	menu.add(loadFromXML);
     	menu.addSeparator();
+    	menu.add(loadOneXML);
+    	menu.addSeparator();
     	menu.add(exitItem);
     	
     	setJMenuBar(menuBar);
     	menuBar.add(menu);
+    	
+    	xmlFilter = new FileNameExtensionFilter("XML files", "xml");
+    	xmlChooser = new JFileChooser();
+    	xmlChooser.setFileFilter(xmlFilter);
     }
 
 	private void generateLeftSideButtons(){
@@ -251,7 +264,16 @@ public class UserInterface extends JFrame implements ActionListener{
 			generateMessage(true, this);
 		}
 		if(source == loadFromXML){
-			generateMessage(!(dataServiceImpl.allEventsFromXml() == null), this);
+			if(xmlChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+				File file = xmlChooser.getSelectedFile();
+				generateMessage(!(dataServiceImpl.allEventsFromXml(file) == null), this);
+			}
+		}
+		if(source == loadOneXML){
+			if(xmlChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+				File file = xmlChooser.getSelectedFile();
+				generateMessage(!(dataServiceImpl.oneEventFromXml(file) == null), this);
+			}
 		}
 	}
     
