@@ -164,7 +164,7 @@ public class CalendarFrame {
     		button.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent e) {
-					new DayListEventsFrame(getDayEvents(Integer.parseInt(e.getActionCommand()))).setVisible(true);	
+					new DayListEventsFrame(getDayEvents(Integer.parseInt(e.getActionCommand())),ui).setVisible(true);	
 				}
 			});
     	}

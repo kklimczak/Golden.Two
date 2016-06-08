@@ -236,33 +236,33 @@ public class UserInterface extends JFrame implements ActionListener{
 		if(source == listFrame.exportToXML){
 			Event exportedEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
 			dataServiceImpl.oneEventToXml(exportedEvent);
-			generateMessage(true);
+			generateMessage(true, this);
 		}
 		if(source == listFrame.delete){
-			if(generateQuestion() == 0){
+			if(generateQuestion(this) == 0){
 				Event deletedEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
 				dataServiceImpl.deleteEvent(deletedEvent.getId());
-				generateMessage(true);
+				generateMessage(true, this);
 				listFrame.update();	
 			}
 		}
 		if(source == saveToXML){
 			dataServiceImpl.allEventsToXml();
-			generateMessage(true);
+			generateMessage(true, this);
 		}
 		if(source == loadFromXML){
-			generateMessage(!(dataServiceImpl.allEventsFromXml() == null));
+			generateMessage(!(dataServiceImpl.allEventsFromXml() == null), this);
 		}
 	}
     
-	private void generateMessage(boolean flag){
+	static public void generateMessage(boolean flag, Component c){
 		if(flag){
-			JOptionPane.showMessageDialog(this,
+			JOptionPane.showMessageDialog(c,
 					  "Success!",
 					  "Message",
 					  JOptionPane.INFORMATION_MESSAGE);
 		}else {
-			JOptionPane.showMessageDialog(this,
+			JOptionPane.showMessageDialog(c,
 					  "Cannot load date from XML file!",
 					  "Error",
 					  JOptionPane.ERROR_MESSAGE);
@@ -270,8 +270,8 @@ public class UserInterface extends JFrame implements ActionListener{
 
 	}
 	
-	private int generateQuestion(){
-		int choose = JOptionPane.showConfirmDialog(this,
+	static public int generateQuestion(Component c){
+		int choose = JOptionPane.showConfirmDialog(c,
 												  "ARE YOU SURE ?", 
 												  "Warning",
 												  JOptionPane.YES_NO_OPTION);

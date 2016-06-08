@@ -56,7 +56,7 @@ public class AlarmChecker extends JFrame implements Runnable {
 
 			cal.add(Calendar.MILLISECOND, sleepTime);		
 			
-			if(cal.getTime().compareTo(comingAlarmDate) > 0){
+			if(comingAlarmDate != null && cal.getTime().compareTo(comingAlarmDate) > 0){
 				new Thread(){
 					public void run(){
 						JOptionPane.showMessageDialog(null,

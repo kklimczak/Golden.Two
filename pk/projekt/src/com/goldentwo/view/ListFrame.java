@@ -116,9 +116,10 @@ public class ListFrame implements ListSelectionListener{
 			list = ui.dataServiceImpl.getAllSortedAndFilteredEventsBetweenDates(dateFrom, dateTo, ui.isEvents, ui.sort, ui.filter, currentPage);
 		}
 		
-
+		
 		totalElements = list.getTotalElements();
 		totalPages = list.getTotalPages();
+
 		
 		for(Event e : list.getContent()){
 			Vector<Object> row = new Vector<>();
@@ -176,7 +177,7 @@ public class ListFrame implements ListSelectionListener{
     
     void updateButtons(){
     	prev.setEnabled(false);
-		if(totalPages == currentPage){
+		if(totalPages == currentPage || totalElements == 0){
 			next.setEnabled(false);
 		}else{
 			next.setEnabled(true);
