@@ -97,7 +97,7 @@ public class EventRepository {
 	}
 	
 	public int countAllEventsWithAlarm(Filter filter) {
-		String query = "SELECT * FROM events WHERE `alarm` IS NOT NULL";
+		String query = "SELECT COUNT(*) FROM events WHERE `alarm` IS NOT NULL";
 		if (filter != null) {
 			query += " AND `" + filter.getField() + "` LIKE '%" + filter.getValue() + "%'";
 		}
