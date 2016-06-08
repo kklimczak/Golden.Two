@@ -1,32 +1,74 @@
 package com.goldentwo.utils.alarmChecker;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-public class AlarmChecker implements Runnable {
+import com.goldentwo.data.Event.Event;
+import com.goldentwo.service.DataServiceImpl;
 
+public class AlarmChecker extends JFrame implements Runnable {
+
+	private Event comingEvent;
+	private Date comingAlarmDate;
+	private DataServiceImpl ds;
+	private Calendar cal;
+	private int sleepTime;
+	
+	public AlarmChecker(DataServiceImpl ds) {
+		this.ds = ds;
+		sleepTime = 1000;
+		cal = Calendar.getInstance();
+		comingEvent = null;
+		comingAlarmDate = null;
+		
+		loadComingEvent();
+	}
+	
+	private void loadComingEvent(){
+		/*
+		 * TODO implement loadComingEvent()
+		 */
+	}
+	
+	private String generateAlarmMessage(){
+		String str = "EVENT IS NEAR!\n";
+		str += "Event name: " + comingEvent.getName() + 
+			   "\nEvent place: " + comingEvent.getPlace() + 
+			   "\nEvent date: " + comingEvent.getDate(); 
+		
+		return str;
+	}
+	
 	@Override
 	public void run() {
 		while(true){
 			
 			try{
-				Thread.sleep(60000);
+				Thread.sleep(sleepTime);
 			}
 			catch(InterruptedException e){
 				e.printStackTrace();
 			}
-			
-			/*
-			 * TODO method that returns coming alarm
-			 */
-			/*
-			 * TODO checking method if alarm date == current date
-			 */
-			/*
-			 * TODO if previous is true, print message
-			 */
-		}
-		
-	}
 
-	
+
+			cal.add(Calendar.MILLISECOND, sleepTime);		
+			
+			if(cal.getTime().compareTo(comingAlarmDate) > 0){
+				new Thread(){
+					public void run(){
+						JOptionPane.showMessageDialog(null,
+								  generateAlarmMessage(), 
+								  "ALARM", 
+								  JOptionPane.INFORMATION_MESSAGE);
+						currentThread().interrupt();
+					}
+				}.start();
+
+				loadComingEvent();
+			}
+		}
+	}
 }

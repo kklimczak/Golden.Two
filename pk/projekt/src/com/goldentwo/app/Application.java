@@ -25,7 +25,7 @@ public class Application {
 		UserInterface ui = new UserInterface(dataServiceImpl);	
 		ui.setVisible(true);
 		
-		new Thread(new AlarmChecker()).start();
+		new Thread(new AlarmChecker(dataServiceImpl)).start();
 		
 	}
 
