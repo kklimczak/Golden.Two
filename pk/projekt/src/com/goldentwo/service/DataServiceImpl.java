@@ -131,6 +131,9 @@ public class DataServiceImpl implements DataService {
 		} catch (NullPointerException exception) {
 			logger.error("Cannot import XML file: You have empty file");
 			return null;
+		} catch (ClassCastException e){
+			logger.error("Error in XML file class casting");
+			return null;
 		}
 	}
 	
