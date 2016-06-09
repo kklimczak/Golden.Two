@@ -290,6 +290,8 @@ public class UserInterface extends JFrame implements ActionListener{
 			/*
 			 * TODO add exporting to Outlook format method
 			 */
+			
+			//generateMessage(true, this);	UNCOMMENT THIS SHIT
 		}
 		if(source == about){
 			String str = "Organizer v1.0\n\n\n"
