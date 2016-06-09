@@ -30,6 +30,7 @@ public class FilterFrame extends JFrame implements ActionListener{
 	
 	public FilterFrame(UserInterface ui){
 		this.ui = ui;
+		setResizable(false);
 		init();
 	}
 

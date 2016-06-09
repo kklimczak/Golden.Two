@@ -24,6 +24,7 @@ public class DeleteOldEventsFrame extends JFrame implements ActionListener {
 	
 	public DeleteOldEventsFrame(UserInterface ui){
 		this.ui = ui;
+		setResizable(false);
 		init();
 	}
 	

@@ -34,6 +34,7 @@ public class DayListEventsFrame extends JFrame implements ActionListener {
 		details = null;
 		export = null;
 		delete = null;
+		setResizable(false);
 		
 		init();
 		
@@ -58,7 +59,7 @@ public class DayListEventsFrame extends JFrame implements ActionListener {
 		list = new JList<>(eventsStr);
 		list.setFont(new Font("Arial", Font.PLAIN, 19));
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setLayoutOrientation(JList.VERTICAL_WRAP);
+		list.setLayoutOrientation(JList.VERTICAL);
 		list.addListSelectionListener(new ListSelectionListener() {
 
 			@Override

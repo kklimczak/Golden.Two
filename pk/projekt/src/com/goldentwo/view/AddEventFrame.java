@@ -38,6 +38,7 @@ public class AddEventFrame extends JFrame implements ActionListener{
 	public AddEventFrame(UserInterface ui, Event updateEvent){
 		this.ui = ui;
 		this.updateEvent = updateEvent;
+		setResizable(false);
 		init();
 	}
 	

@@ -1,24 +1,14 @@
 package com.goldentwo.view;
 
 import java.awt.Component;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.goldentwo.data.Event.Event;
@@ -47,16 +37,16 @@ public class UserInterface extends JFrame implements ActionListener{
 	
 	boolean isEvents;
 	
-	private JButton calendarButton, listButton;
-	private JComboBox alarmComboBox;
-	private JSeparator separatorH, separatorV; 
+    JButton calendarButton, listButton;
+	JComboBox alarmComboBox;
+	JSeparator separatorH, separatorV; 
 	
-	private JMenuBar menuBar;
-	private JMenu menu;
-	private JMenuItem filterItem, exitItem, deleteOldEventsItem, 
-					  saveToXML, loadFromXML, loadOneXML,
-					  saveToOutlookFormat,
-					  about;
+	JMenuBar menuBar;
+	JMenu menu;
+	JMenuItem filterItem, exitItem, deleteOldEventsItem, 
+			  saveToXML, loadFromXML, loadOneXML,
+			  saveToOutlookFormat,
+			  about;
 	
 	public UserInterface(DataServiceImpl dataServiceImpl, AlarmChecker ac) {
 		this.dataServiceImpl = dataServiceImpl;
@@ -71,6 +61,8 @@ public class UserInterface extends JFrame implements ActionListener{
 		listFrame = new ListFrame(this);
 		calendarFrame = new CalendarFrame(this);
 		
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		manager.addKeyEventDispatcher(new MyKeyListener(this));
 		setResizable(false);
 		init();
     }
@@ -281,15 +273,17 @@ public class UserInterface extends JFrame implements ActionListener{
 		if(source == loadFromXML){
 			if(xmlChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
 				File file = xmlChooser.getSelectedFile();
-				generateMessage(!(dataServiceImpl.allEventsFromXml(file) == null), this);
+				generateMessage(dataServiceImpl.allEventsFromXml(file), this);
 				ac.loadComingEvent();
+				listFrame.update();
 			}
 		}
 		if(source == loadOneXML){
 			if(xmlChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
 				File file = xmlChooser.getSelectedFile();
-				generateMessage(!(dataServiceImpl.oneEventFromXml(file) == null), this);
+				generateMessage(dataServiceImpl.oneEventFromXml(file), this);
 				ac.loadComingEvent();
+				listFrame.update();
 			}
 		}
 		if(source == saveToOutlookFormat){
