@@ -53,7 +53,10 @@ public class UserInterface extends JFrame implements ActionListener{
 	
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private JMenuItem filterItem, exitItem, deleteOldEventsItem, saveToXML, loadFromXML, loadOneXML;
+	private JMenuItem filterItem, exitItem, deleteOldEventsItem, 
+					  saveToXML, loadFromXML, loadOneXML,
+					  saveToOutlookFormat,
+					  about;
 	
 	public UserInterface(DataServiceImpl dataServiceImpl, AlarmChecker ac) {
 		this.dataServiceImpl = dataServiceImpl;
@@ -104,9 +107,11 @@ public class UserInterface extends JFrame implements ActionListener{
     	menu = new JMenu("Options");
     	filterItem = new JMenuItem("Filter manager");
     	deleteOldEventsItem = new JMenuItem("Delete old events");
-    	saveToXML = new JMenuItem("Save data to XML");
+    	saveToXML = new JMenuItem("Export data to XML");
     	loadFromXML = new JMenuItem("Load data from XML");
-    	loadOneXML = new JMenuItem("Load one XML event");
+    	loadOneXML = new JMenuItem("Load event from XML");
+    	saveToOutlookFormat = new JMenuItem("Export data as Outlook format");
+    	about = new JMenuItem("About");
     	
     	exitItem = new JMenuItem("Exit");
     	filterItem.addActionListener(this);
@@ -115,14 +120,19 @@ public class UserInterface extends JFrame implements ActionListener{
     	saveToXML.addActionListener(this);
     	loadFromXML.addActionListener(this);
     	loadOneXML.addActionListener(this);
+    	saveToOutlookFormat.addActionListener(this);
+    	about.addActionListener(this);
     	
     	menu.add(filterItem);
     	menu.add(deleteOldEventsItem);
     	menu.addSeparator();
     	menu.add(saveToXML);
-    	menu.add(loadFromXML);
+    	menu.add(saveToOutlookFormat);
     	menu.addSeparator();
+    	menu.add(loadFromXML);
     	menu.add(loadOneXML);
+    	menu.addSeparator();
+    	menu.add(about);
     	menu.addSeparator();
     	menu.add(exitItem);
     	
@@ -281,6 +291,22 @@ public class UserInterface extends JFrame implements ActionListener{
 				generateMessage(!(dataServiceImpl.oneEventFromXml(file) == null), this);
 				ac.loadComingEvent();
 			}
+		}
+		if(source == saveToOutlookFormat){
+			/*
+			 * TODO add exporting to Outlook format method
+			 */
+		}
+		if(source == about){
+			String str = "Organizer v1.0\n\n\n"
+					+ "This program will help you to organize you time.\n"
+					+ "Project wrote for 'Programowanie Komponentowe - FTIMS 2016'\n\n"
+					+ "Łukasz Kuta & Konrad Klimczak\n"
+					+ "®All rights reserved";
+			JOptionPane.showMessageDialog(this,
+										  str,
+										  "About",
+										  JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
     

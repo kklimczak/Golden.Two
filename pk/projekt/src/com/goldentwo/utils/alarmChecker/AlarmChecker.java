@@ -1,8 +1,18 @@
 package com.goldentwo.utils.alarmChecker;
 
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -17,6 +27,7 @@ public class AlarmChecker extends JFrame implements Runnable {
 	private Calendar cal;
 	private long sleepTime;
 	private volatile boolean isRunning;
+	private String soundPath;
 	
 	public AlarmChecker(DataServiceImpl ds) {
 		this.ds = ds;
@@ -25,6 +36,7 @@ public class AlarmChecker extends JFrame implements Runnable {
 		comingEvent = null;
 		comingAlarmDate = null;
 		isRunning = false;
+		soundPath = "alarmSound.wav";
 		
 		loadComingEvent();
 	}
@@ -70,11 +82,25 @@ public class AlarmChecker extends JFrame implements Runnable {
 				 null));
 	}
 	
+	private void makeAlarmSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+	    File yourFile = new File(soundPath);
+	    AudioInputStream stream;
+	    AudioFormat format;
+	    DataLine.Info info;
+	    Clip clip;
+
+	    stream = AudioSystem.getAudioInputStream(yourFile);
+	    format = stream.getFormat();
+	    info = new DataLine.Info(Clip.class, format);
+	    clip = (Clip) AudioSystem.getLine(info);
+	    clip.open(stream);
+	    clip.start();
+	}
+	
 	@Override
 	public void run() {
 		
 		while(true){
-			
 			while(isRunning){
 				
 				try{
@@ -86,12 +112,19 @@ public class AlarmChecker extends JFrame implements Runnable {
 				
 
 				new Thread(){
-					public void run(){
-						JOptionPane.showMessageDialog(null,
-													  generateAlarmMessage(), 
-													  "ALARM", 
-													  JOptionPane.INFORMATION_MESSAGE);
-						currentThread().interrupt();
+					public void run(){						
+						
+						try {
+							makeAlarmSound();
+							JOptionPane.showMessageDialog(null,
+									  generateAlarmMessage(), 
+									  "ALARM", 
+									  JOptionPane.INFORMATION_MESSAGE);
+						} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+							e1.printStackTrace();	
+						} finally {
+							currentThread().interrupt();
+						}
 					}
 				}.start();
 
