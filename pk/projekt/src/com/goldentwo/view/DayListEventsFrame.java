@@ -41,7 +41,9 @@ public class DayListEventsFrame extends JFrame implements ActionListener {
 	}
 
 	private void init() {
-	    setTitle("Day events");
+		String title = "Day events";
+		if(!ui.isEvents) title += " - ALARMS";
+	    setTitle(title);
 	    setSize(400, 470);
 	    setLocationRelativeTo(null);
 		setLayout(null);
@@ -99,12 +101,19 @@ public class DayListEventsFrame extends JFrame implements ActionListener {
 		String name, hour;
 		
 		Calendar c = new GregorianCalendar();
+		boolean isEvent = ui.isEvents;
 		
 		int index = 0;
 		for(Event e : eventList){
-			c.setTime(e.getDate());
+			if(isEvent){
+				c.setTime(e.getDate());
+			}else{
+				c.setTime(e.getAlarm());
+			}
 			name = e.getName();
-			hour = Integer.toString(c.get(Calendar.HOUR_OF_DAY)) + ":" + Integer.toString(c.get(Calendar.MINUTE));
+			hour = String.format("%02d", c.get(Calendar.HOUR_OF_DAY)) + 
+				   ":" + 
+				   String.format("%02d", c.get(Calendar.MINUTE));
 			
 			str[index++] = name + " at " + hour;
 		}
@@ -117,7 +126,7 @@ public class DayListEventsFrame extends JFrame implements ActionListener {
 		
 		if(source == details){
 			int i = list.getSelectedIndex();
-			new AddEventFrame(new DataServiceImpl(), eventList.get(i)).setVisible(true);
+			new AddEventFrame(ui, eventList.get(i)).setVisible(true);
 			dispose();
 		}
 		

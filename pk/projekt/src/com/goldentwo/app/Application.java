@@ -22,10 +22,12 @@ public class Application {
 		DataServiceImpl dataServiceImpl = new DataServiceImpl();
 	
 		logger.info("UserInterface initialized successfully!");
-		UserInterface ui = new UserInterface(dataServiceImpl);	
+		
+		AlarmChecker ac = new AlarmChecker(dataServiceImpl);
+		UserInterface ui = new UserInterface(dataServiceImpl, ac);	
 		ui.setVisible(true);
 		
-		new Thread(new AlarmChecker(dataServiceImpl)).start();
+		new Thread(ac).start();
 		
 	}
 

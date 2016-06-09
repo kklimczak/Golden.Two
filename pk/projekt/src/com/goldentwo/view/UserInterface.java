@@ -24,11 +24,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.service.DataServiceImpl;
 import com.goldentwo.utils.Pagination.*;
+import com.goldentwo.utils.alarmChecker.AlarmChecker;
 
 @SuppressWarnings("serial")
 public class UserInterface extends JFrame implements ActionListener{
 
 	DataServiceImpl dataServiceImpl;
+	AlarmChecker ac;
 	
 	ListFrame listFrame;
 	CalendarFrame calendarFrame;
@@ -53,8 +55,9 @@ public class UserInterface extends JFrame implements ActionListener{
 	private JMenu menu;
 	private JMenuItem filterItem, exitItem, deleteOldEventsItem, saveToXML, loadFromXML, loadOneXML;
 	
-	public UserInterface(DataServiceImpl dataServiceImpl) {
+	public UserInterface(DataServiceImpl dataServiceImpl, AlarmChecker ac) {
 		this.dataServiceImpl = dataServiceImpl;
+		this.ac = ac;
 		buttonDayList = new ArrayList<>();
 		calComponentList = new ArrayList<>();
 		listComponentList = new ArrayList<>();
@@ -217,7 +220,7 @@ public class UserInterface extends JFrame implements ActionListener{
 			listFrame.next.setEnabled(true);
 		}
 		if(source == calendarFrame.addEventButton){
-			new AddEventFrame(dataServiceImpl, null).setVisible(true);
+			new AddEventFrame(this, null).setVisible(true);
 		}
 		if(source == calendarFrame.findPresentDayButton){
 			calendarFrame.setPresentDate();
@@ -241,10 +244,11 @@ public class UserInterface extends JFrame implements ActionListener{
 		}
 		if(source == deleteOldEventsItem){
 			new DeleteOldEventsFrame(this).setVisible(true);
+			ac.loadComingEvent();
 		}
 		if(source == listFrame.details){
 			Event updateEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
-			new AddEventFrame(dataServiceImpl, updateEvent).setVisible(true);
+			new AddEventFrame(this, updateEvent).setVisible(true);
 		}
 		if(source == listFrame.exportToXML){
 			Event exportedEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
@@ -256,7 +260,8 @@ public class UserInterface extends JFrame implements ActionListener{
 				Event deletedEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
 				dataServiceImpl.deleteEvent(deletedEvent.getId());
 				generateMessage(true, this);
-				listFrame.update();	
+				listFrame.update();
+				ac.loadComingEvent();
 			}
 		}
 		if(source == saveToXML){
@@ -267,12 +272,14 @@ public class UserInterface extends JFrame implements ActionListener{
 			if(xmlChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
 				File file = xmlChooser.getSelectedFile();
 				generateMessage(!(dataServiceImpl.allEventsFromXml(file) == null), this);
+				ac.loadComingEvent();
 			}
 		}
 		if(source == loadOneXML){
 			if(xmlChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
 				File file = xmlChooser.getSelectedFile();
 				generateMessage(!(dataServiceImpl.oneEventFromXml(file) == null), this);
+				ac.loadComingEvent();
 			}
 		}
 	}

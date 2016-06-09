@@ -3,6 +3,8 @@ package com.goldentwo.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -50,8 +52,13 @@ public class DeleteOldEventsFrame extends JFrame implements ActionListener {
 		}
 		mask.setPlaceholderCharacter('@');
 		
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat simpleDate = new SimpleDateFormat("dd-MM-yyyy");
+		String dateStr = simpleDate.format(cal.getTime());
+		
 		date = new JFormattedTextField(mask);
 		date.setBounds(10, 100, 250, 30);
+		date.setValue(dateStr);
 		
 		add(date);
 		
@@ -63,6 +70,8 @@ public class DeleteOldEventsFrame extends JFrame implements ActionListener {
 		execute.setBounds(10, 170, 120, 30);
 		execute.addActionListener(this);
 		cancel.setBounds(140, 170, 120, 30);
+		cancel.addActionListener(this);
+		
 		add(execute);
 		add(cancel);
 		

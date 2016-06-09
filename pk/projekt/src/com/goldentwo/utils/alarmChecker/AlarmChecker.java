@@ -11,11 +11,12 @@ import com.goldentwo.service.DataServiceImpl;
 
 public class AlarmChecker extends JFrame implements Runnable {
 
-	private Event comingEvent;
-	private Date comingAlarmDate;
+	private volatile Event comingEvent;
+	private volatile Date comingAlarmDate;
 	private DataServiceImpl ds;
 	private Calendar cal;
-	private int sleepTime;
+	private long sleepTime;
+	private volatile boolean isRunning;
 	
 	public AlarmChecker(DataServiceImpl ds) {
 		this.ds = ds;
@@ -23,18 +24,28 @@ public class AlarmChecker extends JFrame implements Runnable {
 		cal = Calendar.getInstance();
 		comingEvent = null;
 		comingAlarmDate = null;
+		isRunning = false;
 		
 		loadComingEvent();
 	}
 	
-	private void loadComingEvent(){
-		/*
-		 * TODO implement loadComingEvent()
-		 */
+	public void loadComingEvent(){
+		comingEvent = ds.getEventWithClosestAlarm();
+		
+		if(comingEvent != null){
+			comingAlarmDate = comingEvent.getAlarm();
+			cal = Calendar.getInstance();
+			resumeThread();
+			sleepTime = calculateSleepTime();
+		}
+	}
+	
+	private long calculateSleepTime(){
+		return comingAlarmDate.getTime() - cal.getTimeInMillis();
 	}
 	
 	private String generateAlarmMessage(){
-		String str = "EVENT IS NEAR!\n";
+		String str = "EVENT IS NEAR!\n\n";
 		str += "Event name: " + comingEvent.getName() + 
 			   "\nEvent place: " + comingEvent.getPlace() + 
 			   "\nEvent date: " + comingEvent.getDate(); 
@@ -42,33 +53,61 @@ public class AlarmChecker extends JFrame implements Runnable {
 		return str;
 	}
 	
+	public void pauseThread(){
+		isRunning = false;
+	}
+	
+	public void resumeThread(){
+		isRunning = true;
+	}
+	
+	private void deleteAlarm(){
+		ds.updateEvent(new Event(comingEvent.getId(), 
+				 comingEvent.getName(), 
+				 comingEvent.getDescription(), 
+				 comingEvent.getPlace(), 
+				 comingEvent.getDate(), 
+				 null));
+	}
+	
 	@Override
 	public void run() {
+		
 		while(true){
 			
-			try{
-				Thread.sleep(sleepTime);
-			}
-			catch(InterruptedException e){
-				e.printStackTrace();
-			}
+			while(isRunning){
+				
+				try{
+					Thread.sleep(sleepTime);
+				}
+				catch(InterruptedException e){
+					e.printStackTrace();
+				}
+				
 
-
-			cal.add(Calendar.MILLISECOND, sleepTime);		
-			
-			if(comingAlarmDate != null && cal.getTime().compareTo(comingAlarmDate) > 0){
 				new Thread(){
 					public void run(){
 						JOptionPane.showMessageDialog(null,
-								  generateAlarmMessage(), 
-								  "ALARM", 
-								  JOptionPane.INFORMATION_MESSAGE);
+													  generateAlarmMessage(), 
+													  "ALARM", 
+													  JOptionPane.INFORMATION_MESSAGE);
 						currentThread().interrupt();
 					}
 				}.start();
 
-				loadComingEvent();
+				deleteAlarm();
+				loadComingEvent();				
+				if(comingEvent == null){
+					isRunning = false;
+					break;
+				}
+			}//END OF ALARM CHECKING LOOP	
+			
+			try{
+				Thread.sleep(1000);				//Out of alarms. Thread is waiting for new alarm event
+			}catch(InterruptedException e){
+				e.printStackTrace();
 			}
-		}
+		}//END OF THREAD LOOP
 	}
 }

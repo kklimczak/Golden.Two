@@ -25,7 +25,7 @@ import com.goldentwo.utils.Date.DateConverter;
 @SuppressWarnings("serial")
 public class AddEventFrame extends JFrame implements ActionListener{
 	
-	private DataServiceImpl ds;
+	private UserInterface ui;
 	private JTextField name, place;
 	private JTextArea description;
 	private JFormattedTextField date, dateTime, alarm, alarmTime;
@@ -35,8 +35,8 @@ public class AddEventFrame extends JFrame implements ActionListener{
 	
 	private Event updateEvent;
 
-	public AddEventFrame(DataServiceImpl ds, Event updateEvent){
-		this.ds = ds;
+	public AddEventFrame(UserInterface ui, Event updateEvent){
+		this.ui = ui;
 		this.updateEvent = updateEvent;
 		init();
 	}
@@ -161,9 +161,9 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		ePlace = place.getText();
 
 		if(updateEvent == null){
-			ds.addEvent(createEvent(1, eName, eDesc, ePlace, dateParts, timeParts, alarmParts, aTimeParts));
+			ui.dataServiceImpl.addEvent(createEvent(1, eName, eDesc, ePlace, dateParts, timeParts, alarmParts, aTimeParts));
 		}else{
-			ds.updateEvent(createEvent(updateEvent.getId(),eName, eDesc, ePlace, dateParts, timeParts, alarmParts, aTimeParts));
+			ui.dataServiceImpl.updateEvent(createEvent(updateEvent.getId(),eName, eDesc, ePlace, dateParts, timeParts, alarmParts, aTimeParts));
 		}
 		
 		return true;
@@ -314,6 +314,7 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		
 		if(source == accept){
 			generateMessage(addNewEvent());
+			ui.ac.loadComingEvent();
 		}
 		
 		if(source == cancel){
