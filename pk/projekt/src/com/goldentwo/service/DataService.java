@@ -23,7 +23,7 @@ public interface DataService {
 	void deleteEvent(int id);
 	void deleteEventBeforeDate(Date date);
 	void allEventsToXml();
-	List<Event> allEventsFromXml(File file);
+	boolean allEventsFromXml(File file);
 	void oneEventToXml(Event event);
-	Event oneEventFromXml(File file);
+	boolean oneEventFromXml(File file);
 }

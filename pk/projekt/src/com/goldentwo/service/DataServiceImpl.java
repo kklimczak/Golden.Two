@@ -123,23 +123,27 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	@Override
-	public List<Event> allEventsFromXml(File file) {
+	public boolean allEventsFromXml(File file) {
 		EventsDto eventsDto = new EventsDto();
 		try {
 			JAXBContext context = JAXBContext.newInstance(eventsDto.getClass());
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			eventsDto = (EventsDto) unmarshaller.unmarshal(file);
 			logger.info("Import all events from file: events.xml with " + eventsDto.getEventDtos().size() + " elements");
-			return eventsDto.getEventDtos().stream().map(EventDto::asDefault).collect(Collectors.toList());
+			List<Event> events = eventsDto.getEventDtos().stream().map(EventDto::asDefault).collect(Collectors.toList());
+			for (Event event : events) {
+				addEvent(event);
+			}
+			return true;
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
-			return null;
+			return false;
 		} catch (NullPointerException exception) {
 			logger.error("Cannot import XML file: You have empty file");
-			return null;
+			return false;
 		} catch (ClassCastException e){
 			logger.error("Error in XML file class casting");
-			return null;
+			return false;
 		}
 	}
 	
@@ -158,18 +162,19 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	@Override
-	public Event oneEventFromXml(File file) {
+	public boolean oneEventFromXml(File file) {
 		EventDto event = new EventDto();
 		try {
 			JAXBContext context = JAXBContext.newInstance(event.getClass());
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			
 			event = (EventDto) unmarshaller.unmarshal(file);
+			addEvent(event.asDefault());
 			logger.info("Import event from: " + file.getAbsolutePath() + " as event with name: " + event.getName() + " and id: " + event.getId());
-			return event.asDefault();
+			return true;
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
-			return null;
+			return false;
 		}
 	}
 
