@@ -16,38 +16,88 @@ import com.goldentwo.service.DataServiceImpl;
 import com.goldentwo.utils.Pagination.*;
 import com.goldentwo.utils.alarmChecker.AlarmChecker;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserInterface.
+ * 
+ * Main GUI class;
+ * 
+ * Defines view of program.
+ * In containers are stored components of calendar view and event-list view,
+ * which become visible or invisible in properly time.
+ * 
+ *
+ * @author lkuta
+ */
 @SuppressWarnings("serial")
 public class UserInterface extends JFrame implements ActionListener{
 
+	/** Providing methods for data base support */
 	DataServiceImpl dataServiceImpl;
+	
+	/** Generates alarm when event's alarm date is equal to system date */
 	AlarmChecker ac;
 	
+	/** Generates components for event-list view */
 	ListFrame listFrame;
-	CalendarFrame calendarFrame;
 	
+	/** Generates componenents for calendar view */
+	CalendarFrame calendarFrame;
+		
+	/** The top title. */
 	JLabel topTitle;
+	
+	/** The button day list. */
 	ArrayList<JButton> buttonDayList;
+	
+	/** The calendar view component list. */
 	ArrayList<Component> calComponentList;
+	
+	/** The event-list's view component list. */
 	ArrayList<Component> listComponentList;
+	
+	/** The xml chooser. */
 	JFileChooser xmlChooser;
+	
+	/** The xml filter for file chooser. */
 	FileNameExtensionFilter xmlFilter;
 	
+	/** The filter for filtering events. */
 	Filter filter;
+	
+	/** The sort for sorting events. */
 	Sort sort;
 	
+	/** Flag for displaying on calendar events or alarms. */
 	boolean isEvents;
 	
+    /** Button switching calendar view */
     JButton calendarButton, listButton;
+	
+	/** The alarm combo box changing field <code> isEvents </code>. */
 	JComboBox alarmComboBox;
+	
+	/** The calendar line separator. */
 	JSeparator separatorH, separatorV; 
 	
+	/** The menu bar. */
 	JMenuBar menuBar;
+	
+	/** The menu. */
 	JMenu menu;
+	
+	/** The menu items */
 	JMenuItem filterItem, exitItem, deleteOldEventsItem, 
 			  saveToXML, loadFromXML, loadOneXML,
 			  saveToOutlookFormat,
 			  about;
 	
+	/**
+	 * Instantiates a new GUI of Organizer.
+	 *
+	 * @param dataServiceImpl implementation of interface <code> DataService </code>
+	 * @param ac class that generate alarms
+	 */
 	public UserInterface(DataServiceImpl dataServiceImpl, AlarmChecker ac) {
 		this.dataServiceImpl = dataServiceImpl;
 		this.ac = ac;
@@ -67,6 +117,9 @@ public class UserInterface extends JFrame implements ActionListener{
 		init();
     }
 	
+    /**
+     * Inits the program.
+     */
     private void init(){
 	    setTitle("ORGANIZER");
 	    setSize(860, 540);
@@ -94,6 +147,9 @@ public class UserInterface extends JFrame implements ActionListener{
         generateMenuBar();
     }
     
+    /**
+     * Generate menu bar.
+     */
     private void generateMenuBar(){
     	menuBar = new JMenuBar();
     	menu = new JMenu("Options");
@@ -136,6 +192,9 @@ public class UserInterface extends JFrame implements ActionListener{
     	xmlChooser.setFileFilter(xmlFilter);
     }
 
+	/**
+	 * Generate left side buttons.
+	 */
 	private void generateLeftSideButtons(){
     	calendarButton = new JButton("Calendar"); 
     	listButton = new JButton("List");
@@ -154,6 +213,9 @@ public class UserInterface extends JFrame implements ActionListener{
     	add(alarmComboBox);
     }
     
+    /* (non-Javadoc)
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
     @Override
 	public void actionPerformed(ActionEvent e) {
     	Object source = e.getSource();
@@ -306,6 +368,12 @@ public class UserInterface extends JFrame implements ActionListener{
 		}
 	}
     
+	/**
+	 * Generate message.
+	 *
+	 * @param flag 'true' for positive message, 'false' for an error 
+	 * @param c parent component 
+	 */
 	static public void generateMessage(boolean flag, Component c){
 		if(flag){
 			JOptionPane.showMessageDialog(c,
@@ -321,6 +389,13 @@ public class UserInterface extends JFrame implements ActionListener{
 
 	}
 	
+	/**
+	 * Generate confirm question
+	 *
+	 * @param c parent component
+	 * @return 1 if "yes" was chosen, 0 if "no"	
+	 *  
+	 */
 	static public int generateQuestion(Component c){
 		int choose = JOptionPane.showConfirmDialog(c,
 												  "ARE YOU SURE ?", 
