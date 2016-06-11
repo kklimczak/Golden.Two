@@ -89,7 +89,6 @@ public class UserInterface extends JFrame implements ActionListener{
 	/** The menu items */
 	JMenuItem filterItem, exitItem, deleteOldEventsItem, 
 			  saveToXML, loadFromXML, loadOneXML,
-			  saveToOutlookFormat,
 			  about;
 	
 	/**
@@ -158,7 +157,6 @@ public class UserInterface extends JFrame implements ActionListener{
     	saveToXML = new JMenuItem("Export data to XML");
     	loadFromXML = new JMenuItem("Load data from XML");
     	loadOneXML = new JMenuItem("Load event from XML");
-    	saveToOutlookFormat = new JMenuItem("Export data as Outlook format");
     	about = new JMenuItem("About");
     	
     	exitItem = new JMenuItem("Exit");
@@ -168,14 +166,12 @@ public class UserInterface extends JFrame implements ActionListener{
     	saveToXML.addActionListener(this);
     	loadFromXML.addActionListener(this);
     	loadOneXML.addActionListener(this);
-    	saveToOutlookFormat.addActionListener(this);
     	about.addActionListener(this);
     	
     	menu.add(filterItem);
     	menu.add(deleteOldEventsItem);
     	menu.addSeparator();
     	menu.add(saveToXML);
-    	menu.add(saveToOutlookFormat);
     	menu.addSeparator();
     	menu.add(loadFromXML);
     	menu.add(loadOneXML);
@@ -314,10 +310,20 @@ public class UserInterface extends JFrame implements ActionListener{
 			Event updateEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
 			new AddEventFrame(this, updateEvent).setVisible(true);
 		}
-		if(source == listFrame.exportToXML){
+		if(source == listFrame.export){
 			Event exportedEvent = listFrame.list.getContent().get(listFrame.latestSelectedRow);
-			dataServiceImpl.oneEventToXml(exportedEvent);
-			generateMessage(true, this);
+			int choose = generateExportQuestion();
+				
+			if(choose == 0){
+				dataServiceImpl.oneEventToXml(exportedEvent);
+			}
+			if(choose == 1) {
+				dataServiceImpl.oneEventToIcs(exportedEvent);
+			}
+				
+			if(choose != -1){
+				generateMessage(true, this);
+			}
 		}
 		if(source == listFrame.delete){
 			if(generateQuestion(this) == 0){
@@ -348,13 +354,6 @@ public class UserInterface extends JFrame implements ActionListener{
 				listFrame.update();
 			}
 		}
-		if(source == saveToOutlookFormat){
-			/*
-			 * TODO add exporting to Outlook format method
-			 */
-			
-			//generateMessage(true, this);	UNCOMMENT THIS SHIT
-		}
 		if(source == about){
 			String str = "Organizer v1.0\n\n\n"
 					+ "This program will help you to organize you time.\n"
@@ -371,7 +370,7 @@ public class UserInterface extends JFrame implements ActionListener{
 	/**
 	 * Generate message.
 	 *
-	 * @param flag 'true' for positive message, 'false' for an error 
+	 * @param flag 'true' for positive message, 'false'e for an error 
 	 * @param c parent component 
 	 */
 	static public void generateMessage(boolean flag, Component c){
@@ -401,6 +400,22 @@ public class UserInterface extends JFrame implements ActionListener{
 												  "ARE YOU SURE ?", 
 												  "Warning",
 												  JOptionPane.YES_NO_OPTION);
+		return choose;
+	}
+	
+	private int generateExportQuestion(){
+		String[] options = new String[2];
+		options[0] = new String("XML format");
+		options[1] = new String("Outlook format");
+		int choose = JOptionPane.showOptionDialog(this,
+									   			 "Export selected event to: ",
+												 "Choose wisely", 
+												 0,
+												 JOptionPane.INFORMATION_MESSAGE,
+												 null,
+												 options,
+												 null);
+		
 		return choose;
 	}
 }

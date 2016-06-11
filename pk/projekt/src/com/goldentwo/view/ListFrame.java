@@ -30,7 +30,7 @@ public class ListFrame implements ListSelectionListener{
 	int totalElements, totalPages;
 	Vector<Vector<String>> events;
 	JTable table;
-	JButton prev, next, details, exportToXML, delete;
+	JButton prev, next, details, export, delete;
 	JLabel eventCounter;
 	Page<Event> list;
 	
@@ -98,7 +98,7 @@ public class ListFrame implements ListSelectionListener{
 			String str = e.getSource().toString();
 			latestSelectedRow = str.charAt(str.length() - 2) - 48;
 			details.setEnabled(true);
-			exportToXML.setEnabled(true);
+			export.setEnabled(true);
 			delete.setEnabled(true);
 		}
 	}
@@ -137,21 +137,21 @@ public class ListFrame implements ListSelectionListener{
 		prev = new JButton("Previous");
 		next = new JButton("Next");
 		details = new JButton("Details");
-		exportToXML = new JButton("Export to XML");
+		export = new JButton("Export event");
 		delete = new JButton("Delete");
 		
 		prev.setBounds(225, 440, 100, 25);
 		next.setBounds(730, 440, 100, 25);
 		details.setBounds(730, 100, 100, 25);
-		exportToXML.setBounds(560, 100, 150, 25);
+		export.setBounds(560, 100, 150, 25);
 		delete.setBounds(225, 100, 100, 25);
 		
 		ui.listComponentList.add(prev);
 		ui.listComponentList.add(next);
 		ui.listComponentList.add(details);
-		ui.listComponentList.add(exportToXML);
+		ui.listComponentList.add(export);
 		ui.listComponentList.add(delete);
-		
+				
 		eventCounter = new JLabel("Generated Label");
 		eventCounter.setBounds(500, 440, 100, 25);
 		ui.listComponentList.add(eventCounter);
@@ -159,12 +159,12 @@ public class ListFrame implements ListSelectionListener{
 		prev.addActionListener(ui);
 		next.addActionListener(ui);
 		details.addActionListener(ui);
-		exportToXML.addActionListener(ui);
+		export.addActionListener(ui);
 		delete.addActionListener(ui);
 		
 		if(latestSelectedRow == -1){
 			details.setEnabled(false);
-			exportToXML.setEnabled(false);
+			export.setEnabled(false);
 			delete.setEnabled(false);
 		}
 		
@@ -190,7 +190,4 @@ public class ListFrame implements ListSelectionListener{
     	updateEventCounterLabel();
     	updateButtons();
     }
-    
-    
-	
 }
