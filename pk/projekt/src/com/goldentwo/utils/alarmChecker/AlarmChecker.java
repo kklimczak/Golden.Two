@@ -25,7 +25,7 @@ public class AlarmChecker extends JFrame implements Runnable {
 	private volatile Date comingAlarmDate;
 	private DataServiceImpl ds;
 	private Calendar cal;
-	private long sleepTime;
+	private int sleepTime;
 	private volatile boolean isRunning;
 	private String soundPath;
 	
@@ -43,24 +43,19 @@ public class AlarmChecker extends JFrame implements Runnable {
 	
 	public void loadComingEvent(){
 		comingEvent = ds.getEventWithClosestAlarm();
-		
+		comingAlarmDate = null;
 		if(comingEvent != null){
 			comingAlarmDate = comingEvent.getAlarm();
 			cal = Calendar.getInstance();
 			resumeThread();
-			sleepTime = calculateSleepTime();
 		}
 	}
 	
-	private long calculateSleepTime(){
-		return comingAlarmDate.getTime() - cal.getTimeInMillis();
-	}
-	
-	private String generateAlarmMessage(){
+	private String generateAlarmMessage(Event e){
 		String str = "EVENT IS NEAR!\n\n";
-		str += "Event name: " + comingEvent.getName() + 
-			   "\nEvent place: " + comingEvent.getPlace() + 
-			   "\nEvent date: " + comingEvent.getDate(); 
+		str += "Event name: " + e.getName() + 
+			   "\nEvent place: " + e.getPlace() + 
+			   "\nEvent date: " + e.getDate(); 
 		
 		return str;
 	}
@@ -75,14 +70,14 @@ public class AlarmChecker extends JFrame implements Runnable {
 	
 	private void deleteAlarm(){
 		ds.updateEvent(new Event(comingEvent.getId(), 
-				 comingEvent.getName(), 
-				 comingEvent.getDescription(), 
-				 comingEvent.getPlace(), 
-				 comingEvent.getDate(), 
-				 null));
+								 comingEvent.getName(), 
+								 comingEvent.getDescription(), 
+								 comingEvent.getPlace(), 
+								 comingEvent.getDate(), 
+								 null));
 	}
 	
-	private void makeAlarmSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+	public void makeAlarmSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 	    File yourFile = new File(soundPath);
 	    AudioInputStream stream;
 	    AudioFormat format;
@@ -110,26 +105,32 @@ public class AlarmChecker extends JFrame implements Runnable {
 					e.printStackTrace();
 				}
 				
-
-				new Thread(){
-					public void run(){						
-						
-						try {
-							makeAlarmSound();
-							JOptionPane.showMessageDialog(null,
-									  generateAlarmMessage(), 
-									  "ALARM", 
-									  JOptionPane.INFORMATION_MESSAGE);
-						} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
-							e1.printStackTrace();	
-						} finally {
-							currentThread().interrupt();
+				cal.add(Calendar.MILLISECOND, sleepTime);
+				
+				if(comingAlarmDate != null && cal.getTime().after(comingAlarmDate)){
+					Event comingEventCopy = comingEvent;
+					new Thread(){
+						public void run(){						
+							
+							try {
+								makeAlarmSound();
+								JOptionPane.showMessageDialog(null,
+										  generateAlarmMessage(comingEventCopy), 
+										  "ALARM", 
+										  JOptionPane.INFORMATION_MESSAGE);
+							} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+								e1.printStackTrace();	
+							}
+							
+							interrupt();
 						}
-					}
-				}.start();
+					}.start();	
 
-				deleteAlarm();
-				loadComingEvent();				
+					deleteAlarm();
+					loadComingEvent();
+				}
+				
+				
 				if(comingEvent == null){
 					isRunning = false;
 					break;
@@ -137,7 +138,7 @@ public class AlarmChecker extends JFrame implements Runnable {
 			}//END OF ALARM CHECKING LOOP	
 			
 			try{
-				Thread.sleep(1000);				//Out of alarms. Thread is waiting for new alarm event
+				Thread.sleep(sleepTime);				//Out of alarms. Thread is waiting for new alarm event
 			}catch(InterruptedException e){
 				e.printStackTrace();
 			}
