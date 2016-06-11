@@ -26,4 +26,5 @@ public interface DataService {
 	boolean allEventsFromXml(File file);
 	void oneEventToXml(Event event);
 	boolean oneEventFromXml(File file);
+	boolean oneEventToIcs(Event event);
 }

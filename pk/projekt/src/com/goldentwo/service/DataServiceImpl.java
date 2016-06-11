@@ -1,6 +1,8 @@
 package com.goldentwo.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +23,19 @@ import com.goldentwo.utils.Pagination.Direction;
 import com.goldentwo.utils.Pagination.Filter;
 import com.goldentwo.utils.Pagination.Page;
 import com.goldentwo.utils.Pagination.Sort;
+
+import net.fortuna.ical4j.data.CalendarOutputter;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.ValidationException;
+import net.fortuna.ical4j.model.component.VAlarm;
+import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.Location;
+import net.fortuna.ical4j.model.property.Method;
+import net.fortuna.ical4j.model.property.ProdId;
+import net.fortuna.ical4j.model.property.Trigger;
+import net.fortuna.ical4j.model.property.Version;
 
 public class DataServiceImpl implements DataService {
 	
@@ -174,6 +189,34 @@ public class DataServiceImpl implements DataService {
 			return true;
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean oneEventToIcs(Event event) {
+		DateTime dateTime = new DateTime(event.getDate());
+		VEvent vEvent = new VEvent(dateTime, event.getName());
+		vEvent.getProperties().add(new Description(event.getDescription()));
+		vEvent.getProperties().add(new Location(event.getPlace()));
+		
+		Calendar calendar = new Calendar();
+		calendar.getComponents().add(vEvent);
+		calendar.getProperties().add(new ProdId("-//Ximian//NONSGML Evolution Calendar//EN"));
+		calendar.getProperties().add(Version.VERSION_2_0);
+		calendar.getProperties().add(Method.PUBLISH);
+		try {
+			File file = new File("event.ics");
+			FileOutputStream fos = new FileOutputStream(file);
+			CalendarOutputter calendarOutputter = new CalendarOutputter();
+			calendarOutputter.setValidating(false);
+			calendarOutputter.output(calendar, fos);
+			return true;
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+			return false;
+		} catch (ValidationException validationException) {
+			validationException.printStackTrace();
 			return false;
 		}
 	}
