@@ -100,7 +100,7 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		date.setBounds(10, 250, 130, 30);
 		add(date);
 		dateTime = new JFormattedTextField(timeMask);
-		dateTime.setBounds(155, 250, 45, 30);
+		dateTime.setBounds(155, 250, 50, 30);
 		add(dateTime);
 		dateL = new JLabel("Date (DD-MM-YYYY    HH:MM)");
 		dateL.setBounds(10, 230, 280, 20);
@@ -114,7 +114,7 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		alarm = new JFormattedTextField(dateMask);
 		alarm.setBounds(10, 340, 130, 30);
 		alarmTime = new JFormattedTextField(timeMask);
-		alarmTime.setBounds(155, 340, 45, 30);
+		alarmTime.setBounds(155, 340, 50, 30);
 		add(alarmTime);
 		alarm.setVisible(false);
 		alarmTime.setVisible(false);
@@ -316,6 +316,8 @@ public class AddEventFrame extends JFrame implements ActionListener{
 		if(source == accept){
 			generateMessage(addNewEvent());
 			ui.ac.loadComingEvent();
+			ui.listFrame.update();
+			ui.calendarFrame.setEventsIntoCalendar();
 		}
 		
 		if(source == cancel){

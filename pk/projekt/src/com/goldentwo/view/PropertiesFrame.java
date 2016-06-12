@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -37,6 +38,7 @@ public class PropertiesFrame extends JFrame implements ActionListener {
 	private String[] soundPaths;
 	private int lookAndFeelNumber;
 	private String exportPath;
+	private JLabel theme, sound, path;
 	
 	
 	public PropertiesFrame(UserInterface ui, SettingsServiceImpl ssi) {
@@ -44,7 +46,7 @@ public class PropertiesFrame extends JFrame implements ActionListener {
 		this.ssi = ssi;
 		exportPath = null;
 	    setTitle("Properties");
-	    setSize(310, 350);
+	    setSize(240, 350);
 	    setLocationRelativeTo(null);
 		setLayout(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -72,6 +74,21 @@ public class PropertiesFrame extends JFrame implements ActionListener {
 		setDefaultSettings();
         changeLookAndFeel();
         updateSound();
+        generateLabels();
+	}
+	
+	private void generateLabels(){
+		theme = new JLabel("Choose Organizer's theme");
+		sound = new JLabel("Choose alarm sound");
+		path = new JLabel("Choose default export directory");
+		
+		theme.setBounds(10, 5, 250, 30);
+		sound.setBounds(10, 125, 250, 30);
+		path.setBounds(10, 190, 250, 30);
+		
+		add(theme);
+		add(sound);
+		add(path);
 	}
 	
 	private void updateSound() {
@@ -99,8 +116,8 @@ public class PropertiesFrame extends JFrame implements ActionListener {
 		String[] sounds = {"Default", "Ahem...", "Applause", "Arrow", "Charge"};
 		soundChooser = new JComboBox<>(sounds);
 		listenButton = new JButton("Listen");
-		soundChooser.setBounds(10, 130, 100, 30);
-		listenButton.setBounds(130, 130, 100, 30);
+		soundChooser.setBounds(10, 150, 100, 30);
+		listenButton.setBounds(130, 150, 100, 30);
 		soundChooser.addActionListener(this);
 		listenButton.addActionListener(this);
 		
@@ -136,11 +153,11 @@ public class PropertiesFrame extends JFrame implements ActionListener {
 		add(motif);
 		
 		accept = new JButton("Save and quit");
-		accept.setBounds(10, 300, 140, 30);
+		accept.setBounds(50, 300, 140, 30);
 		accept.addActionListener(this);
 		
 		changePath = new JButton("Set path");
-		changePath.setBounds(10, 230, 140, 30);
+		changePath.setBounds(10, 215, 220, 30);
 		changePath.addActionListener(this);
 		
 		add(accept);

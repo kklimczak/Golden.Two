@@ -45,7 +45,7 @@ public class DayListEventsFrame extends JFrame implements ActionListener {
 		String title = "Day events";
 		if(!ui.isEvents) title += " - ALARMS";
 	    setTitle(title);
-	    setSize(400, 470);
+	    setSize(400, 420);
 	    setLocationRelativeTo(null);
 		setLayout(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
