@@ -22,20 +22,47 @@ import javax.swing.table.DefaultTableModel;
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.utils.Pagination.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Klasa generujaca komponenty listy wydarzen
+ */
 public class ListFrame implements ListSelectionListener{
 	
+	/** The ui. */
 	private UserInterface ui;
+	
+	/** Ostatnio wybrany wiersz */
 	int latestSelectedRow;
+	
+	/** Aktualna strona listy wydarzen */
 	int currentPage;
+	
+	/** Ilosc wszystkich elementow/stron */
 	int totalElements, totalPages;
+	
+	/** Lista wydarzen dla danej strony (max 10) */
 	Vector<Vector<String>> events;
+	
+	/** Tabela z wydarzeniami */
 	JTable table;
+	
+	/** Przyciski funkcyjne */
 	JButton prev, next, details, export, delete;
+	
+	/** Label */
 	JLabel eventCounter;
+	
+	/** Zwracana z metody obsugujacej dane. Zawiera wszystkie dane dla strony (wydarzenia, nr strony, ilosc wszystkich wydarzen itd) */
 	Page<Event> list;
 	
+	/** Daty */
 	Date dateFrom, dateTo;
 	
+	/**
+	 * Inicuje nowy obiekt ListFrame
+	 *
+	 * @param ui glowny komponent programu
+	 */
 	public ListFrame(UserInterface ui){
 		this.ui = ui;
 		currentPage = 1;
@@ -48,6 +75,9 @@ public class ListFrame implements ListSelectionListener{
 		generateButtons();
 	}
 	
+	/**
+	 * Inicjuje liste wydarzen
+	 */
 	public void initJList(){
 		Page<Event> page = ui.isEvents ? 
 				ui.dataServiceImpl.getSortedAndFilteredEvents(ui.sort, ui.filter, currentPage) :
@@ -92,6 +122,9 @@ public class ListFrame implements ListSelectionListener{
 		ui.listComponentList.add(table);
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getValueIsAdjusting()){
@@ -103,6 +136,9 @@ public class ListFrame implements ListSelectionListener{
 		}
 	}
 	
+	/**
+	 * Wypelnia tabele wydarzeniami
+	 */
 	void fillTable(){
 		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -133,6 +169,9 @@ public class ListFrame implements ListSelectionListener{
 		}
 	}
 
+	/**
+	 * Generuje przyciski widoku listy wydarzen
+	 */
 	private void generateButtons(){
 		prev = new JButton("Previous");
 		next = new JButton("Next");
@@ -171,10 +210,16 @@ public class ListFrame implements ListSelectionListener{
 		updateButtons();
 	}
 	
+    /**
+     * Uaktualnia licznik wydarzen
+     */
     void updateEventCounterLabel(){		
 		eventCounter.setText(10*(currentPage)-9 + " - " + (10*currentPage > totalElements ? totalElements : 10*currentPage)  + " of " + totalElements);
 	}
     
+    /**
+     * Uaktualnia przyciski zmiany stron listy
+     */
     void updateButtons(){
     	prev.setEnabled(false);
 		if(totalPages == currentPage || totalElements == 0){
@@ -184,6 +229,9 @@ public class ListFrame implements ListSelectionListener{
 		}
     }
     
+    /**
+     * Uaktualnia cala liste wydarzen
+     */
     void update(){
     	currentPage = 1;
     	fillTable();

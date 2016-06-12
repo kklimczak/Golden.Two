@@ -17,14 +17,12 @@ import com.goldentwo.utils.alarmChecker.AlarmChecker;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class UserInterface.
- * 
  * Main GUI class;
  * 
- * Defines view of program.
- * In containers are stored components of calendar view and event-list view,
- * which become visible or invisible in properly time.
- * 
+ * Określa wygląd programu.
+ * W swoich kolekcjach przechowyje komponenty kalendarza oraz listy wydarzeń,
+ * które w odpowienim momencie pokazuje lub chowa prze uzytkownikiem.
+ * Jest również klasa nasłuchującą większość zdarzeń programu.
  *
  * @author lkuta
  * @author kklimczak
@@ -32,55 +30,55 @@ import com.goldentwo.utils.alarmChecker.AlarmChecker;
 @SuppressWarnings("serial")
 public class UserInterface extends JFrame implements ActionListener{
 
-	/** Providing methods for data base support */
+	/** Dostarcza metody to obsługi danych*/
 	DataServiceImpl dataServiceImpl;
 	
-	/** Providing default setups */
+	/** Dostarcza ustawienia podstawowe oraz zapisuje je w bazie */
 	SettingsServiceImpl ssi;
 	
-	/** Generates alarm when event's alarm date is equal to system date */
+	/** Generuje sygnal dzwiekowy i wiadomosc dla alarmow */
 	AlarmChecker ac;
 	
-	/** Generates components for event-list view */
+	/** Generuje komponenty widoku listy wydarzen */
 	ListFrame listFrame;
 	
-	/** Generates componenents for calendar view */
+	/** Generuje komponenty widoku kalendarza */
 	CalendarFrame calendarFrame;
 		
-	/** The top title. */
+	/** Glowny opis ramki w programie */
 	JLabel topTitle;
 	
-	/** The button day list. */
+	/** Lista przyciskow odpowiadajaca dniom miesiaca */
 	ArrayList<JButton> buttonDayList;
 	
-	/** The calendar view component list. */
+	/** Lista komponentow dla widoku listy zdarzen  */
 	ArrayList<Component> calComponentList;
 	
-	/** The event-list's view component list. */
+	/** Lista komponentow dla widoku kalendarz. */
 	ArrayList<Component> listComponentList;
 	
-	/** The xml chooser. */
+	/** Wybor pliku xml to zaimportowania */
 	JFileChooser xmlChooser;
 	
-	/** The xml filter for file chooser. */
+	/** Filtr dla xmlChooser'a */
 	FileNameExtensionFilter xmlFilter;
 	
-	/** The filter for filtering events. */
+	/** Filtr wydarzen. */
 	Filter filter;
 	
-	/** The sort for sorting events. */
+	/** Sposob sortowania wydarzen. */
 	Sort sort;
 	
-	/** Flag for displaying on calendar events or alarms. */
+	/** Flaga warunkujaca wyswietlanie alarmow lub wydarzen. */
 	boolean isEvents;
 	
-    /** Button switching calendar view */
+    /** Przyciski zmieniajace widok */
     JButton calendarButton, listButton;
 	
-	/** The alarm combo box changing field <code> isEvents </code>. */
+	/** Komponent zmieniajacy flage 'isEvents' */
 	JComboBox alarmComboBox;
 	
-	/** The calendar line separator. */
+	/** Separator sekcji kalendarza */
 	JSeparator separatorH, separatorV; 
 	
 	/** The menu bar. */
@@ -95,10 +93,11 @@ public class UserInterface extends JFrame implements ActionListener{
 			  about, properties;
 	
 	/**
-	 * Instantiates a new GUI of Organizer.
+	 * Inicjuje graficzny interfejs Organizera
 	 *
-	 * @param dataServiceImpl implementation of interface <code> DataService </code>
-	 * @param ac class that generate alarms
+	 * @param dataServiceImpl implementacja 'DataService' 
+	 * @param ac klasa generujaca alarm 
+	 * @param ssi klasa dostarczajaca podstawowych ustawien programu zapisanych w bazie
 	 */
 	public UserInterface(DataServiceImpl dataServiceImpl, AlarmChecker ac, SettingsServiceImpl ssi) {
 		this.dataServiceImpl = dataServiceImpl;
@@ -122,7 +121,7 @@ public class UserInterface extends JFrame implements ActionListener{
     }
 	
     /**
-     * Inits the program.
+     * Inicjuje kolejne komponenty programu
      */
     private void init(){
 	    setTitle("ORGANIZER");
@@ -155,7 +154,7 @@ public class UserInterface extends JFrame implements ActionListener{
     }
     
     /**
-     * Generate menu bar.
+     * Generuje menu bar
      */
     private void generateMenuBar(){
     	menuBar = new JMenuBar();
@@ -200,7 +199,7 @@ public class UserInterface extends JFrame implements ActionListener{
     }
 
 	/**
-	 * Generate left side buttons.
+	 *  Generuje lewy interfejs
 	 */
 	private void generateLeftSideButtons(){
     	calendarButton = new JButton("Calendar"); 
@@ -382,10 +381,10 @@ public class UserInterface extends JFrame implements ActionListener{
 	}
     
 	/**
-	 * Generate message.
+	 * Generuje wiadomosc
 	 *
-	 * @param flag 'true' for positive message, 'false'e for an error 
-	 * @param c parent component 
+	 * @param flag jesli 'true' to wiadomosc pozytywna, 'false' oznacza wiadomosc o bledzie 
+	 * @param c komponent nadrzedny
 	 */
 	static public void generateMessage(boolean flag, Component c){
 		if(flag){
@@ -403,10 +402,10 @@ public class UserInterface extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Generate confirm question
+	 * Generuje prosbe o potwierdzenie
 	 *
-	 * @param c parent component
-	 * @return 1 if "yes" was chosen, 0 if "no"	
+	 * @param c komponent rodzic
+	 * @return '1' w momencie wyboru "yes", '0' przy wyborze "no"
 	 *  
 	 */
 	static public int generateQuestion(Component c){
@@ -417,6 +416,12 @@ public class UserInterface extends JFrame implements ActionListener{
 		return choose;
 	}
 	
+	/**
+	 * Generuje zapytanie o wybor formatu
+	 *
+	 * @return 0 po wyborze formatu XML, 1 po wyborze formatu Evolution
+	 *  
+	 */
 	private int generateExportQuestion(){
 		String[] options = new String[2];
 		options[0] = new String("XML format");

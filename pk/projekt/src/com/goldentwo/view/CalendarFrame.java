@@ -17,18 +17,36 @@ import javax.swing.border.LineBorder;
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.utils.Date.DateConverter;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Klasa generujaca komponenty widoku kalendarza
+ */
 public class CalendarFrame {
 	
+	/** Komponent nadrzedny */
 	private UserInterface ui;
 	
+	/** Kalendarz uzywany do pobierania daty. */
 	Calendar calendar;
+	
 	JLabel monLab, tueLab, wedLab, thuLab, friLab, sunLab, satLab;
+	
 	int actualMonth, actualYear, firstDayOfMonth;
+	
+	/** Przyciski zmieniajace miesiac */
 	JButton previousMonthButton, nextMonthButton;
+	
+	/** Przyciski funkcyjne */
 	JButton addEventButton, findPresentDayButton;
 
+	/** Tabela z iloscia dni w miesiacu. */
 	int[] daysOfMonths = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	
+	/**
+	 * Inicjalizuje instancje CalendarFrame
+	 *
+	 * @param ui klasa nadrzedna
+	 */
 	public CalendarFrame(UserInterface ui){
 		this.ui = ui;
 		calendar = new GregorianCalendar();
@@ -46,6 +64,9 @@ public class CalendarFrame {
 		setEventsIntoCalendar();
 	}
 	
+	/**
+	 * Inicjalizuje najwazniejsze komponenty
+	 */
 	private void initComponents(){
 	    ui.topTitle = new JLabel();
 	    
@@ -60,12 +81,18 @@ public class CalendarFrame {
     	findPresentDayButton = new JButton("BACK TO PRESENT DAY");
 	}
 	
+	/**
+	 * Inicjalizuje glowny napis organizera
+	 */
 	private void initTopLabel(){
 	    ui.topTitle.setBounds(430, 20, 280, 50);
 	    ui.topTitle.setFont(new Font("Arial", 1, 30));
 	    ui.add(ui.topTitle);
 	}
 	
+    /**
+     * Generuje label'e z dniami tygodnia
+     */
     void setDayLabels(){
         monLab.setBounds(265, 90, 50, 50);
         tueLab.setBounds(345, 90, 50, 50);
@@ -93,6 +120,9 @@ public class CalendarFrame {
         
     }
     
+    /**
+     * Ustawia napis z rokiem i miesiacem
+     */
     void setMonthAndYear(){
     	
        	if(actualMonth == -1){
@@ -144,6 +174,9 @@ public class CalendarFrame {
 
     }
 
+    /**
+     * Generuje przyciski zmieniajace miesiac
+     */
     void generateMonthsButtons() {
 		previousMonthButton.setBounds(225, 140, 20, 325);
 		nextMonthButton.setBounds(810, 140, 20, 325);
@@ -154,6 +187,9 @@ public class CalendarFrame {
 		ui.calComponentList.add(nextMonthButton);
 	}
     
+    /**
+     * Generuje przyciski odpowiadajace dniom miesiaca
+     */
     void generateDayButtons(){
         
     	for(int i = 0 ; i < 42 ; i++){
@@ -185,6 +221,9 @@ public class CalendarFrame {
     	}
     }
 
+    /**
+     * Wypelnia odpowiednie przyciski z dniami miesiaca numerem dnia miesiaca
+     */
     void fillDayButtons(){
     	int day = 1;
     	int foundDay = findFirstDayOfMonth();
@@ -208,6 +247,11 @@ public class CalendarFrame {
     	markTodayDay();
     }
     
+    /**
+     * Znajduje pierwszy dzien miesiaca
+     *
+     * @return dzien tygodnia. 0 dla poniedzialku, 6 dla niedzieli
+     */
     int findFirstDayOfMonth(){
     	calendar.set(Calendar.MONTH, actualMonth);
     	calendar.set(Calendar.YEAR, actualYear);
@@ -233,6 +277,9 @@ public class CalendarFrame {
     	return 10;
     }
     	
+    /**
+     * Oznacza w widoku kalendarza dzien dzisiejszy
+     */
     void markTodayDay(){
 		if(ui.calComponentList.get(0).isVisible())findPresentDayButton.setVisible(true);
     	Calendar c = new GregorianCalendar();
@@ -245,6 +292,9 @@ public class CalendarFrame {
     	}
     }
     
+    /**
+     * Laduje wydarzenia do widoku kalendarza i zaznacza, w ktore dni zapisane jest wydarzenie
+     */
     void setEventsIntoCalendar(){
     	List<Event> list = ui.dataServiceImpl.getAllEventsBetweenDates(
     			DateConverter.stringToDate(actualYear, actualMonth + 1, 1), 
@@ -263,6 +313,9 @@ public class CalendarFrame {
     	}
     }
     
+    /**
+     * Generuje przyciski do znajdowania aktualnego dnia oraz dodania nowego zdarzenia
+     */
     void generateAddEventAndFindPresentDayButtons(){
     	addEventButton.setBounds(225, 470, 140, 20);
     	addEventButton.setBackground(Color.green);
@@ -275,12 +328,21 @@ public class CalendarFrame {
     	
     }
     
+    /**
+     * Uaktualnia kalendarz na bierzacy rok i miesiac 
+     */
     void setPresentDate(){
     	Calendar c = new GregorianCalendar();
 		actualMonth = c.get(Calendar.MONTH);
 		actualYear = c.get(Calendar.YEAR);
     }
     
+    /**
+     * Zwraca liste wydarzen z jednego dnia
+     *
+     * @param dayNumber numer dnia miesiaca
+     * @return lista wydarzen	
+     */
     List<Event> getDayEvents(int dayNumber){
     	Date from = DateConverter.stringToDate(actualYear, actualMonth + 1, dayNumber);
     	Date to = DateConverter.stringToDate(actualYear, actualMonth + 1, dayNumber+1);
@@ -288,7 +350,5 @@ public class CalendarFrame {
     	List<Event> list = ui.dataServiceImpl.getAllEventsBetweenDates(from, to, ui.isEvents);
     	return list;
     }
-
-
 }
 
