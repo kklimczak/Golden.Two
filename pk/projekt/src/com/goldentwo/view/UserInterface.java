@@ -11,6 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.goldentwo.data.Event.Event;
 import com.goldentwo.service.DataServiceImpl;
+import com.goldentwo.service.SettingsServiceImpl;
 import com.goldentwo.utils.Pagination.*;
 import com.goldentwo.utils.alarmChecker.AlarmChecker;
 
@@ -26,12 +27,16 @@ import com.goldentwo.utils.alarmChecker.AlarmChecker;
  * 
  *
  * @author lkuta
+ * @author kklimczak
  */
 @SuppressWarnings("serial")
 public class UserInterface extends JFrame implements ActionListener{
 
 	/** Providing methods for data base support */
 	DataServiceImpl dataServiceImpl;
+	
+	/** Providing default setups */
+	SettingsServiceImpl ssi;
 	
 	/** Generates alarm when event's alarm date is equal to system date */
 	AlarmChecker ac;
@@ -95,8 +100,9 @@ public class UserInterface extends JFrame implements ActionListener{
 	 * @param dataServiceImpl implementation of interface <code> DataService </code>
 	 * @param ac class that generate alarms
 	 */
-	public UserInterface(DataServiceImpl dataServiceImpl, AlarmChecker ac) {
+	public UserInterface(DataServiceImpl dataServiceImpl, AlarmChecker ac, SettingsServiceImpl ssi) {
 		this.dataServiceImpl = dataServiceImpl;
+		this.ssi = ssi;
 		this.ac = ac;
 		buttonDayList = new ArrayList<>();
 		calComponentList = new ArrayList<>();
@@ -111,6 +117,7 @@ public class UserInterface extends JFrame implements ActionListener{
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(new MyKeyListener(this));
 		setResizable(false);
+		
 		init();
     }
 	
@@ -142,6 +149,9 @@ public class UserInterface extends JFrame implements ActionListener{
 
         generateLeftSideButtons();           
         generateMenuBar();
+        
+        PropertiesFrame component = new PropertiesFrame(this, ssi);
+        component.setDefaultSettings();
     }
     
     /**
@@ -367,7 +377,7 @@ public class UserInterface extends JFrame implements ActionListener{
 										  JOptionPane.INFORMATION_MESSAGE);
 		}
 		if(source == properties){
-			new PropertiesFrame(this).setVisible(true);
+			new PropertiesFrame(this, ssi).setVisible(true);
 		}
 	}
     

@@ -7,6 +7,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Stack;
 
 import javax.annotation.Generated;
 import javax.sound.sampled.LineUnavailableException;
@@ -21,9 +22,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class PropertiesFrame extends JFrame implements ItemListener, ActionListener {
+import com.goldentwo.data.Settings.Settings;
+import com.goldentwo.service.SettingsServiceImpl;
+
+public class PropertiesFrame extends JFrame implements ActionListener {
 	
 	private UserInterface ui;
+	private SettingsServiceImpl ssi;
 	private JFileChooser directoryChooser;
 	private JRadioButton metal, nimbus, gtk, motif;
 	private ButtonGroup bGroup;
@@ -31,10 +36,13 @@ public class PropertiesFrame extends JFrame implements ItemListener, ActionListe
 	private JButton listenButton, accept, changePath;
 	private String[] soundPaths;
 	private int lookAndFeelNumber;
+	private String exportPath;
 	
 	
-	public PropertiesFrame(UserInterface ui) {
+	public PropertiesFrame(UserInterface ui, SettingsServiceImpl ssi) {
 		this.ui = ui;
+		this.ssi = ssi;
+		exportPath = null;
 	    setTitle("Properties");
 	    setSize(310, 350);
 	    setLocationRelativeTo(null);
@@ -43,6 +51,13 @@ public class PropertiesFrame extends JFrame implements ItemListener, ActionListe
         setAlwaysOnTop(true);
         
         init();
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+            	setDefaultSettings();
+            }
+        });
 
 	}
 	
@@ -54,7 +69,7 @@ public class PropertiesFrame extends JFrame implements ItemListener, ActionListe
 		generateButtons();
 		generateSoundComponents(); 
 		
-		setLookAndFeelNumber();
+		setDefaultSettings();
         changeLookAndFeel();
         updateSound();
 	}
@@ -162,15 +177,17 @@ public class PropertiesFrame extends JFrame implements ItemListener, ActionListe
 			
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		updateWindows();
 	}
 	
-	private void setLookAndFeelNumber(){
-		//METODA OD KONRADA
+	public void setDefaultSettings(){
+		lookAndFeelNumber = ssi.getSettings().getLookAndFeelNumber();
+		changeLookAndFeel();
+		ui.ac.setSoundPath(soundPaths[ssi.getSettings().getAlarmSound()]);
+		exportPath = ssi.getSettings().getDefaultExportPath();
 	}
 	
 	private void updateWindows(){
@@ -213,12 +230,14 @@ public class PropertiesFrame extends JFrame implements ItemListener, ActionListe
 		
 		if(source == accept){
 			setAlarmSound();
+			int alarmSound = soundChooser.getSelectedIndex() == -1 ? ssi.getSettings().getAlarmSound() : soundChooser.getSelectedIndex();
+			ssi.updateSettings(new Settings(1, exportPath, alarmSound, lookAndFeelNumber));
 			dispose();
 		}
 		
 		if(source == changePath){
 			if(directoryChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
-				String path = directoryChooser.getSelectedFile().getAbsolutePath();
+				exportPath = directoryChooser.getSelectedFile().getAbsolutePath();
 			}
 		}
 	}
@@ -231,10 +250,5 @@ public class PropertiesFrame extends JFrame implements ItemListener, ActionListe
 			 else if(str.equals("Applause")) ui.ac.setSoundPath(soundPaths[2]);
 			   	  else if(str.equals("Arrow")) ui.ac.setSoundPath(soundPaths[3]);
 					   else if(str.equals("Charge")) ui.ac.setSoundPath(soundPaths[4]);
-	}
-
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-
 	}
 }

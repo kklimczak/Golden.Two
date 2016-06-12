@@ -27,8 +27,8 @@ public class Application {
 		
 		DBInit dbInit = new DBInit();
 		DBConnection dbConnection = new DBConnection();
-		SettingsServiceImpl settingsServiceImpl = new SettingsServiceImpl(dbConnection);
 		
+		SettingsServiceImpl settingsServiceImpl = new SettingsServiceImpl(dbConnection);
 		Settings settings = settingsServiceImpl.getSettings();
 		
 		DataServiceImpl dataServiceImpl = new DataServiceImpl(dbConnection, settings);
@@ -38,7 +38,7 @@ public class Application {
 		logger.info("UserInterface initialized successfully!");
 		
 		AlarmChecker ac = new AlarmChecker(dataServiceImpl);
-		UserInterface ui = new UserInterface(dataServiceImpl, ac);	
+		UserInterface ui = new UserInterface(dataServiceImpl, ac, settingsServiceImpl);	
 		ui.setVisible(true);
 		
 		new Thread(ac).start();
