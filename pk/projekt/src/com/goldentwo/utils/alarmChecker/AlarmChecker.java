@@ -41,6 +41,10 @@ public class AlarmChecker extends JFrame implements Runnable {
 		loadComingEvent();
 	}
 	
+	public void setSoundPath(String soundPath){
+		this.soundPath = soundPath;
+	}
+	
 	public void loadComingEvent(){
 		comingEvent = ds.getEventWithClosestAlarm();
 		comingAlarmDate = null;

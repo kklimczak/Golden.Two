@@ -4,8 +4,6 @@ import java.awt.Component;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -89,7 +87,7 @@ public class UserInterface extends JFrame implements ActionListener{
 	/** The menu items */
 	JMenuItem filterItem, exitItem, deleteOldEventsItem, 
 			  saveToXML, loadFromXML, loadOneXML,
-			  about;
+			  about, properties;
 	
 	/**
 	 * Instantiates a new GUI of Organizer.
@@ -158,6 +156,7 @@ public class UserInterface extends JFrame implements ActionListener{
     	loadFromXML = new JMenuItem("Load data from XML");
     	loadOneXML = new JMenuItem("Load event from XML");
     	about = new JMenuItem("About");
+    	properties = new JMenuItem("Properties");
     	
     	exitItem = new JMenuItem("Exit");
     	filterItem.addActionListener(this);
@@ -167,6 +166,7 @@ public class UserInterface extends JFrame implements ActionListener{
     	loadFromXML.addActionListener(this);
     	loadOneXML.addActionListener(this);
     	about.addActionListener(this);
+    	properties.addActionListener(this);
     	
     	menu.add(filterItem);
     	menu.add(deleteOldEventsItem);
@@ -176,6 +176,7 @@ public class UserInterface extends JFrame implements ActionListener{
     	menu.add(loadFromXML);
     	menu.add(loadOneXML);
     	menu.addSeparator();
+    	menu.add(properties);
     	menu.add(about);
     	menu.addSeparator();
     	menu.add(exitItem);
@@ -365,6 +366,9 @@ public class UserInterface extends JFrame implements ActionListener{
 										  "About",
 										  JOptionPane.INFORMATION_MESSAGE);
 		}
+		if(source == properties){
+			new PropertiesFrame(this).setVisible(true);
+		}
 	}
     
 	/**
@@ -406,7 +410,7 @@ public class UserInterface extends JFrame implements ActionListener{
 	private int generateExportQuestion(){
 		String[] options = new String[2];
 		options[0] = new String("XML format");
-		options[1] = new String("Outlook format");
+		options[1] = new String("Evolution format");
 		int choose = JOptionPane.showOptionDialog(this,
 									   			 "Export selected event to: ",
 												 "Choose wisely", 
