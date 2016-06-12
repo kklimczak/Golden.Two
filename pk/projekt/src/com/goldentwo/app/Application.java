@@ -29,9 +29,9 @@ public class Application {
 		DBConnection dbConnection = new DBConnection();
 		
 		SettingsServiceImpl settingsServiceImpl = new SettingsServiceImpl(dbConnection);
-		Settings settings = settingsServiceImpl.getSettings();
+		settingsServiceImpl.getSettings();
 		
-		DataServiceImpl dataServiceImpl = new DataServiceImpl(dbConnection, settings);
+		DataServiceImpl dataServiceImpl = new DataServiceImpl(dbConnection, settingsServiceImpl);
 		
 		dataServiceImpl.getEventById(120);
 	

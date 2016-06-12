@@ -36,25 +36,43 @@ import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Version;
 
+/**
+ * Klasa odpowiadajaca za logike programu zwiazana z wydarzeniami.
+ */
 public class DataServiceImpl implements DataService {
 	
+	/** Obiekt klasy odpowiedzialnej za operowanie na bazie danych. */
 	private EventRepository eventRepository;
 	
-	private Settings settings;
+	/** Obiekt odpowiedzialny za logike zwiazana z ustawieniami programu. */
+	private SettingsServiceImpl settingsServiceImpl;
 	
+	/**  Obiekt zawierajacy metody sluzace do logowania na konsoli. */
 	private Logger logger = new Logger(DataServiceImpl.class);
 	
-	public DataServiceImpl(DBConnection db, Settings settings) {
+	/**
+	 * Glowny konstruktor ustawiajacy przekazuje parametr db do EventRepository.
+	 *
+	 * @param db Klasa odpowiedzialna za polaczenia z baza
+	 * @param settingsServiceImpl Logika ustawien
+	 */
+	public DataServiceImpl(DBConnection db, SettingsServiceImpl settingsServiceImpl) {
 		this.eventRepository = new EventRepository(db);
-		this.settings = settings;
+		this.settingsServiceImpl = settingsServiceImpl;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#getAllEvents()
+	 */
 	@Override
 	public List<Event> getAllEvents() {
 		logger.info("getAllEvents() called");
 		return eventRepository.findAll();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#getSortedAndFilteredEvents(com.goldentwo.utils.Pagination.Sort, com.goldentwo.utils.Pagination.Filter, int)
+	 */
 	@Override
 	public Page<Event> getSortedAndFilteredEvents(Sort sort, Filter filter, int page) {
 		if(sort == null) {
@@ -64,6 +82,9 @@ public class DataServiceImpl implements DataService {
 		return eventRepository.findEventWithSortAndFilterParams(sort, filter, page);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#getSortedAndFilteredEventsWithAlarm(com.goldentwo.utils.Pagination.Sort, com.goldentwo.utils.Pagination.Filter, int)
+	 */
 	@Override
 	public Page<Event> getSortedAndFilteredEventsWithAlarm(Sort sort, Filter filter, int page) {
 		if(sort == null) {
@@ -73,12 +94,18 @@ public class DataServiceImpl implements DataService {
 		return eventRepository.findEventWithSortAndFilterParamsAndAlarmNotNull(sort, filter, page);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#getAllEventsBetweenDates(java.util.Date, java.util.Date, boolean)
+	 */
 	@Override
 	public List<Event> getAllEventsBetweenDates(Date from, Date to, boolean isEvent) {
 		logger.info("getAllEventsBetweenDates() called");
 		return eventRepository.findByDateRange(new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()), isEvent);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#getAllSortedAndFilteredEventsBetweenDates(java.util.Date, java.util.Date, boolean, com.goldentwo.utils.Pagination.Sort, com.goldentwo.utils.Pagination.Filter, int)
+	 */
 	@Override
 	public Page<Event> getAllSortedAndFilteredEventsBetweenDates(Date from, Date to, boolean isEvent, Sort sort, Filter filter, int page) {
 		if(sort == null) {
@@ -88,42 +115,63 @@ public class DataServiceImpl implements DataService {
 		return eventRepository.findByDateRangeWithSortAndFilterParams(from, to, isEvent, sort, filter, page);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#getEventById(int)
+	 */
 	@Override
 	public Event getEventById(int id) {
 		logger.info("getEventById() called");
 		return eventRepository.findOne(id);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#getEventWithClosestAlarm()
+	 */
 	@Override
 	public Event getEventWithClosestAlarm() {
 		logger.info("getEventWithClosestAlarm() called");
 		return eventRepository.findOneWithClosestAlarm();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#addEvent(com.goldentwo.data.Event.Event)
+	 */
 	@Override
 	public void addEvent(Event event) {
 		logger.info("addEvent() called");
 		eventRepository.addOne(event);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#updateEvent(com.goldentwo.data.Event.Event)
+	 */
 	@Override
 	public void updateEvent(Event event) {
 		logger.info("updateEvent() called");
 		eventRepository.updateOne(event);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#deleteEvent(int)
+	 */
 	@Override
 	public void deleteEvent(int id) {
 		logger.info("deleteEvent() called");
 		eventRepository.deleteOne(id);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#deleteEventBeforeDate(java.util.Date)
+	 */
 	@Override
 	public void deleteEventBeforeDate(Date date) {
 		logger.info("deleteEventsBeforeDate() called");
 		eventRepository.deleteEventsBeforeDate(new java.sql.Date(date.getTime()));
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#allEventsToXml()
+	 */
 	@Override
 	public void allEventsToXml() {
 		EventsDto eventsDto = new EventsDto(new ArrayList<>());
@@ -134,13 +182,16 @@ public class DataServiceImpl implements DataService {
 			Marshaller marshaller = context.createMarshaller();
 			
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(eventsDto, new File (settings.getDefaultExportPath() + "/events.xml"));
+			marshaller.marshal(eventsDto, new File (settingsServiceImpl.getSettings().getDefaultExportPath() + "/events.xml"));
 			logger.info("Export all events to xml file: events.xml with " + eventsDto.getEventDtos().size() + " elements" );
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#allEventsFromXml(java.io.File)
+	 */
 	@Override
 	public boolean allEventsFromXml(File file) {
 		EventsDto eventsDto = new EventsDto();
@@ -166,6 +217,9 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#oneEventToXml(com.goldentwo.data.Event.Event)
+	 */
 	@Override
 	public void oneEventToXml(Event event) {
 		try {
@@ -173,13 +227,16 @@ public class DataServiceImpl implements DataService {
 			Marshaller marshaller = context.createMarshaller();
 			
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(event.asDto(), new File(settings.getDefaultExportPath() + "/" +event.getId()+"."+event.getName()+".xml"));
+			marshaller.marshal(event.asDto(), new File(settingsServiceImpl.getSettings().getDefaultExportPath() + "/" +event.getId()+"."+event.getName()+".xml"));
 			logger.info("Export event with name: " + event.getName() + " and id: " + event.getId() + " to " + event.getId()+"."+event.getName()+".xml");
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#oneEventFromXml(java.io.File)
+	 */
 	@Override
 	public boolean oneEventFromXml(File file) {
 		EventDto event = new EventDto();
@@ -197,6 +254,9 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.DataService#oneEventToIcs(com.goldentwo.data.Event.Event)
+	 */
 	@Override
 	public boolean oneEventToIcs(Event event) {
 		DateTime dateTime = new DateTime(event.getDate());
@@ -210,7 +270,7 @@ public class DataServiceImpl implements DataService {
 		calendar.getProperties().add(Version.VERSION_2_0);
 		calendar.getProperties().add(Method.PUBLISH);
 		try {
-			File file = new File(settings.getDefaultExportPath() + "/" + event.getId() + ".event.ics");
+			File file = new File(settingsServiceImpl.getSettings().getDefaultExportPath() + "/" + event.getId() + ".event.ics");
 			FileOutputStream fos = new FileOutputStream(file);
 			CalendarOutputter calendarOutputter = new CalendarOutputter();
 			calendarOutputter.setValidating(false);

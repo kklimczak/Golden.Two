@@ -8,16 +8,29 @@ import com.goldentwo.data.database.DBConnection;
 import com.goldentwo.utils.Exceptions.SQLUpdateException;
 import com.goldentwo.utils.Logger.Logger;
 
+/**
+ * Klasa odpowiadajaca za logike zwiazana z ustawieniami programu.
+ */
 public class SettingsServiceImpl implements SettingsService {
 	
+	/** Obiekt klasy odpowiedzialnej za operowanie na bazie danych. */
 	private SettingsRepository settingsRepository;
 	
+	/** Obiekt zawierajacy metody sluzace do logowania na konsoli. */
 	Logger logger = new Logger(SettingsServiceImpl.class); 
 	
+	/**
+	 * Glowny konstruktor klasy odpowiadajacy za poprawne przekazanie do repozytorium polaczenia do bazy danych.
+	 *
+	 * @param db Klasa odpowiedzialna za polaczenia z baza
+	 */
 	public SettingsServiceImpl(DBConnection db) {
 		this.settingsRepository = new SettingsRepository(db);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.SettingsService#getSettings()
+	 */
 	@Override
 	public Settings getSettings() {
 		logger.info("getSettings() called");
@@ -30,6 +43,9 @@ public class SettingsServiceImpl implements SettingsService {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.goldentwo.service.SettingsService#updateSettings(com.goldentwo.data.Settings.Settings)
+	 */
 	@Override
 	public boolean updateSettings(Settings settings) {
 		try {

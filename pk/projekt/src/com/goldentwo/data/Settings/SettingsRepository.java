@@ -7,16 +7,31 @@ import com.goldentwo.data.database.DBConnection;
 import com.goldentwo.utils.Exceptions.SQLUpdateException;
 import com.goldentwo.utils.Logger.Logger;
 
+/**
+ * Klasa odpowidzialna za obsluge bazy danych dla tabeli z ustawieniami (CRUD).
+ */
 public class SettingsRepository {
 
+	/** Obiekt zawierajacy konfiguracje oraz polaczenie z baza danych. */
 	private DBConnection db;
 	
+	/** Obiekt zawierajacy metody sluzace do logowania na konsoli. */
 	private Logger logger = new Logger(SettingsRepository.class);
 	
+	/**
+	 * Glowny konstruktor klasy SettingsRepository ustawiajacy obiekt klasy konfiguracyjnej bazy danych.
+	 *
+	 * @param dbConnection Klasa konfiguracyjna bazy danych.
+	 */
 	public SettingsRepository(DBConnection dbConnection) {
 		this.db = dbConnection;
 	}
 	
+	/**
+	 * Metoda zwracajaca obiekt ustawien wraz ze wszystkimi uzupelnionymi polami.
+	 *
+	 * @return Obiekt ustawien
+	 */
 	public Settings getOne() {
 		try {
 			ResultSet resultSet = db.getStmt().executeQuery("SELECT * FROM `settings`");
@@ -36,6 +51,13 @@ public class SettingsRepository {
 		}
 	}
 	
+	/**
+	 * Metoda dodajaca nowy rekord w bazie zawierajacy ustawienia programu.
+	 *
+	 * @param defaultExportPath Domyslna sciezka eksportu
+	 * @param alarmSound Numer dzwieku alarmu
+	 * @param lookAndFeelNumber Numer wygladu programu
+	 */
 	public void addOne(String defaultExportPath, int alarmSound, int lookAndFeelNumber) {
 		try {
 			db.getStmt().executeUpdate("INSERT INTO `settings` VALUES (NULL, '" + defaultExportPath + "',"
@@ -47,6 +69,12 @@ public class SettingsRepository {
 		
 	}
 	
+	/**
+	 * Metoda aktualizujaca ustawienia programu w bazie.
+	 *
+	 * @param settings Obiekt ustawien
+	 * @throws SQLUpdateException Wyjatek zwiazany z bleden zaktualizowania obiektu w bazie.
+	 */
 	public void updateOne(Settings settings) throws SQLUpdateException {
 		try {
 			db.getStmt().executeUpdate("UPDATE `settings` SET "
