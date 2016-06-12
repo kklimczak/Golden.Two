@@ -1,10 +1,14 @@
 package com.goldentwo.app;
 
+import java.awt.Color;
 import java.util.Date;
 
 import com.goldentwo.data.Event.Event;
+import com.goldentwo.data.Settings.Settings;
+import com.goldentwo.data.database.DBConnection;
 import com.goldentwo.data.database.DBInit;
 import com.goldentwo.service.DataServiceImpl;
+import com.goldentwo.service.SettingsServiceImpl;
 import com.goldentwo.utils.Logger.Logger;
 import com.goldentwo.utils.alarmChecker.AlarmChecker;
 import com.goldentwo.view.UserInterface;
@@ -22,7 +26,13 @@ public class Application {
 		logger.info("Load profile: " + profile);
 		
 		DBInit dbInit = new DBInit();
-		DataServiceImpl dataServiceImpl = new DataServiceImpl();
+		DBConnection dbConnection = new DBConnection();
+		DataServiceImpl dataServiceImpl = new DataServiceImpl(dbConnection);
+		SettingsServiceImpl settingsServiceImpl = new SettingsServiceImpl(dbConnection);
+		settingsServiceImpl.getSettings();
+		settingsServiceImpl.updateSettings(new Settings(0, "/home/konrad", Color.green.getRGB(), Color.red.getRGB(), 2));
+		
+		dataServiceImpl.getEventById(120);
 	
 		logger.info("UserInterface initialized successfully!");
 		

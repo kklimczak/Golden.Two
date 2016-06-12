@@ -28,22 +28,22 @@ import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.ValidationException;
-import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.Trigger;
 import net.fortuna.ical4j.model.property.Version;
 
 public class DataServiceImpl implements DataService {
 	
-	private DBConnection dbc = new DBConnection();
-	
-	private EventRepository eventRepository = new EventRepository(dbc);
+	private EventRepository eventRepository;
 	
 	private Logger logger = new Logger(DataServiceImpl.class);
+	
+	public DataServiceImpl(DBConnection db) {
+		this.eventRepository = new EventRepository(db);
+	}
 
 	@Override
 	public List<Event> getAllEvents() {
@@ -211,6 +211,7 @@ public class DataServiceImpl implements DataService {
 			CalendarOutputter calendarOutputter = new CalendarOutputter();
 			calendarOutputter.setValidating(false);
 			calendarOutputter.output(calendar, fos);
+			logger.info("Export event with name: " + event.getName() + " and id: " + event.getId() + " to " + file.getName());
 			return true;
 		} catch (IOException ioException) {
 			ioException.printStackTrace();

@@ -45,7 +45,14 @@ public class DBInit {
 				+ "`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 				+ "`name` varchar(50) DEFAULT NULL," + "`description` varchar(500) DEFAULT NULL,"
 				+ "`place` varchar(50) DEFAULT NULL," + "`date` datetime DEFAULT NULL,"
-				+ "`alarm` datetime DEFAULT NULL)");
+				+ "`alarm` datetime DEFAULT NULL);"
+				+ "CREATE TABLE IF NOT EXISTS `settings` ("
+				+ "`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+				+ "`defaultExportPath` varchar(100) DEFAULT NULL,"
+				+ "`currentDayBorderColor` int(11) DEFAULT NULL,"
+				+ "`eventDayColor` int(11) DEFAULT NULL,"
+				+ "`lookAndFeelNumber` int(11) DEFAULT NULL)");
+		
 	}
 
 	public void clearDatabase() {

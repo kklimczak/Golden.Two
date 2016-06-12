@@ -257,6 +257,7 @@ public class EventRepository {
 		        logger.info("findOne() called with id: " + id);
 		        return new Event(eventId, name, description, place, date, alarm);
 			}
+			logger.error("Not found event with id: " + id);
 			return null;
 		} catch (SQLException exception) {
 			exception.printStackTrace();
