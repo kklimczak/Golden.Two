@@ -27,10 +27,11 @@ public class Application {
 		
 		DBInit dbInit = new DBInit();
 		DBConnection dbConnection = new DBConnection();
-		DataServiceImpl dataServiceImpl = new DataServiceImpl(dbConnection);
 		SettingsServiceImpl settingsServiceImpl = new SettingsServiceImpl(dbConnection);
-		settingsServiceImpl.getSettings();
-		settingsServiceImpl.updateSettings(new Settings(0, "/home/konrad", Color.green.getRGB(), Color.red.getRGB(), 2));
+		
+		Settings settings = settingsServiceImpl.getSettings();
+		
+		DataServiceImpl dataServiceImpl = new DataServiceImpl(dbConnection, settings);
 		
 		dataServiceImpl.getEventById(120);
 	

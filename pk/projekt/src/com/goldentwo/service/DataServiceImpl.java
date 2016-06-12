@@ -17,6 +17,7 @@ import com.goldentwo.data.Event.Event;
 import com.goldentwo.data.Event.EventDto;
 import com.goldentwo.data.Event.EventRepository;
 import com.goldentwo.data.Event.EventsDto;
+import com.goldentwo.data.Settings.Settings;
 import com.goldentwo.data.database.DBConnection;
 import com.goldentwo.utils.Logger.Logger;
 import com.goldentwo.utils.Pagination.Direction;
@@ -39,10 +40,13 @@ public class DataServiceImpl implements DataService {
 	
 	private EventRepository eventRepository;
 	
+	private Settings settings;
+	
 	private Logger logger = new Logger(DataServiceImpl.class);
 	
-	public DataServiceImpl(DBConnection db) {
+	public DataServiceImpl(DBConnection db, Settings settings) {
 		this.eventRepository = new EventRepository(db);
+		this.settings = settings;
 	}
 
 	@Override
@@ -130,7 +134,7 @@ public class DataServiceImpl implements DataService {
 			Marshaller marshaller = context.createMarshaller();
 			
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(eventsDto, new File ("events.xml"));
+			marshaller.marshal(eventsDto, new File (settings.getDefaultExportPath() + "/events.xml"));
 			logger.info("Export all events to xml file: events.xml with " + eventsDto.getEventDtos().size() + " elements" );
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
@@ -169,7 +173,7 @@ public class DataServiceImpl implements DataService {
 			Marshaller marshaller = context.createMarshaller();
 			
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(event.asDto(), new File(event.getId()+"."+event.getName()+".xml"));
+			marshaller.marshal(event.asDto(), new File(settings.getDefaultExportPath() + "/" +event.getId()+"."+event.getName()+".xml"));
 			logger.info("Export event with name: " + event.getName() + " and id: " + event.getId() + " to " + event.getId()+"."+event.getName()+".xml");
 		} catch (JAXBException jaxbException) {
 			jaxbException.printStackTrace();
@@ -206,7 +210,7 @@ public class DataServiceImpl implements DataService {
 		calendar.getProperties().add(Version.VERSION_2_0);
 		calendar.getProperties().add(Method.PUBLISH);
 		try {
-			File file = new File("event.ics");
+			File file = new File(settings.getDefaultExportPath() + "/" + event.getId() + ".event.ics");
 			FileOutputStream fos = new FileOutputStream(file);
 			CalendarOutputter calendarOutputter = new CalendarOutputter();
 			calendarOutputter.setValidating(false);
