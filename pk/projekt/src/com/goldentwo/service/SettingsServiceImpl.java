@@ -23,7 +23,7 @@ public class SettingsServiceImpl implements SettingsService {
 		logger.info("getSettings() called");
 		Settings settings = settingsRepository.getOne();
 		if (settings == null) {
-			settingsRepository.addOne(System.getProperty("user.home"), Color.green.getRGB(), Color.red.getRGB(), 1);
+			settingsRepository.addOne(System.getProperty("user.home"), 0, 1);
 			return settingsRepository.getOne();
 		} else {
 			return settings;

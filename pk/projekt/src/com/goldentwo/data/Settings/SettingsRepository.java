@@ -23,11 +23,10 @@ public class SettingsRepository {
 			while(resultSet.next()) {
 				int id = resultSet.getInt("id");
 				String defaultExportPath = resultSet.getString("defaultExportPath");
-				int currentDayBorderColor = resultSet.getInt("currentDayBorderColor");
-				int eventDayColor = resultSet.getInt("eventDayColor");
+				int alarmSound = resultSet.getInt("alarmSound");
 				int lookAndFeelNumber = resultSet.getInt("lookAndFeelNumber");
 				logger.info("Get settings from database");
-				return new Settings(id, defaultExportPath, currentDayBorderColor, eventDayColor, lookAndFeelNumber);
+				return new Settings(id, defaultExportPath, alarmSound, lookAndFeelNumber);
 			}
 			logger.error("Settings not found in database");
 			return null;
@@ -37,10 +36,10 @@ public class SettingsRepository {
 		}
 	}
 	
-	public void addOne(String defaultExportPath, int currentDayBorderColor, int eventDayColor, int lookAndFeelNumber) {
+	public void addOne(String defaultExportPath, int alarmSound, int lookAndFeelNumber) {
 		try {
 			db.getStmt().executeUpdate("INSERT INTO `settings` VALUES (NULL, '" + defaultExportPath + "',"
-			+ "'"+currentDayBorderColor+"','"+eventDayColor+"','"+lookAndFeelNumber+"')");
+			+ "'"+alarmSound+"','"+lookAndFeelNumber+"')");
 			logger.info("Create new settings record");
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -52,8 +51,7 @@ public class SettingsRepository {
 		try {
 			db.getStmt().executeUpdate("UPDATE `settings` SET "
 					+ "defaultExportPath='"+settings.getDefaultExportPath()+"',"
-					+ "currentDayBorderColor='"+settings.getCurrentDayBorderColor()+"',"
-					+ "eventDayColor='"+settings.getEventDayColor()+"',"
+					+ "alarmSound='"+settings.getAlarmSound()+"',"
 					+ "lookAndFeelNumber='"+settings.getLookAndFeelNumber()+"' "
 					+ "WHERE id=1");
 			logger.info("Settings updated successfully");

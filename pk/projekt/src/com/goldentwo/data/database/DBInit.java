@@ -49,8 +49,7 @@ public class DBInit {
 				+ "CREATE TABLE IF NOT EXISTS `settings` ("
 				+ "`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 				+ "`defaultExportPath` varchar(100) DEFAULT NULL,"
-				+ "`currentDayBorderColor` int(11) DEFAULT NULL,"
-				+ "`eventDayColor` int(11) DEFAULT NULL,"
+				+ "`alarmSound` int(11) DEFAULT NULL,"
 				+ "`lookAndFeelNumber` int(11) DEFAULT NULL)");
 		
 	}

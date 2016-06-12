@@ -4,15 +4,13 @@ public class Settings {
 	
 	private int id;
 	private String defaultExportPath;
-	private int currentDayBorderColor;
-	private int eventDayColor;
+	private int alarmSound;
 	private int lookAndFeelNumber;
 	
-	public Settings(int id, String defaultExportPath, int currentDayBorderColor, int eventDayColor, int lookAndFeelNumber) {
+	public Settings(int id, String defaultExportPath, int alarmSound, int lookAndFeelNumber) {
 		this.id = id;
 		this.defaultExportPath = defaultExportPath;
-		this.currentDayBorderColor = currentDayBorderColor;
-		this.eventDayColor = eventDayColor;
+		this.alarmSound = alarmSound;
 		this.lookAndFeelNumber = lookAndFeelNumber;
 	}
 
@@ -32,20 +30,12 @@ public class Settings {
 		this.defaultExportPath = defaultExportPath;
 	}
 
-	public int getCurrentDayBorderColor() {
-		return currentDayBorderColor;
+	public int getAlarmSound() {
+		return alarmSound;
 	}
 
-	public void setCurrentDayBorderColor(int currentDayBorderColor) {
-		this.currentDayBorderColor = currentDayBorderColor;
-	}
-
-	public int getEventDayColor() {
-		return eventDayColor;
-	}
-
-	public void setEventDayColor(int eventDayColor) {
-		this.eventDayColor = eventDayColor;
+	public void setAlarmSound(int alarmSound) {
+		this.alarmSound = alarmSound;
 	}
 
 	public int getLookAndFeelNumber() {
