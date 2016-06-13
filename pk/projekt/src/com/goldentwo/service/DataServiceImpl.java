@@ -285,5 +285,38 @@ public class DataServiceImpl implements DataService {
 			return false;
 		}
 	}
+	
+	@Override
+	public boolean allEventsToIcs() {
+		List<Event> events = eventRepository.findAll();
+		Calendar calendar = new Calendar();
+		calendar.getProperties().add(new ProdId("-//Ximian//NONSGML Evolution Calendar//EN"));
+		calendar.getProperties().add(Version.VERSION_2_0);
+		calendar.getProperties().add(Method.PUBLISH);
+		
+		for (Event event : events) {
+			DateTime dateTime = new DateTime(event.getDate());
+			VEvent vEvent = new VEvent(dateTime, event.getName());
+			vEvent.getProperties().add(new Description(event.getDescription()));
+			vEvent.getProperties().add(new Location(event.getPlace()));
+			calendar.getComponents().add(vEvent);
+		}
+		
+		try {
+			File file = new File(settingsServiceImpl.getSettings().getDefaultExportPath() + "/events.ics");
+			FileOutputStream fos = new FileOutputStream(file);
+			CalendarOutputter calendarOutputter = new CalendarOutputter();
+			calendarOutputter.setValidating(false);
+			calendarOutputter.output(calendar, fos);
+			logger.info("Export " + events.size() + " events to: " + settingsServiceImpl.getSettings().getDefaultExportPath() + "/events.ics");
+			return true;
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+			return false;
+		} catch (ValidationException validationException) {
+			validationException.printStackTrace();
+			return false;
+		}
+	}
 
 }

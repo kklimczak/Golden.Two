@@ -142,4 +142,6 @@ public interface DataService {
 	 * @return Status powodzenia
 	 */
 	boolean oneEventToIcs(Event event);
+	
+	boolean allEventsToIcs();
 }
