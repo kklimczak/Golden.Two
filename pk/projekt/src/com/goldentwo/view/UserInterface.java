@@ -89,7 +89,7 @@ public class UserInterface extends JFrame implements ActionListener{
 	
 	/** The menu items */
 	JMenuItem filterItem, exitItem, deleteOldEventsItem, 
-			  saveToXML, loadFromXML, loadOneXML,
+			  saveToXML, saveToICS, loadFromXML, loadOneXML,
 			  about, properties;
 	
 	/**
@@ -162,6 +162,7 @@ public class UserInterface extends JFrame implements ActionListener{
     	filterItem = new JMenuItem("Filter manager");
     	deleteOldEventsItem = new JMenuItem("Delete old events");
     	saveToXML = new JMenuItem("Export data to XML");
+    	saveToICS = new JMenuItem("Export data to ICS");
     	loadFromXML = new JMenuItem("Load data from XML");
     	loadOneXML = new JMenuItem("Load event from XML");
     	about = new JMenuItem("About");
@@ -172,6 +173,7 @@ public class UserInterface extends JFrame implements ActionListener{
     	exitItem.addActionListener(this);
     	deleteOldEventsItem.addActionListener(this);
     	saveToXML.addActionListener(this);
+    	saveToICS.addActionListener(this);
     	loadFromXML.addActionListener(this);
     	loadOneXML.addActionListener(this);
     	about.addActionListener(this);
@@ -181,6 +183,7 @@ public class UserInterface extends JFrame implements ActionListener{
     	menu.add(deleteOldEventsItem);
     	menu.addSeparator();
     	menu.add(saveToXML);
+    	menu.add(saveToICS);
     	menu.addSeparator();
     	menu.add(loadFromXML);
     	menu.add(loadOneXML);
@@ -346,6 +349,10 @@ public class UserInterface extends JFrame implements ActionListener{
 		}
 		if(source == saveToXML){
 			dataServiceImpl.allEventsToXml();
+			generateMessage(true, this);
+		}
+		if(source == saveToICS){
+			dataServiceImpl.allEventsToIcs();
 			generateMessage(true, this);
 		}
 		if(source == loadFromXML){
