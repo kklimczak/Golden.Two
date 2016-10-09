@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="styles.css"?>
+<biblioteka>
+	<dane_dodatkowe>
+		<autor_strony>Łukasz Kuta</autor_strony>
+		<autor_strony>Konrad Klimczak</autor_strony>
+		<data_modyfikacji>09-11-2016 17:30</data_modyfikacji>
+	</dane_dodatkowe>
+
+	<dział nazwa="Nauka">
+		<pododział nazwa="Nauki ogólne">
+			<gatunek nazwa="filozofia">
+				<książka id="1">
+					<tytuł>Skąd ten bunt? Nowe światowe rewolucje</tytuł>
+					<autor>Paul Mason</autor>
+					<cena waluta="PLN">35,91</cena>
+				</książka>
+				<książka id="2">
+					<tytuł>Agonistyka</tytuł>
+					<autor>Chantal Mouffe</autor>
+					<cena waluta="PLN">31,99</cena>
+				</książka>
+			</gatunek>
+			<gatunek nazwa="muzyka, sztuka, teatr">
+				<książka id="3">
+					<tytuł>Transfer! Teksty dla teatru. Antologia</tytuł>
+					<autor>Joanna Krakowska</autor>
+					<cena waluta="PLN">51,20</cena>
+				</książka>
+				<książka id="4">
+					<tytuł>Dziennik ucha. Słuchanie na ostro</tytuł>
+					<autor>Andrzej Chłopecki</autor>
+					<cena waluta="PLN">21,99</cena>
+				</książka>
+			</gatunek>
+		</pododział>
+
+		<pododział nazwa="Nauki ścisłe">
+			<gatunek nazwa="fizyka">
+				<książka id="5">
+					<tytuł>Fizyka wokół nas</tytuł>
+					<autor>Paul Hewitt</autor>
+					<cena waluta="PLN">135,91</cena>
+				</książka>
+				<książka id="6">
+					<tytuł>Fizyka molekularna</tytuł>
+					<autor>Adam Brzeszczot</autor>
+					<cena waluta="PLN">299,99</cena>
+				</książka>
+			</gatunek>
+			<gatunek nazwa="informatyka">
+				<książka id="7">
+					<tytuł>Informatyka</tytuł>
+					<autor>Bill Apple</autor>
+					<cena waluta="PLN">50,20</cena>
+				</książka>
+				<książka id="8">
+					<tytuł>IT Crowd - technicy magicy</tytuł>
+					<autor>Comedy Central</autor>
+					<cena waluta="PLN">100,99</cena>
+				</książka>
+			</gatunek>		
+		</pododział>
+
+		<pododział nazwa="Historia">
+			<gatunek nazwa="historia Polski">
+				<książka id="9">
+					<tytuł>Polskie rewolucje</tytuł>
+					<autor>Krzysztof Kolumb</autor>
+					<cena waluta="PLN">50,51</cena>
+				</książka>
+				<książka id="10">
+					<tytuł>Efekty II Wojny Światowej</tytuł>
+					<autor>Jan Janowicz</autor>
+					<cena waluta="PLN">31,99</cena>
+				</książka>
+			</gatunek>
+			<gatunek nazwa="historia świata">
+				<książka id="11">
+					<tytuł>Konflikty na przestrzeni lat</tytuł>
+					<autor>Jan Janowicz</autor>
+					<cena waluta="PLN">51,20</cena>
+				</książka>
+				<książka id="12">
+					<tytuł>Dziennik oka.</tytuł>
+					<autor>Andrzej Chłopecki</autor>
+					<cena waluta="PLN">21,99</cena>
+				</książka>
+			</gatunek>			
+		</pododział>
+	</dział>
+	<dział nazwa="Języki obce">
+		<pododział nazwa="Eurazja">
+			<gatunek nazwa="angielski">
+				<książka id="13">
+					<tytuł>Angielski is izi</tytuł>
+					<autor>Johny English</autor>
+					<cena waluta="PLN">70,20</cena>
+				</książka>
+				<książka id="14">
+					<tytuł>Angielski is not easy</tytuł>
+					<autor>Johny English</autor>
+					<cena waluta="PLN">21,99</cena>
+				</książka>
+			</gatunek>
+		</pododział>
+
+		<pododział nazwa="Afryka">
+			<gatunek nazwa="buszmeński">
+				<książka id="15">
+					<tytuł>Uga buga</tytuł>
+					<autor>Mike Tyson</autor>
+					<cena waluta="PLN">10,01</cena>
+				</książka>
+			</gatunek>
+		</pododział>
+	</dział>
+</biblioteka>
