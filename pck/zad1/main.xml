@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="style.css"?>
+<biblioteka>
+  <dane-dodatkowe>
+    <tytuł>Biblioteka</tytuł>
+    <wersja>1.0</wersja>
+    <autorzy>
+      <autor numer-indexu="195637">
+        <imię>Łukasz</imię>
+        <nazwisko>Kuta</nazwisko>
+      </autor>
+      <autor numer-indexu="195614">
+        <imię>Konrad</imię>
+        <nazwisko>Klimczak</nazwisko>
+      </autor>
+    </autorzy>
+    <data-modyfikacji>
+      <dzień>09</dzień>
+      <miesiąc>11</miesiąc>
+      <rok>2016</rok>
+    </data-modyfikacji>
+  </dane-dodatkowe>
+
+  <działy>
+    <dział>
+  </działy>
+</biblioteka>
