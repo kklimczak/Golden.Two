@@ -1,4 +1,4 @@
-<!ELEMENT biblioteka (dane-dodatkowe, działy, autorzy, książki)>
+<!ELEMENT księgarnia (dane-dodatkowe, działy, autorzy, książki)>
 
 <!ELEMENT dane-dodatkowe (spis, wersja, właściciele, data-modyfikacji)>
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/css" href="style.css"?>
-<!DOCTYPE biblioteka SYSTEM "document.dtd">
-<biblioteka>
+<!DOCTYPE księgarnia SYSTEM "document.dtd">
+<księgarnia>
     <dane-dodatkowe>
-        <spis>Biblioteka</spis>
+        <spis>księgarnia</spis>
         <wersja>1.0</wersja>
         <właściciele>
             <właściciel numer-indexu="I195637">
@@ -211,4 +211,4 @@
             <cena waluta="PLN">99,99</cena>
         </książka>
     </książki>
-</biblioteka>
+</księgarnia>
