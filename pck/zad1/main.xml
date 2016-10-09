@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/css" href="style.css"?>
+<!DOCTYPE biblioteka SYSTEM "document.dtd">
 <biblioteka>
     <dane-dodatkowe>
-        <tytuł>Biblioteka</tytuł>
+        <spis>Biblioteka</spis>
         <wersja>1.0</wersja>
-        <autorzy>
-            <autor numer-indexu="195637">
+        <właściciele>
+            <właściciel numer-indexu="I195637">
                 <imię>Łukasz</imię>
                 <nazwisko>Kuta</nazwisko>
-            </autor>
-            <autor numer-indexu="195614">
+            </właściciel>
+            <właściciel numer-indexu="I195614">
                 <imię>Konrad</imię>
                 <nazwisko>Klimczak</nazwisko>
-            </autor>
-        </autorzy>
+            </właściciel>
+        </właściciele>
         <data-modyfikacji>
             <dzień>09</dzień>
             <miesiąc>11</miesiąc>
@@ -22,191 +23,191 @@
     </dane-dodatkowe>
 
     <działy>
-        <dział id-działu="1">
+        <dział id-działu="D1">
             <nazwa>Fantastyka</nazwa>
             <regał numer="11"/>
         </dział>
-        <dział id-działu="2">
+        <dział id-działu="D2">
             <nazwa>Beletrystyka</nazwa>
             <regał numer="12"/>
         </dział>
-        <dział id-działu="3">
+        <dział id-działu="D3">
             <nazwa>Filozofia</nazwa>
             <regał numer="13"/>
         </dział>
-        <dział id-działu="4">
+        <dział id-działu="D4">
             <nazwa>Gotowanie</nazwa>
             <regał numer="14"/>
         </dział>
-        <dział id-działu="5">
+        <dział id-działu="D5">
             <nazwa>Thriller</nazwa>
             <regał numer="15"/>
         </dział>
-        <dział id-działu="6">
+        <dział id-działu="D6">
             <nazwa>Romans</nazwa>
             <regał numer="16"/>
         </dział>
     </działy>
 
     <autorzy>
-        <autor id-autora="1">
+        <autor id-autora="A1">
             <imię>Andrzej</imię>
             <nazwisko>Sapkowski</nazwisko>
         </autor>
-        <autor id-autora="2">
+        <autor id-autora="A2">
             <imię>Jan</imię>
             <nazwisko>Janowicz</nazwisko>
         </autor>
-        <autor id-autora="3">
+        <autor id-autora="A3">
             <imię>Doktor</imię>
             <nazwisko>Oetker</nazwisko>
         </autor>
-        <autor id-autora="4">
+        <autor id-autora="A4">
             <imię>Filip</imię>
             <nazwisko>Zkonopijski</nazwisko>
         </autor>
-        <autor id-autora="5">
+        <autor id-autora="A5">
             <imię>Adam</imię>
             <nazwisko>Małysz</nazwisko>
         </autor>
-        <autor id-autora="6">
+        <autor id-autora="A6">
             <imię>Izabela</imię>
             <nazwisko>Łęcka</nazwisko>
         </autor>
-        <autor id-autora="7">
+        <autor id-autora="A7">
             <imię>Tajemniczy</imię>
             <nazwisko>Jegomość</nazwisko>
         </autor>
-        <autor id-autora="8">
+        <autor id-autora="A8">
             <imię>Jan</imię>
             <nazwisko>Klatka</nazwisko>
         </autor>
-        <autor id-autora="9">
+        <autor id-autora="A9">
             <imię>Dorota</imię>
             <nazwisko>Robaczewska</nazwisko>
         </autor>
     </autorzy>
 
     <książki>
-        <książka id-książki="1">
+        <książka id-książki="K1">
             <tytuł>Wiedźmin</tytuł>
-            <autor id-autora="1" imię="Andrzej" nazwisko="Sapkowski"/>
-            <dział id-działu="1" nazwa="Fantastyka" regał="11"/>
+            <autor-książki id-autora="A1" imię="Andrzej" nazwisko="Sapkowski"/>
+            <dział-książki id-działu="D1" nazwa="Fantastyka" regał="11"/>
             <cena waluta="PLN">30,50</cena>
         </książka>
-        <książka id-książki="2">
+        <książka id-książki="K2">
             <tytuł>Wiedźmin - Nawrócenie</tytuł>
-            <autor id-autora="1" imię="Andrzej" nazwisko="Sapkowski"/>
-            <dział id-działu="1" nazwa="Fantastyka" regał="11"/>
+            <autor-książki id-autora="A1" imię="Andrzej" nazwisko="Sapkowski"/>
+            <dział-książki id-działu="D1" nazwa="Fantastyka" regał="11"/>
             <cena waluta="PLN">35,50</cena>
         </książka>
-        <książka id-książki="3">
+        <książka id-książki="K3">
             <tytuł>Wiedźmin - Czas Ultrona</tytuł>
-            <autor id-autora="1" imię="Andrzej" nazwisko="Sapkowski"/>
-            <dział id-działu="1" nazwa="Fantastyka" regał="11"/>
+            <autor-książki id-autora="A1" imię="Andrzej" nazwisko="Sapkowski"/>
+            <dział-książki id-działu="D1" nazwa="Fantastyka" regał="11"/>
             <cena waluta="PLN">60,99</cena>
         </książka>
 
-        <książka id-książki="4">
+        <książka id-książki="K4">
             <tytuł>Życie jak w Madrycie</tytuł>
-            <autor id-autora="2" imię="Jan" nazwisko="Janowicz"/>
-            <dział id-działu="2" nazwa="Beletrystyka" regał="12"/>
+            <autor-książki id-autora="A2" imię="Jan" nazwisko="Janowicz"/>
+            <dział-książki id-działu="D2" nazwa="Beletrystyka" regał="12"/>
             <cena waluta="PLN">60,99</cena>
         </książka>
-        <książka id-książki="5">
+        <książka id-książki="K5">
             <tytuł>Spojrzenia</tytuł>
-            <autor id-autora="2" imię="Jan" nazwisko="Janowicz"/>
-            <dział id-działu="2" nazwa="Beletrystyka" regał="12"/>
+            <autor-książki id-autora="A2" imię="Jan" nazwisko="Janowicz"/>
+            <dział-książki id-działu="D2" nazwa="Beletrystyka" regał="12"/>
             <cena waluta="PLN">160,99</cena>
         </książka>
-        <książka id-książki="6">
+        <książka id-książki="K6">
             <tytuł>Królewska para</tytuł>
-            <autor id-autora="2" imię="Jan" nazwisko="Janowicz"/>
-            <dział id-działu="2" nazwa="Beletrystyka" regał="12"/>
+            <autor-książki id-autora="A2" imię="Jan" nazwisko="Janowicz"/>
+            <dział-książki id-działu="D2" nazwa="Beletrystyka" regał="12"/>
             <cena waluta="PLN">10,99</cena>
         </książka>
-        <książka id-książki="7">
+        <książka id-książki="K7">
             <tytuł>Jak żyć</tytuł>
-            <autor id-autora="3" imię="Doktor" nazwisko="Oetker"/>
-            <dział id-działu="3" nazwa="Filozofia" regał="13"/>
+            <autor-książki id-autora="A3" imię="Doktor" nazwisko="Oetker"/>
+            <dział-książki id-działu="D3" nazwa="Filozofia" regał="13"/>
             <cena waluta="PLN">60,99</cena>
         </książka>
-        <książka id-książki="8">
+        <książka id-książki="K8">
             <tytuł>Jak umrzeć godnie</tytuł>
-            <autor id-autora="4" imię="Filip" nazwisko="Zkonopijski"/>
-            <dział id-działu="3" nazwa="Filozofia" regał="13"/>
+            <autor-książki id-autora="A4" imię="Filip" nazwisko="Zkonopijski"/>
+            <dział-książki id-działu="D3" nazwa="Filozofia" regał="13"/>
             <cena waluta="PLN">60,99</cena>
         </książka>
-        <książka id-książki="9">
+        <książka id-książki="K9">
             <tytuł>Myślę, że jestem</tytuł>
-            <autor id-autora="4" imię="Filip" nazwisko="Zkonopijski"/>
-            <dział id-działu="3" nazwa="Filozofia" regał="13"/>
+            <autor-książki id-autora="A4" imię="Filip" nazwisko="Zkonopijski"/>
+            <dział-książki id-działu="D3" nazwa="Filozofia" regał="13"/>
             <cena waluta="PLN">69,99</cena>
         </książka>
-        <książka id-książki="10">
+        <książka id-książki="K10">
             <tytuł>Bułki z bananami</tytuł>
-            <autor id-autora="5" imię="Adam" nazwisko="Małysz"/>
-            <dział id-działu="4" nazwa="Gotowanie" regał="14"/>
+            <autor-książki id-autora="A5" imię="Adam" nazwisko="Małysz"/>
+            <dział-książki id-działu="D4" nazwa="Gotowanie" regał="14"/>
             <cena waluta="PLN">60,99</cena>
         </książka>
-        <książka id-książki="11">
+        <książka id-książki="K11">
             <tytuł>Chlebek z masełkiem</tytuł>
-            <autor id-autora="5" imię="Adam" nazwisko="Małysz"/>
-            <dział id-działu="4" nazwa="Gotowanie" regał="14"/>
+            <autor-książki id-autora="A5" imię="Adam" nazwisko="Małysz"/>
+            <dział-książki id-działu="D4" nazwa="Gotowanie" regał="14"/>
             <cena waluta="PLN">69,99</cena>
         </książka>
-        <książka id-książki="12">
+        <książka id-książki="K12">
             <tytuł>Przylepki - smaczne czy nie?</tytuł>
-            <autor id-autora="5" imię="Adam" nazwisko="Małysz"/>
-            <dział id-działu="4" nazwa="Gotowanie" regał="14"/>
+            <autor-książki id-autora="A5" imię="Adam" nazwisko="Małysz"/>
+            <dział-książki id-działu="D4" nazwa="Gotowanie" regał="14"/>
             <cena waluta="PLN">60,99</cena>
         </książka>
-        <książka id-książki="13">
+        <książka id-książki="K13">
             <tytuł>O jak smacznie</tytuł>
-            <autor id-autora="6" imię="Izabela" nazwisko="Łęcka"/>
-            <dział id-działu="4" nazwa="Gotowanie" regał="14"/>
+            <autor-książki id-autora="A6" imię="Izabela" nazwisko="Łęcka"/>
+            <dział-książki id-działu="D4" nazwa="Gotowanie" regał="14"/>
             <cena waluta="PLN">10,99</cena>
         </książka>
-        <książka id-książki="14">
+        <książka id-książki="K14">
             <tytuł>Kto jest kim</tytuł>
-            <autor id-autora="7" imię="Tajemniczy" nazwisko="Jegomość"/>
-            <dział id-działu="5" nazwa="Thriller" regał="15"/>
+            <autor-książki id-autora="A7" imię="Tajemniczy" nazwisko="Jegomość"/>
+            <dział-książki id-działu="D5" nazwa="Thriller" regał="15"/>
             <cena waluta="PLN">60,99</cena>
         </książka>
-        <książka id-książki="15">
+        <książka id-książki="K15">
             <tytuł>Chyba, nie wiem, może...</tytuł>
-            <autor id-autora="7" imię="Tajemniczy" nazwisko="Jegomość"/>
-            <dział id-działu="5" nazwa="Thriller" regał="15"/>
+            <autor-książki id-autora="A7" imię="Tajemniczy" nazwisko="Jegomość"/>
+            <dział-książki id-działu="D5" nazwa="Thriller" regał="15"/>
             <cena waluta="PLN">100,99</cena>
         </książka>
-        <książka id-książki="16">
+        <książka id-książki="K16">
             <tytuł>Zabójcza pomidorówka</tytuł>
-            <autor id-autora="8" imię="Jan" nazwisko="Klatka"/>
-            <dział id-działu="5" nazwa="Thriller" regał="15"/>
+            <autor-książki id-autora="A8" imię="Jan" nazwisko="Klatka"/>
+            <dział-książki id-działu="D5" nazwa="Thriller" regał="15"/>
             <cena waluta="PLN">60,99</cena>
         </książka>
-        <książka id-książki="17">
+        <książka id-książki="K17">
             <tytuł>Jasnoamarantowołososiowa szminka</tytuł>
-            <autor id-autora="9" imię="Dorota" nazwisko="Robaczewska"/>
-            <dział id-działu="6" nazwa="Romans" regał="16"/>
+            <autor-książki id-autora="A9" imię="Dorota" nazwisko="Robaczewska"/>
+            <dział-książki id-działu="D6" nazwa="Romans" regał="16"/>
             <cena waluta="PLN">10,99</cena>
         </książka>
-        <książka id-książki="18">
+        <książka id-książki="K18">
             <tytuł>Status: to skomplikowane</tytuł>
-            <autor id-autora="10" imię="Dorota" nazwisko="Robaczewska"/>
-            <dział id-działu="6" nazwa="Romans" regał="16"/>
+            <autor-książki id-autora="A9" imię="Dorota" nazwisko="Robaczewska"/>
+            <dział-książki id-działu="D6" nazwa="Romans" regał="16"/>
             <cena waluta="PLN">10,99</cena>
         </książka>
-        <książka id-książki="19">
+        <książka id-książki="K19">
             <tytuł>Mroczny Rycerz</tytuł>
-            <autor id-autora="9" imię="Dorota" nazwisko="Robaczewska"/>
-            <dział id-działu="6" nazwa="Romans" regał="16"/>
+            <autor-książki id-autora="A9" imię="Dorota" nazwisko="Robaczewska"/>
+            <dział-książki id-działu="D6" nazwa="Romans" regał="16"/>
             <cena waluta="PLN">69,99</cena>
         </książka>
-        <książka id-książki="20">
+        <książka id-książki="K20">
             <tytuł>Kocha to poczeka...</tytuł>
-            <autor id-autora="9" imię="Dorota" nazwisko="Robaczewska"/>
-            <dział id-działu="6" nazwa="Romans" regał="16"/>
+            <autor-książki id-autora="A9" imię="Dorota" nazwisko="Robaczewska"/>
+            <dział-książki id-działu="D6" nazwa="Romans" regał="16"/>
             <cena waluta="PLN">99,99</cena>
         </książka>
     </książki>
