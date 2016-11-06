@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/css" href="style.css"?>
-<księgarnia xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="przyklad2.xsd">
+<!--
+<księgarnia xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="biblioteka.xsd">
+-->
+    <księgarnia xmlns="http://www.example.org/ns"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.example.org/ns biblioteka.xsd">
+
     <dane-dodatkowe>
         <spis>księgarnia</spis>
         <wersja>1.0</wersja>
