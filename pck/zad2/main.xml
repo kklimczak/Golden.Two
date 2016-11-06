@@ -55,41 +55,50 @@
     </działy>
 
     <autorzy>
-        <autor id-autora="A1">
+        <autor>
             <imię>Andrzej</imię>
             <nazwisko>Sapkowski</nazwisko>
+            <id-autora>A1</id-autora>
         </autor>
-        <autor id-autora="A2">
+        <autor>
             <imię>Jan</imię>
             <nazwisko>Janowicz</nazwisko>
+            <id-autora>A2</id-autora>
         </autor>
-        <autor id-autora="A3">
+        <autor>
             <imię>Doktor</imię>
             <nazwisko>Oetker</nazwisko>
+            <id-autora>A3</id-autora>
         </autor>
-        <autor id-autora="A4">
+        <autor>
             <imię>Filip</imię>
             <nazwisko>Zkonopijski</nazwisko>
+            <id-autora>A4</id-autora>
         </autor>
-        <autor id-autora="A5">
+        <autor>
             <imię>Adam</imię>
             <nazwisko>Małysz</nazwisko>
+            <id-autora>A5</id-autora>
         </autor>
-        <autor id-autora="A6">
+        <autor>
             <imię>Izabela</imię>
             <nazwisko>Łęcka</nazwisko>
+            <id-autora>A6</id-autora>
         </autor>
-        <autor id-autora="A7">
+        <autor>
             <imię>Tajemniczy</imię>
             <nazwisko>Jegomość</nazwisko>
+            <id-autora>A7</id-autora>
         </autor>
-        <autor id-autora="A8">
+        <autor>
             <imię>Jan</imię>
             <nazwisko>Klatka</nazwisko>
+            <id-autora>A8</id-autora>
         </autor>
-        <autor id-autora="A9">
+        <autor>
             <imię>Dorota</imię>
             <nazwisko>Robaczewska</nazwisko>
+            <id-autora>A9</id-autora>
         </autor>
     </autorzy>
 
@@ -99,18 +108,21 @@
             <autor-książki id-autora="A1"/>
             <dział-książki id-działu="D1"/>
             <cena waluta="PLN">30.50</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K2">
             <tytuł>Wiedźmin - Nawrócenie</tytuł>
             <autor-książki id-autora="A1"/>
             <dział-książki id-działu="D1"/>
             <cena waluta="PLN">35.50</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K3">
             <tytuł>Wiedźmin - Czas Ultrona</tytuł>
             <autor-książki id-autora="A1"/>
             <dział-książki id-działu="D1"/>
             <cena waluta="PLN">60.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
 
         <książka id-książki="K4">
@@ -118,102 +130,119 @@
             <autor-książki id-autora="A2"/>
             <dział-książki id-działu="D2"/>
             <cena waluta="PLN">60.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K5">
             <tytuł>Spojrzenia</tytuł>
             <autor-książki id-autora="A2"/>
             <dział-książki id-działu="D2"/>
             <cena waluta="PLN">160.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K6">
             <tytuł>Królewska para</tytuł>
             <autor-książki id-autora="A2"/>
             <dział-książki id-działu="D2"/>
             <cena waluta="PLN">10.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K7">
             <tytuł>Jak żyć</tytuł>
             <autor-książki id-autora="A3"/>
             <dział-książki id-działu="D3"/>
             <cena waluta="PLN">60.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K8">
             <tytuł>Jak umrzeć godnie</tytuł>
             <autor-książki id-autora="A4"/>
             <dział-książki id-działu="D3"/>
             <cena waluta="PLN">60.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K9">
             <tytuł>Myślę, że jestem</tytuł>
             <autor-książki id-autora="A4"/>
             <dział-książki id-działu="D3"/>
             <cena waluta="PLN">69.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K10">
             <tytuł>Bułki z bananami</tytuł>
             <autor-książki id-autora="A5"/>
             <dział-książki id-działu="D4"/>
             <cena waluta="PLN">60.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K11">
             <tytuł>Chlebek z masełkiem</tytuł>
             <autor-książki id-autora="A5"/>
             <dział-książki id-działu="D4"/>
             <cena waluta="PLN">69.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K12">
             <tytuł>Przylepki - smaczne czy nie?</tytuł>
             <autor-książki id-autora="A5"/>
             <dział-książki id-działu="D4"/>
             <cena waluta="PLN">60.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K13">
             <tytuł>O jak smacznie</tytuł>
             <autor-książki id-autora="A6"/>
             <dział-książki id-działu="D4"/>
             <cena waluta="PLN">10.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K14">
             <tytuł>Kto jest kim</tytuł>
             <autor-książki id-autora="A7"/>
             <dział-książki id-działu="D5"/>
             <cena waluta="PLN">60.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K15">
             <tytuł>Chyba, nie wiem, może...</tytuł>
             <autor-książki id-autora="A7"/>
             <dział-książki id-działu="D5"/>
             <cena waluta="PLN">100.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K16">
             <tytuł>Zabójcza pomidorówka</tytuł>
             <autor-książki id-autora="A8"/>
             <dział-książki id-działu="D5"/>
             <cena waluta="PLN">60.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K17">
             <tytuł>Jasnoamarantowołososiowa szminka</tytuł>
             <autor-książki id-autora="A9"/>
             <dział-książki id-działu="D6"/>
             <cena waluta="PLN">10.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K18">
             <tytuł>Status: to skomplikowane</tytuł>
             <autor-książki id-autora="A9"/>
             <dział-książki id-działu="D6"/>
             <cena waluta="PLN">10.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K19">
             <tytuł>Mroczny Rycerz</tytuł>
             <autor-książki id-autora="A9"/>
             <dział-książki id-działu="D6"/>
             <cena waluta="PLN">69.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
         <książka id-książki="K20">
             <tytuł>Kocha to poczeka...</tytuł>
             <autor-książki id-autora="A9"/>
             <dział-książki id-działu="D6"/>
             <cena waluta="PLN">99.99</cena>
+            <isbn>978-83-931471-8-2</isbn>
         </książka>
     </książki>
 </księgarnia>
