@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="imię" type="xs:string"/>
+	<xs:element name="nazwisko" type="xs:string"/>
+	<xs:element name="spis" type="xs:string"/>
+	<xs:element name="wersja" type="xs:decimal"/>
+	<xs:element name="dzień" type="xs:unsignedShort"/>
+	<xs:element name="miesiąc" type="xs:unsignedShort"/>
+	<xs:element name="rok" type="xs:unsignedShort"/>
+	<xs:element name="nazwa" type="xs:string"/>
+	<xs:element name="tytuł" type="xs:string"/>
+	<xs:element name="id-działu" type="xs:string"/>
+
+	<xs:attribute name="numer-indexu" type="xs:string"/>
+	<xs:attribute name="numer" type="xs:unsignedShort"/>
+	<xs:attribute name="id-autora" type="xs:string"/>
+	<xs:attribute name="id-działu" type="xs:string"/>
+	<xs:attribute name="id-książki" type="xs:string"/>
+	<xs:attribute name="waluta" type="xs:string"/>
+
+<!--  DANE DODATKOWE -->
+	<xs:element name="dane-dodatkowe">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="spis"/>
+				<xs:element ref="wersja"/>
+				<xs:element ref="właściciele"/>
+				<xs:element ref="data-modyfikacji"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="właściciele">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="właściciel" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="właściciel">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="imię"/>
+				<xs:element ref="nazwisko"/>
+			</xs:sequence>
+			<xs:attribute ref="numer-indexu"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="data-modyfikacji">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="dzień"/>
+				<xs:element ref="miesiąc"/>
+				<xs:element ref="rok"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+<!--  DANE DODATKOWE KONIEC -->
+
+<!--  DZIAŁY -->
+	<xs:element name="działy">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="dział" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="dział">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="nazwa"/>
+				<xs:element ref="regał"/>
+				<xs:element ref="id-działu"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="regał">
+		<xs:complexType>
+			<xs:attribute ref="numer"/>
+		</xs:complexType>
+	</xs:element>
+<!--  DZIAŁY KONIEC -->
+
+<!--  AUTORZY -->
+	<xs:element name="autorzy">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="autor" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="autor">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="imię"/>
+				<xs:element ref="nazwisko"/>
+			</xs:sequence>
+			<xs:attribute ref="id-autora"/>
+		</xs:complexType>
+	</xs:element>
+<!--  AUTORZY KONIEC -->
+
+<!--  KSIĄŻKI -->
+	<xs:element name="książki">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="książka" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="książka">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tytuł"/>
+				<xs:element ref="autor-książki"/>
+				<xs:element ref="dział-książki"/>
+				<xs:element ref="cena"/>
+			</xs:sequence>
+			<xs:attribute ref="id-książki"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="cena">
+	  <xs:complexType>
+	    <xs:simpleContent>
+	      <xs:extension base="xs:decimal">
+	        <xs:attribute ref="waluta"/>
+	      </xs:extension>
+	    </xs:simpleContent>
+	  </xs:complexType>
+	</xs:element>
+
+	<xs:element name="autor-książki">
+		<xs:complexType>
+			<xs:attribute ref="id-autora"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="dział-książki">
+		<xs:complexType>
+			<xs:attribute ref="id-działu"/>
+		</xs:complexType>
+	</xs:element>
+<!--  KSIĄŻKI KONIEC -->
+
+	<xs:element name="księgarnia">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="dane-dodatkowe"/>
+				<xs:element ref="działy"/>
+				<xs:element ref="autorzy"/>
+				<xs:element ref="książki"/>
+			</xs:sequence>
+		</xs:complexType>
+
+		<xs:key name="dział_key">
+			<xs:selector xpath="działy/dział"/>
+			<xs:field xpath="id-działu"/>
+		</xs:key>
+		<xs:keyref name="książki_dział_ref" refer="dział_key">
+			<xs:selector xpath="książki/książka/dział-książki"/>
+			<xs:field xpath="@id-działu"/>
+		</xs:keyref>
+	</xs:element>
+</xs:schema>
