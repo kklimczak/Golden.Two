@@ -17,13 +17,6 @@
 	<xs:element name="id-autora" type="xs:string"/>
 	<xs:element name="isbn" type="ISBN"/>
 
-	<xs:attribute name="numer-indexu" type="xs:string"/>
-	<xs:attribute name="numer" type="xs:unsignedShort"/>
-	<xs:attribute name="id-autora" type="xs:string"/>
-	<xs:attribute name="id-działu" type="xs:string"/>
-	<xs:attribute name="id-książki" type="xs:string"/>
-	<xs:attribute name="waluta" type="waluty"/>
-
 <!-- ~~ENUM~~ -->
 	<xs:simpleType name="waluty">
 		<xs:restriction base="xs:string">
@@ -85,7 +78,7 @@
 				<xs:element ref="imię"/>
 				<xs:element ref="nazwisko"/>
 			</xs:sequence>
-			<xs:attribute ref="numer-indexu"/>
+			<xs:attribute name="numer-indexu" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -121,7 +114,7 @@
 
 	<xs:element name="regał">
 		<xs:complexType>
-			<xs:attribute ref="numer"/>
+			<xs:attribute name="numer" type="xs:unsignedShort"/>
 		</xs:complexType>
 	</xs:element>
 <!--  DZIAŁY KONIEC -->
@@ -164,7 +157,7 @@
 				<xs:element ref="cena"/>
 				<xs:element ref="isbn"/>
 			</xs:sequence>
-			<xs:attribute ref="id-książki"/>
+			<xs:attribute name="id-książki" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -172,7 +165,7 @@
 	  <xs:complexType>
 	    <xs:simpleContent>
 	      <xs:extension base="xs:decimal">
-	        <xs:attribute ref="waluta" use="optional" default="PLN"/>
+	        <xs:attribute name="waluta" type="waluty" use="optional" default="PLN"/>
 	      </xs:extension>
 	    </xs:simpleContent>
 	  </xs:complexType>
@@ -180,13 +173,13 @@
 
 	<xs:element name="autor-książki">
 		<xs:complexType>
-			<xs:attribute ref="id-autora" use="required"/>
+			<xs:attribute name="id-autora" type="xs:string" use="required"/>
 		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="dział-książki">
 		<xs:complexType>
-			<xs:attribute ref="id-działu" use="required"/>
+			<xs:attribute name="id-działu" type="xs:string" use="required"/>
 		</xs:complexType>
 	</xs:element>
 <!--  KSIĄŻKI KONIEC -->
