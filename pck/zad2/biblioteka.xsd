@@ -130,7 +130,7 @@
 	<xs:element name="autorzy">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="autor" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="autor" minOccurs="1" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -172,7 +172,7 @@
 	  <xs:complexType>
 	    <xs:simpleContent>
 	      <xs:extension base="xs:decimal">
-	        <xs:attribute ref="waluta"/>
+	        <xs:attribute ref="waluta" use="optional" default="PLN"/>
 	      </xs:extension>
 	    </xs:simpleContent>
 	  </xs:complexType>
@@ -180,13 +180,13 @@
 
 	<xs:element name="autor-książki">
 		<xs:complexType>
-			<xs:attribute ref="id-autora"/>
+			<xs:attribute ref="id-autora" use="required"/>
 		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="dział-książki">
 		<xs:complexType>
-			<xs:attribute ref="id-działu"/>
+			<xs:attribute ref="id-działu" use="required"/>
 		</xs:complexType>
 	</xs:element>
 <!--  KSIĄŻKI KONIEC -->

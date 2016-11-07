@@ -4,8 +4,8 @@
 <księgarnia xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="biblioteka.xsd">
 -->
     <księgarnia xmlns="http://www.example.org/ns"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://www.example.org/ns biblioteka.xsd">
+                xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+                xs:schemaLocation="http://www.example.org/ns biblioteka.xsd">
 
     <dane-dodatkowe>
         <spis>księgarnia</spis>
