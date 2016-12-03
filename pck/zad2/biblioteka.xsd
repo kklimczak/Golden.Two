@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
 		   targetNamespace="http://www.example.org/ns"
 		   xmlns="http://www.example.org/ns" 
-		   elementFormDefault="qualified">
+		   elementFormDefault="unqualified">
 
 	<xs:element name="imię" type="xs:string"/>
 	<xs:element name="nazwisko" type="xs:string"/>
