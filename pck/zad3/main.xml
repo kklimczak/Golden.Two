@@ -125,7 +125,6 @@
             <cena waluta="PLN">60.99</cena>
             <isbn>978-83-931471-8-2</isbn>
         </książka>
-
         <książka id-książki="K4">
             <tytuł>Życie jak w Madrycie</tytuł>
             <autor-książki id-autora="A2"/>
