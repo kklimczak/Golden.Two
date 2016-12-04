@@ -10,53 +10,54 @@
     <xsl:template match="/">
       <html>
         <head>
+          <title>Raport</title>
           <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.4/foundation.css" />
         </head>
         <body>
-          <table>
-            <thead>
-              <th>ID</th>
-              <th>Tytuł</th>
-              <th>Autor</th>
-              <th>Dział</th>
-              <th>Cena</th>
-              <th>ISBN</th>
-            </thead>
-            <tbody>
-              <xsl:for-each select="księgarnia/książki/książka">
-                <xsl:apply-templates select="."/>
-              </xsl:for-each>
-            </tbody>
-          </table>
+          <h1>Raport (XHTML)</h1>
+          <xsl:apply-templates />
         </body>
       </html>
+
+    </xsl:template>
+
+    <xsl:template match="spis-książek">
+      <table>
+        <thead>
+          <th>Tytuł</th>
+          <th>Autor</th>
+          <th>Cena z VAT</th>
+          <th>Cena [EUR]</th>
+          <th>Cena [USD]</th>
+        </thead>
+        <tbody>
+            <xsl:apply-templates />
+        </tbody>
+      </table>
     </xsl:template>
 
     <xsl:template match="książka">
-      <xsl:variable name="autor" select="key('autorId', autor-książki/@id-autora)" />
-      <xsl:variable name="dzial" select="key('dzialId', dział-książki/@id-działu)" />
       <tr>
         <td>
-          <xsl:value-of select="@id-książki" />
+          <xsl:value-of select="tytuł-ksiazki" />
         </td>
         <td>
-          <xsl:value-of select="tytuł" />
+          <xsl:value-of select="autor-ksiazki" />
         </td>
-        <td>
-          <xsl:value-of select="concat($autor/imię, ' ', $autor/nazwisko)" />
-        </td>
-        <td>
-          <xsl:value-of select="concat($dzial/nazwa, ' &lt;', $dzial/regał/@numer, '&gt;')" />
-        </td>
-        <td>
-          <xsl:variable name="cena" select="format-number(cena, '####.00')" />
-          <xsl:variable name="euro" select="4.48" />
-          <xsl:variable name="cena-euro" select="format-number(cena div $euro, '####.00')" />
-          <xsl:value-of select="concat($cena, ' PLN / ', $cena-euro, ' EUR')" />
-        </td>
-        <td>
-          <xsl:value-of select="isbn" />
-        </td>
+        <xsl:apply-templates select="cena" />
       </tr>
     </xsl:template>
+
+    <xsl:template match="cena">
+      <td>
+        <xsl:value-of select="cena-z-vat" />
+      </td>
+      <td>
+        <xsl:value-of select="cena-w-euro" />
+      </td>
+      <td>
+        <xsl:value-of select="cena-w-usd" />
+      </td>
+    </xsl:template>
+
 </xsl:stylesheet>
