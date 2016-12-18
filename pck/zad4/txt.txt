@@ -1,0 +1,103 @@
+TYTUŁ:	Bułki z bananami
+AUTOR:	Adam Małysz
+CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+
+
+TYTUŁ:	Chlebek z masełkiem
+AUTOR:	Adam Małysz
+CENA:	73.49PLN 	|	16.40EUR 	|	 17.50USD
+
+
+TYTUŁ:	Chyba, nie wiem, może...
+AUTOR:	Tajemniczy Jegomość
+CENA:	106.04PLN 	|	23.67EUR 	|	 25.25USD
+
+
+TYTUŁ:	Jak umrzeć godnie
+AUTOR:	Filip Zkonopijski
+CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+
+
+TYTUŁ:	Jak żyć
+AUTOR:	Doktor Oetker
+CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+
+
+TYTUŁ:	Łososiowa szminka
+AUTOR:	Dorota Robaczewska
+CENA:	11.54PLN 	|	2.58EUR 	|	 2.75USD
+
+
+TYTUŁ:	Kocha to poczeka...
+AUTOR:	Dorota Robaczewska
+CENA:	104.99PLN 	|	23.44EUR 	|	 25.00USD
+
+
+TYTUŁ:	Królewska para
+AUTOR:	Jan Janowicz
+CENA:	11.54PLN 	|	2.58EUR 	|	 2.75USD
+
+
+TYTUŁ:	Kto jest kim
+AUTOR:	Tajemniczy Jegomość
+CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+
+
+TYTUŁ:	Mroczny Rycerz
+AUTOR:	Dorota Robaczewska
+CENA:	73.49PLN 	|	16.40EUR 	|	 17.50USD
+
+
+TYTUŁ:	Myślę, że jestem
+AUTOR:	Filip Zkonopijski
+CENA:	73.49PLN 	|	16.40EUR 	|	 17.50USD
+
+
+TYTUŁ:	O jak smacznie
+AUTOR:	Izabela Łęcka
+CENA:	11.54PLN 	|	2.58EUR 	|	 2.75USD
+
+
+TYTUŁ:	Przylepki - smaczne czy nie?
+AUTOR:	Adam Małysz
+CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+
+
+TYTUŁ:	Spojrzenia
+AUTOR:	Jan Janowicz
+CENA:	169.04PLN 	|	37.73EUR 	|	 40.25USD
+
+
+TYTUŁ:	Status: to skomplikowane
+AUTOR:	Dorota Robaczewska
+CENA:	11.54PLN 	|	2.58EUR 	|	 2.75USD
+
+
+TYTUŁ:	Wiedźmin
+AUTOR:	Andrzej Sapkowski
+CENA:	32.03PLN 	|	7.15EUR 	|	 7.62USD
+
+
+TYTUŁ:	Wiedźmin - Czas Ultrona
+AUTOR:	Andrzej Sapkowski
+CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+
+
+TYTUŁ:	Wiedźmin - Nawrócenie
+AUTOR:	Andrzej Sapkowski
+CENA:	37.28PLN 	|	8.32EUR 	|	 8.88USD
+
+
+TYTUŁ:	Zabójcza pomidorówka
+AUTOR:	Jan Klatka
+CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+
+
+TYTUŁ:	Życie jak w Madrycie
+AUTOR:	Jan Janowicz
+CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+
+
+
+
+Liczba autorów:		9Ilość książek:		20Wartość książek:	1169.82PLN 	|	261.12EUROOcena księgarni:	Księgarnia daje możliwości wyboru książki
