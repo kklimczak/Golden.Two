@@ -68,7 +68,7 @@
                 }]]>
             </script>
 
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="raport/podsumowanie" />
         </svg:svg>
     </xsl:template>
 
