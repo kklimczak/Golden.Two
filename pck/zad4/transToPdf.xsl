@@ -16,11 +16,11 @@
 					margin-left="5mm" 
 					margin-right="5mm">
 					
-		          	<fo:region-body margin="30,10"/>
-		          	<fo:region-before extent="5" />
-		          	<fo:region-after extent="5" />
-		          	<fo:region-start extent="5" />
-		          	<fo:region-end extent="5" />
+		          	<fo:region-body margin="3"/>
+		          	<fo:region-before extent="2" />
+		          	<fo:region-after extent="2" />
+		          	<fo:region-start extent="2" />
+		          	<fo:region-end extent="2" />
 				</fo:simple-page-master>
 			</fo:layout-master-set>
 

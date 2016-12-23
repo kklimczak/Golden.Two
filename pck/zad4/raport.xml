@@ -38,7 +38,7 @@
             </cena>
         </książka>
         <książka>
-            <tytuł-ksiazki>Jak żyć</tytuł-ksiazki>
+            <tytuł-ksiazki>Jak żyć </tytuł-ksiazki>
             <autor-ksiazki>Doktor Oetker</autor-ksiazki>
             <cena>
                 <cena-z-vat>64.04</cena-z-vat>
@@ -110,7 +110,7 @@
             </cena>
         </książka>
         <książka>
-            <tytuł-ksiazki>Przylepki - smaczne czy nie?</tytuł-ksiazki>
+            <tytuł-ksiazki>Przylepki - smaczne?</tytuł-ksiazki>
             <autor-ksiazki>Adam Małysz</autor-ksiazki>
             <cena>
                 <cena-z-vat>64.04</cena-z-vat>

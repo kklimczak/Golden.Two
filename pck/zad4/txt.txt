@@ -1,103 +1,65 @@
-TYTUŁ:	Bułki z bananami
-AUTOR:	Adam Małysz
-CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+            TYTUŁ                |            AUTOR            |    CENA(PLN)    |    CENA(EUR)    |    CENA(USD)
+________________________________________________________________________________________________________________________
+    Bułki z bananami             |    Adam Małysz              |    64.04        |    14.29        |    15.25        
 
 
-TYTUŁ:	Chlebek z masełkiem
-AUTOR:	Adam Małysz
-CENA:	73.49PLN 	|	16.40EUR 	|	 17.50USD
+    Chlebek z masełkiem          |    Adam Małysz              |    73.49        |    16.40        |    17.50        
 
 
-TYTUŁ:	Chyba, nie wiem, może...
-AUTOR:	Tajemniczy Jegomość
-CENA:	106.04PLN 	|	23.67EUR 	|	 25.25USD
+    Chyba, nie wiem, może...     |    Tajemniczy Jegomość      |    106.04       |    23.67        |    25.25        
 
 
-TYTUŁ:	Jak umrzeć godnie
-AUTOR:	Filip Zkonopijski
-CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+    Jak umrzeć godnie            |    Filip Zkonopijski        |    64.04        |    14.29        |    15.25        
 
 
-TYTUŁ:	Jak żyć
-AUTOR:	Doktor Oetker
-CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+    Jak żyć                      |    Doktor Oetker            |    64.04        |    14.29        |    15.25        
 
 
-TYTUŁ:	Łososiowa szminka
-AUTOR:	Dorota Robaczewska
-CENA:	11.54PLN 	|	2.58EUR 	|	 2.75USD
+    Łososiowa szminka            |    Dorota Robaczewska       |    11.54        |    2.58         |    2.75         
 
 
-TYTUŁ:	Kocha to poczeka...
-AUTOR:	Dorota Robaczewska
-CENA:	104.99PLN 	|	23.44EUR 	|	 25.00USD
+    Kocha to poczeka...          |    Dorota Robaczewska       |    104.99       |    23.44        |    25.00        
 
 
-TYTUŁ:	Królewska para
-AUTOR:	Jan Janowicz
-CENA:	11.54PLN 	|	2.58EUR 	|	 2.75USD
+    Królewska para               |    Jan Janowicz             |    11.54        |    2.58         |    2.75         
 
 
-TYTUŁ:	Kto jest kim
-AUTOR:	Tajemniczy Jegomość
-CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+    Kto jest kim                 |    Tajemniczy Jegomość      |    64.04        |    14.29        |    15.25        
 
 
-TYTUŁ:	Mroczny Rycerz
-AUTOR:	Dorota Robaczewska
-CENA:	73.49PLN 	|	16.40EUR 	|	 17.50USD
+    Mroczny Rycerz               |    Dorota Robaczewska       |    73.49        |    16.40        |    17.50        
 
 
-TYTUŁ:	Myślę, że jestem
-AUTOR:	Filip Zkonopijski
-CENA:	73.49PLN 	|	16.40EUR 	|	 17.50USD
+    Myślę, że jestem             |    Filip Zkonopijski        |    73.49        |    16.40        |    17.50        
 
 
-TYTUŁ:	O jak smacznie
-AUTOR:	Izabela Łęcka
-CENA:	11.54PLN 	|	2.58EUR 	|	 2.75USD
+    O jak smacznie               |    Izabela Łęcka            |    11.54        |    2.58         |    2.75         
 
 
-TYTUŁ:	Przylepki - smaczne czy nie?
-AUTOR:	Adam Małysz
-CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+    Przylepki - smaczne?         |    Adam Małysz              |    64.04        |    14.29        |    15.25        
 
 
-TYTUŁ:	Spojrzenia
-AUTOR:	Jan Janowicz
-CENA:	169.04PLN 	|	37.73EUR 	|	 40.25USD
+    Spojrzenia                   |    Jan Janowicz             |    169.04       |    37.73        |    40.25        
 
 
-TYTUŁ:	Status: to skomplikowane
-AUTOR:	Dorota Robaczewska
-CENA:	11.54PLN 	|	2.58EUR 	|	 2.75USD
+    Status: to skomplikowane     |    Dorota Robaczewska       |    11.54        |    2.58         |    2.75         
 
 
-TYTUŁ:	Wiedźmin
-AUTOR:	Andrzej Sapkowski
-CENA:	32.03PLN 	|	7.15EUR 	|	 7.62USD
+    Wiedźmin                     |    Andrzej Sapkowski        |    32.03        |    7.15         |    7.62         
 
 
-TYTUŁ:	Wiedźmin - Czas Ultrona
-AUTOR:	Andrzej Sapkowski
-CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+    Wiedźmin - Czas Ultrona      |    Andrzej Sapkowski        |    64.04        |    14.29        |    15.25        
 
 
-TYTUŁ:	Wiedźmin - Nawrócenie
-AUTOR:	Andrzej Sapkowski
-CENA:	37.28PLN 	|	8.32EUR 	|	 8.88USD
+    Wiedźmin - Nawrócenie        |    Andrzej Sapkowski        |    37.28        |    8.32         |    8.88         
 
 
-TYTUŁ:	Zabójcza pomidorówka
-AUTOR:	Jan Klatka
-CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+    Zabójcza pomidorówka         |    Jan Klatka               |    64.04        |    14.29        |    15.25        
 
 
-TYTUŁ:	Życie jak w Madrycie
-AUTOR:	Jan Janowicz
-CENA:	64.04PLN 	|	14.29EUR 	|	 15.25USD
+    Życie jak w Madrycie         |    Jan Janowicz             |    64.04        |    14.29        |    15.25        
 
 
 
 
-Liczba autorów:		9Ilość książek:		20Wartość książek:	1169.82PLN 	|	261.12EUROOcena księgarni:	Księgarnia daje możliwości wyboru książki
+Liczba autorów:     9Ilość książek:      20Wartość książek:    1169.82PLN     |    261.12EUROOcena księgarni:    Księgarnia daje możliwości wyboru książki
