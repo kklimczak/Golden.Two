@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/kklimczak/Golden.Two#readme",
   "dependencies": {
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "multer": "^1.2.1"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
