@@ -4,7 +4,8 @@
   "description": "PKCK 5. exercise",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/kklimczak/Golden.Two/issues"
   },
-  "homepage": "https://github.com/kklimczak/Golden.Two#readme"
+  "homepage": "https://github.com/kklimczak/Golden.Two#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
 }
