@@ -1,0 +1,22 @@
+{
+  "name": "zad5",
+  "version": "1.0.0",
+  "description": "PKCK 5. exercise",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kklimczak/Golden.Two.git"
+  },
+  "keywords": [
+    "pkck"
+  ],
+  "author": "Konrad Klimczak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kklimczak/Golden.Two/issues"
+  },
+  "homepage": "https://github.com/kklimczak/Golden.Two#readme"
+}
