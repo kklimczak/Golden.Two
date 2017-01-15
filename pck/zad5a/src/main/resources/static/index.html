@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>XML Crud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.6/angular.min.js"></script>
+    <script src="assets/appController.js"></script>
+    <script src="assets/main.js"></script>
+</head>
+<body ng-controller="appCtrl">
+<div class="row">
+    <div class="small-12 columns">
+        <h1>XML CRUD
+            <small>Konrad Klimczak & Łukasz Kuta</small>
+        </h1>
+    </div>
+    <div class="small-12 columns">
+        <div class="row">
+            <div class="small-6 columns">
+                <label>
+                    Wybierz plik do modyfikacji:
+                </label>
+                <input type="file" id="uploadingFile" name="main">
+                <a class="button"
+                   ng-click="$m.getData()">Wczytaj</a>
+            </div>
+            <div class="small-6 columns">
+                <a href="/file/download" download="generated.xml" class="button">Pobierz XMLa</a>
+                <a href="/file/download/generated" download="generated.html" class="button">Pobierz Raport HTML</a>
+            </div>
+        </div>
+    </div>
+    <div class="small-12 columns">
+        <a ng-show="data" ng-click="$m.addRow()" class="button">Dodaj wiersz</a>
+        <div class="row" ng-if="selectedIndex === -1">
+            <div class="small-12 columns">
+                <form>
+                    <div class="row">
+                        <div class="small-6 columns">
+                            <label>
+                                Tytuł
+                                <input type="text" ng-model="selectedRow.tytul">
+                            </label>
+                        </div>
+                        <div class="small-6 columns">
+                            <label>
+                                ISBN
+                                <input type="text" ng-model="selectedRow.isbn">
+                            </label>
+                        </div>
+                        <div class="small-6 columns">
+                            <label>
+                                Autor: {{selectedRow.autorKsiazki.autor.imie}} {{selectedRow.autorKsiazki.autor.nazwisko}}
+                                <select ng-model="selectedRow.autorKsiazki.autor"
+                                        ng-options="i as (i.imie + ' ' + i.nazwisko) for i in data.autorzy">
+                                </select>
+                            </label>
+                        </div>
+                        <div class="small-6 columns">
+                            <label>
+                                Dział: {{selectedRow.dzialKsiazki.dzial.nazwa}}
+                                <select ng-model="selectedRow.dzialKsiazki.dzial"
+                                        ng-options="i as i.nazwa for i in data.dzialy">
+                                </select>
+                            </label>
+                        </div>
+                        <div class="small-3 columns">
+                            <a ng-click="$m.save()" class="button">Zapisz</a>
+                            <a ng-click="$m.cancel()" class="button secondary">Anuluj</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="small-12 columns">
+        <div class="row" id="data">
+            <div class="small-12 columns" ng-repeat="ksiazka in data.ksiazki">
+                <div class="row">
+                    <div class="small-1 columns">
+                        {{ksiazka.idKsiazki}}
+                    </div>
+                    <div class="small-2 columns">
+                        {{ksiazka.tytul}}
+                    </div>
+                    <div class="small-3 columns">
+                        {{ksiazka.autorKsiazki.autor.imie}} {{ksiazka.autorKsiazki.autor.nazwisko}}
+                    </div>
+                    <div class="small-2 columns">
+                        {{ksiazka.dzialKsiazki.dzial.nazwa}}
+                    </div>
+                    <div class="small-3 columns">
+                        {{ksiazka.isbn}}
+                    </div>
+                    <div class="small-1 columns">
+                        <a ng-click="$m.editRow(ksiazka, $index)" class="button tiny">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <a ng-click="$m.deleteKsiazka(ksiazka.idKsiazki, $index)" class="button tiny">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row" ng-if="selectedIndex === $index">
+                    <div class="small-12 columns">
+                        <form>
+                            <div class="row">
+                                <div class="small-6 columns">
+                                    <label>
+                                        Tytuł
+                                        <input type="text" ng-model="selectedRow.tytul">
+                                    </label>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label>
+                                        ISBN
+                                        <input type="text" ng-model="selectedRow.isbn">
+                                    </label>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label>
+                                        Autor: {{selectedRow.autorKsiazki.autor.imie}} {{selectedRow.autorKsiazki.autor.nazwisko}}
+                                        <select ng-model="selectedRow.autorKsiazki.autor"
+                                                ng-options="i as (i.imie + ' ' + i.nazwisko) for i in data.autorzy">
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="small-6 columns">
+                                    <label>
+                                        Dział: {{selectedRow.dzialKsiazki.dzial.nazwa}}
+                                        <select ng-model="selectedRow.dzialKsiazki.dzial"
+                                                ng-options="i as i.nazwa for i in data.dzialy">
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="small-3 columns">
+                                    <a ng-click="$m.save()" class="button">Zapisz</a>
+                                    <a ng-click="$m.cancel()" class="button secondary">Anuluj</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
