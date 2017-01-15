@@ -79,11 +79,12 @@ public class DataServiceImpl implements DataService {
 
         if (ksiazka.getIdKsiazki() == null) {
             ksiazka.setIdKsiazki("K" + ++highestId);
-        }
-
-        for (int i = 0; i < ksiegarnia.getKsiazki().size(); i++) {
-            if (ksiegarnia.getKsiazki().get(i).getIdKsiazki().equals(ksiazka.getIdKsiazki())) {
-                ksiegarnia.getKsiazki().set(i, ksiazka);
+            ksiegarnia.getKsiazki().add(ksiazka);
+        } else {
+            for (int i = 0; i < ksiegarnia.getKsiazki().size(); i++) {
+                if (ksiegarnia.getKsiazki().get(i).getIdKsiazki().equals(ksiazka.getIdKsiazki())) {
+                    ksiegarnia.getKsiazki().set(i, ksiazka);
+                }
             }
         }
 
