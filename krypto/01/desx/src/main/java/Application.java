@@ -25,6 +25,7 @@ public class Application {
                             "[5] Display DES key\n" +
                             "[6] Display DESX first key\n" +
                             "[7] Display DESX second key\n" +
+                            "[8] Set new message\n" +
                             "[0] EXIT\n"
             );
             option = scanner.nextInt();
@@ -54,6 +55,14 @@ public class Application {
                 case 7:
                     System.out.print("Second key: ");
                     displayAsString(desx.getKeySecond());
+                case 8:
+                    System.out.print("New message: ");
+                    String msg = scanner.next();
+                    if(msg.length() != 8)
+                        System.out.println("Wrong message size (8 bytes)");
+                    else
+                        desx.setMsg(msg);
+                    break;
                 case 0:
                     System.out.println("Bye");
                     break;

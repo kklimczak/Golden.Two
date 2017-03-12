@@ -22,6 +22,11 @@ public class DESX extends DES {
         generateKeys();
     }
 
+    public void setMsg(String msg){
+        des.setMsg(msg);
+        this.msg = msg.getBytes();
+    }
+
     public void run(boolean ifEncrypt){
         if(ifEncrypt)
             encrypt();
