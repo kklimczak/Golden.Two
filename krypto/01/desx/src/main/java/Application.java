@@ -57,7 +57,8 @@ public class Application {
                     displayAsString(desx.getKeySecond());
                 case 8:
                     System.out.print("New message: ");
-                    String msg = scanner.next();
+                    scanner.nextLine();
+                    String msg = scanner.nextLine();
                     if(msg.length() != 8)
                         System.out.println("Wrong message size (8 bytes)");
                     else
