@@ -41,7 +41,7 @@ public class DESX extends DES {
         msg = msgPackage[0];
         if(msgPackage.length > 1){
             for (int i = 1; i < msgPackage.length; i++) {
-                msg = des.concatenateBits(msg, msg.length*8, msgPackage[i], msgPackage[i].length*8);
+                msg = des.concatBytes(msg, msg.length*8, msgPackage[i], msgPackage[i].length*8);
             }
         }
     }

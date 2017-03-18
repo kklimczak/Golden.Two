@@ -68,7 +68,7 @@ public class DES {
     }
 
     private void composeOutput() {
-        msg = concatenateBits(rightSite, v.startPermutation.length/2, leftSite, v.startPermutation.length/2);
+        msg = concatBytes(rightSite, v.startPermutation.length/2, leftSite, v.startPermutation.length/2);
         msg = shuffleBits(msg, v.endPermutation);
     }
 
@@ -141,12 +141,12 @@ public class DES {
         for (int i = 0; i < v.shifts.length; i++) {
             c = leftShift(c, v.shifts[i]);
             d = leftShift(d, v.shifts[i]);
-            byte[] cd = concatenateBits(c, 28, d, 28);
+            byte[] cd = concatBytes(c, 28, d, 28);
             subKeys[i] = shuffleBits(cd, v.taperPermutation);
         }
     }
 
-    byte[] concatenateBits(byte[] a, int aLength, byte[] b, int bLength) {
+    byte[] concatBytes(byte[] a, int aLength, byte[] b, int bLength) {
         byte[] output = prepareOutput(aLength, bLength);
 
         int i = 0;
@@ -168,8 +168,9 @@ public class DES {
 
     private byte[] leftShift(byte[] input, int shiftNumb) {
         byte[] out = new byte[4];
-        for (int i = 0; i < 28; i++) {
-            boolean bit = checkBit(input, (i + shiftNumb) % 28);
+        int halfKeySize = 28;
+        for (int i = 0; i < halfKeySize; i++) {
+            boolean bit = checkBit(input, (i + shiftNumb) % halfKeySize);
             setBit(out, i, bit);
         }
         return out;
