@@ -197,9 +197,10 @@ public class DES {
     private void setBit(byte[] data, int index, boolean bit) {
         int whichByte = index / 8;
         int whichBit = index % 8;
-        byte oldByte = data[whichByte];
-        oldByte = (byte) (((0xFF7F >> whichBit) & oldByte) & 0x00FF);
-        byte newByte = (byte) (((bit ? 1 : 0) << (8 - (whichBit + 1))) | oldByte);
-        data[whichByte] = newByte;
+        if(bit)
+            data[whichByte] |= 0x80 >> whichBit;
+        else
+            data[whichByte] &= ~(0x80 >> whichBit);
+
     }
 }
