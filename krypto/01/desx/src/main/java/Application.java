@@ -55,6 +55,7 @@ public class Application {
                 case 7:
                     System.out.print("Second key: ");
                     displayAsString(desx.getKeySecond());
+                    break;
                 case 8:
                     System.out.print("New message: ");
                     scanner.nextLine();
