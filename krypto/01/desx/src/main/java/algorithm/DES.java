@@ -24,7 +24,18 @@ public class DES {
     }
 
     public void setMsg(String msg) {
+        msg = msgCheck(msg);
         this.msg = msg.getBytes();
+    }
+
+    private String msgCheck(String msg) {
+        int overflowBytesNumb = msg.length() % 8;
+        if(overflowBytesNumb != 0){
+            for (int i = 0; i < 8 - overflowBytesNumb; i++) {
+                msg += " ";
+            }
+        }
+        return msg;
     }
 
     public byte[] getKey(){
@@ -107,8 +118,8 @@ public class DES {
     private void divideMsg() {
         int size = v.startPermutation.length / 2;
 
-        leftSite = shuffleBits(msg, 0, size);
-        rightSite = shuffleBits(msg, size, size);
+        leftSite = splitBytes(msg, 0, size);
+        rightSite = splitBytes(msg, size, size);
     }
 
     private void initPermutation() {
@@ -123,8 +134,8 @@ public class DES {
     private void generateSubkeys(){
         byte[] keyPC1 = shuffleBits(key,v.keyPermutation);
 
-        byte[] c = shuffleBits(keyPC1, 0, 28);
-        byte[] d = shuffleBits(keyPC1, 28, 28);
+        byte[] c = splitBytes(keyPC1, 0, 28);
+        byte[] d = splitBytes(keyPC1, 28, 28);
 
         subKeys = new byte[v.shifts.length][];
         for (int i = 0; i < v.shifts.length; i++) {
@@ -135,7 +146,7 @@ public class DES {
         }
     }
 
-    private byte[] concatenateBits(byte[] a, int aLength, byte[] b, int bLength) {
+    byte[] concatenateBits(byte[] a, int aLength, byte[] b, int bLength) {
         byte[] output = prepareOutput(aLength, bLength);
 
         int i = 0;
@@ -164,7 +175,7 @@ public class DES {
         return out;
     }
 
-    private byte[] shuffleBits(byte[] input, int index, int length) {
+    byte[] splitBytes(byte[] input, int index, int length) {
         byte[] output = prepareOutput(length);
         for (int i = 0; i < length; i++) {
             boolean bit = checkBit(input, index + i);

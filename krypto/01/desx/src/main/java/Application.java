@@ -59,10 +59,7 @@ public class Application {
                     System.out.print("New message: ");
                     scanner.nextLine();
                     String msg = scanner.nextLine();
-                    if(msg.length() != 8)
-                        System.out.println("Wrong message size (8 bytes)");
-                    else
-                        desx.setMsg(msg);
+                    desx.setMsg(msg);
                     break;
                 case 0:
                     System.out.println("Bye");
