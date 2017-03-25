@@ -24,11 +24,11 @@ public class DES {
     }
 
     public void setMsg(String msg) {
-        msg = msgCheck(msg);
+        msg = makeProperMsgLength(msg);
         this.msg = msg.getBytes();
     }
 
-    private String msgCheck(String msg) {
+    private String makeProperMsgLength(String msg) {
         int overflowBytesNumb = msg.length() % 8;
         if(overflowBytesNumb != 0){
             for (int i = 0; i < 8 - overflowBytesNumb; i++) {
@@ -116,10 +116,10 @@ public class DES {
     }
 
     private void divideMsg() {
-        int size = v.startPermutation.length / 2;
+        int howManyBits = (msg.length * 8) / 2;
 
-        leftSite = splitBytes(msg, 0, size);
-        rightSite = splitBytes(msg, size, size);
+        leftSite = splitBytes(msg, 0, howManyBits);
+        rightSite = splitBytes(msg, howManyBits, howManyBits);
     }
 
     private void initPermutation() {

@@ -1,7 +1,7 @@
 package algorithm;
 
 public class DESX extends DES {
-    private DES des;
+    private final DES des;
     private byte[] keyFirst, keySecond, msg;
     private byte[][] msgPackage;
 
@@ -20,7 +20,7 @@ public class DESX extends DES {
     public DESX() {
         des = new DES();
         msg = des.getMsg();
-        generateKeys();
+        generateDefaultKeys();
     }
 
     public void setMsg(String msg){
@@ -74,7 +74,7 @@ public class DESX extends DES {
         }
     }
 
-    private void generateKeys() {
+    private void generateDefaultKeys() {
         keyFirst = "qwertyui".getBytes();
         keySecond = "asdfghjk".getBytes();
     }
