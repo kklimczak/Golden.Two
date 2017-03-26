@@ -1,3 +1,8 @@
+/**
+ * @author Lukasz Kuta 195637
+ * @author Konrad Klimczak 195614
+ */
+
 import algorithm.*;
 
 import java.util.Arrays;
