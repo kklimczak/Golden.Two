@@ -55,13 +55,9 @@ public class DES {
     }
 
     /**
-     * Prawy blok przeksztalcany jest za pomoca funkcji f a nastepnie laczony za pomoca operacji XOR z lewym blokiem.
-     * Operacje te przeprowadza sie 16 razy.
-     * Blok otrzymany po 16 operacjach poddawany jest jeszcze jednej permtacji koncowej.
-     *
      * Glowna petla algorytmu. Przeksztalca prawy blok wiadomosci funkcja f,
      * a nastepnie laczy sie z lewym blokiem operacja XOR.
-     * Petla wykonuje sie 16 razy.
+     * Petla wykonuje sie 16 razy po czym blok koncowy poddawany jest permtacji koncowej.
      *
      * Funkcja f zawiera w sobie:
      *  1. permutacje rozszerzajaca - prawy blok danych z 32bitow ma ich teraz 48
