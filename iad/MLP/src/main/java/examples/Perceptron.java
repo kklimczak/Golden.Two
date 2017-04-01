@@ -1,10 +1,12 @@
 package examples;
 
+import static java.lang.Math.exp;
+import static java.lang.Math.round;
+
 public class Perceptron {
-    private final static int MAX_ITER = 100;
+    private final static int MAX_ITER = 1000;
     private final static double LEARNING_RATE = 0.001;
     private final static int NUM_INSTANCES = 100;
-    private final static int theta = 0;
 
     public static void run(){
         //three variables (features)
@@ -29,8 +31,8 @@ public class Perceptron {
         }
 
         double[] weights = new double[3]; //2 for input variables and one for bias
-        double localError, globalError;
-        int p, iteration, output;
+        double localError, globalError, output;
+        int p, iteration;
 
         weights[0] = randomNumber(0, 1);
         weights[1] = randomNumber(0, 1);
@@ -44,7 +46,7 @@ public class Perceptron {
             //loop through all instances (complete one epoch)
             for(p = 0;p<NUM_INSTANCES;p++){
                 //calculate predicted class
-                output = calculateOutput(theta, weights, x[p], y[p]);
+                output = calculateOutput(weights, x[p], y[p]);
                 //difference between predicted and actual class values
                 localError = outputs[p] - output;
                 //update weights
@@ -72,7 +74,8 @@ public class Perceptron {
             double x1 = randomNumber(-1, 1);
             double y1 = randomNumber(-1, 1);
 
-            output = calculateOutput(theta, weights, x1, y1);
+            output = calculateOutput(weights, x1, y1);
+            output = round(output);
             System.out.println("\n=======\nNew Random Point:");
             System.out.println("x = "+x1+",y = "+y1);
             System.out.println("class = "+output);
@@ -88,7 +91,8 @@ public class Perceptron {
             for(int i=0;i<5;++i){
                 double x1 = randomNumber(-1, 0);
                 double y1 = randomNumber(-1, 0);
-                output = calculateOutput(theta, weights, x1, y1);
+                output = calculateOutput(weights, x1, y1);
+                output = round(output);
                 if(output != 1)mis++;
             }
 
@@ -96,7 +100,8 @@ public class Perceptron {
             for(int i=0;i<5;i++){
                 double x1 = randomNumber(0.01, 1);
                 double y1 = randomNumber(0.01, 1);
-                output = calculateOutput(theta, weights, x1, y1);
+                output = calculateOutput(weights, x1, y1);
+                output = round(output);
                 if(output != 0)mis++;
             }
             avg1+=(double)mis/10;
@@ -109,7 +114,8 @@ public class Perceptron {
             for(int i=0;i<50;++i){
                 double x1 = randomNumber(-1, 0);
                 double y1 = randomNumber(-1, 0);
-                output = calculateOutput(theta, weights, x1, y1);
+                output = calculateOutput(weights, x1, y1);
+                output = round(output);
                 if(output != 1)mis++;
             }
 
@@ -117,7 +123,8 @@ public class Perceptron {
             for(int i=0;i<50;i++){
                 double x1 = randomNumber(0.1, 1);
                 double y1 = randomNumber(0.1, 1);
-                output = calculateOutput(theta, weights, x1, y1);
+                output = calculateOutput(weights, x1, y1);
+                output = round(output);
                 if(output != 0)mis++;
             }
 
@@ -138,15 +145,14 @@ public class Perceptron {
     }
 
     /**
-     * returns either 1 or 0 using a threshold function
-     * @param theta an integer value for the threshold
+     * returns value of a SIGMOID activation function
      * @param weights the array of weights
      * @param x the x input value
      * @param y the y input value
-     * @return 1 or 0
+     * @return double value
      */
-    private static int calculateOutput(int theta, double weights[], double x, double y){
+    private static double calculateOutput(double weights[], double x, double y){
         double sum  = x*weights[0] + y*weights[1] + weights[2];
-        return sum>=theta ? 1:0;
+        return 1.0/(1.0+exp(-sum));
     }
 }
