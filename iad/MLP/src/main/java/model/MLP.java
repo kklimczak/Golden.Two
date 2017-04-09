@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class MLP {
@@ -40,7 +39,8 @@ public class MLP {
         inputLayer.setInput(input);
     }
 
-    public void propagate(){
+    public void propagate(List<Double> input){
+        setInput(input);
         List<Double> outputValues;
         outputValues = getInputLayerOutput();
 

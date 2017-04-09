@@ -41,6 +41,14 @@ public class Neuron {
         weights.set(index, value);
     }
 
+    public List<Double> getWeights(){
+        return weights;
+    }
+
+    public Double getWeight(int index){
+        return weights.get(index);
+    }
+
     private void generateWeights(int inputSize) {
         for (int i = 0; i < inputSize; i++) {
             weights.add(generateWeight());
