@@ -1,4 +1,4 @@
-package examples;
+package oldShit.examples;
 
 import static java.lang.Math.exp;
 import static java.lang.Math.round;

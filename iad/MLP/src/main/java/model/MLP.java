@@ -1,227 +1,122 @@
 package model;
 
+import utils.ActivationFunc;
+import utils.MyUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MLP {
     private Layer inputLayer;
     private Layer hiddenLayer;
     private Layer outputLayer;
 
-    private List<Double> outputValues;
-
-    private Double learningStep = 0.001;
-    private int maxIter = 100;
-    private Double epsilon = 0.01;
+    private int inputLayerSize;
+    private int hiddenLayerSize;
+    private int outputLayerSize;
 
     private boolean ifBias;
 
+    private double [][] weightL1, weigthL2;
 
-    public MLP (int inputLayer, int hiddenLayer, int outputLayer, boolean ifBias){
-        createLayers(inputLayer, hiddenLayer, outputLayer, ifBias);
-        outputValues = new ArrayList<>();
+
+    public MLP (int inputNeurons, int hiddenNeurons, int outputNeurons, boolean ifBias){
+        inputLayer = new Layer();
+        hiddenLayer = new Layer();
+        outputLayer = new Layer();
+
+        this.inputLayerSize = inputNeurons;
+        this.hiddenLayerSize = hiddenNeurons;
+        this.outputLayerSize = outputNeurons;
+
         this.ifBias = ifBias;
+
+        weightL1 = new double[hiddenNeurons+1][inputNeurons+1];
+        weigthL2 = new double[outputNeurons+1][hiddenNeurons+1];
+
+        generateRandomWeights();
     }
 
-    private void createLayers(int inputLayer, int hiddenLayer, int outputLayer, boolean ifBias) {
-        this.inputLayer = createInputLayer(inputLayer, ifBias);
-        this.hiddenLayer = createLayer(hiddenLayer, ifBias, inputLayer);
-        this.outputLayer = createLayer(outputLayer, ifBias, hiddenLayer);
+
+    private void generateRandomWeights() {
+
+        for(int j=1; j<=hiddenLayerSize; j++)
+            for(int i=0; i<=inputLayerSize; i++) {
+                weightL1[j][i] = MyUtil.randomNumber(-0.5, 0.5);
+            }
+
+        for(int j=1; j<=outputLayerSize; j++)
+            for(int i=0; i<=hiddenLayerSize; i++) {
+                weigthL2[j][i] = MyUtil.randomNumber(-0.5, 0.5);
+            }
     }
 
-    private Layer createLayer(int hiddenLayer, boolean ifBias, int prevLayerSize) {
-        return new Layer(
-                hiddenLayer,
-                ifBias,
-                prevLayerSize,
-                false
-        );
-    }
-
-    private Layer createInputLayer(int inputLayer, boolean ifBias) {
-        return new Layer(
-                inputLayer,
-                ifBias,
-                1,
-                true
-        );
-    }
-
-    public void setInput(List<Double> input){
-        inputLayer.setInput(input);
-    }
-
-    public void propagate(List<Double> input){
-        setInput(input);
-        List<Double> outputValues;
-        outputValues = getInputLayerOutput();
-
-        hiddenLayer.setInput(outputValues);
-        outputValues = getLayerOutput(hiddenLayer);
-
-        outputLayer.setInput(outputValues);
-        outputValues = getLayerOutput(outputLayer);
-
-        this.outputValues = outputValues;
-    }
-
-    private List<Double> getLayerOutput(Layer layer) {
-        List<Double> output = new ArrayList<>();
-        for (int i = 0; i < layer.getLayerSize(); i++) {
-            output.add(layer.getOutput(i));
-        }
+    public List<Double> train(List<Double> pattern, List<Double> desiredOutput, double learningRate) {
+        List<Double> output = propagate(pattern);
+        backpropagation(desiredOutput, learningRate);
 
         return output;
     }
 
-    private List<Double> getInputLayerOutput() {
+    private void backpropagation(List<Double> desiredOutput, double learningRate) {
+        double[] errorL2 = new double[outputLayer.getLayerSize()];
+        double[] errorL1 = new double[hiddenLayer.getLayerSize()];
+        double Esum = 0.0;
+
+        for(int i=1; i < outputLayer.getLayerSize(); i++) { // Layer 2 error gradient
+            Double neuron = outputLayer.getNeuron(i);
+            errorL2[i] = neuron * (1.0 - neuron) * (desiredOutput.get(i-1) - neuron);
+        }
+
+
+        for(int i=0; i < hiddenLayer.getLayerSize(); i++) {  // Layer 1 error gradient
+            for(int j=1; j < outputLayer.getLayerSize(); j++)
+                Esum += weigthL2[j][i] * errorL2[j];
+
+            errorL1[i] = hiddenLayer.getNeuron(i) * (1.0-hiddenLayer.getNeuron(i)) * Esum;
+            Esum = 0.0;
+        }
+
+        for(int j=1; j<outputLayer.getLayerSize(); j++)
+            for(int i=0; i<hiddenLayer.getLayerSize(); i++)
+                weigthL2[j][i] += learningRate * errorL2[j] * hiddenLayer.getNeuron(i);
+
+        for(int j=1; j<hiddenLayer.getLayerSize(); j++)
+            for(int i=0; i<inputLayer.getLayerSize(); i++)
+                weightL1[j][i] += learningRate * errorL1[j] * inputLayer.getNeuron(i);
+
+    }
+
+    public List<Double> propagate(List<Double> pattern) {
+        inputLayer.setInput(pattern);
+        inputLayer.addBias(ifBias);
         List<Double> output = new ArrayList<>();
-        for (int i = 0; i < inputLayer.getLayerSize(); i++) {
-            output.add(inputLayer.getOutput(i));
-        }
 
-        return output;
-    }
-
-    private void calculateErrors(List<Double> expectedValues) {
-        calculateOutputErrors(expectedValues);
-        calculateHiddenLayerErrors();
-    }
-
-    private void backPropagation(){
-        updateOutputLayerWeights();
-        updateHiddenLayerWeights();
-    }
-
-    private void updateHiddenLayerWeights() {
-        Neuron neuron;
-        Double newWeight;
-        int weightIndex = 0;
-        for (; weightIndex < inputLayer.getLayerSize(); weightIndex++) {
-            for (int neuronIndex = 0; neuronIndex < hiddenLayer.getLayerSize(); neuronIndex++) {
-                neuron = hiddenLayer.getNeuron(neuronIndex);
-                newWeight =
-                        neuron.getWeight(weightIndex) + (
-                                learningStep
-                                        * neuron.getError()
-                                        * neuron.getDiverativeOutput()
-                                        * neuron.getInputValue(weightIndex)
-                        );
-                hiddenLayer.setNeuronWeight(neuronIndex, weightIndex, newWeight);
+        // Passing through hidden layer
+        for(int j=1; j<= hiddenLayerSize; j++) {
+            double passedValue = 0.0;
+            for(int i=0; i<inputLayer.getLayerSize(); i++) {
+                passedValue += weightL1[j][i] * inputLayer.getNeuron(i);
             }
+            output.add(ActivationFunc.sigmoid(passedValue));
         }
-        if(ifBias){
-            updateHiddenBias(weightIndex);
-        }
-    }
+        hiddenLayer.setInput(output);
+        hiddenLayer.addBias(ifBias);
 
-    private void updateHiddenBias(int weightIndex) {
-        Neuron neuron;
-        Double newWeight;
-            for (int neuronIndex = 0; neuronIndex < hiddenLayer.getLayerSize(); neuronIndex++) {
-                neuron = hiddenLayer.getNeuron(neuronIndex);
-                newWeight =
-                        neuron.getWeight(weightIndex) + (
-                                learningStep
-                                        * neuron.getError()
-                                        * neuron.getDiverativeOutput()
-                        );
-                hiddenLayer.setNeuronWeight(neuronIndex, weightIndex, newWeight);
+        // Passing through output layer
+        output.clear();
+        for(int j=1; j<= outputLayerSize; j++) {
+            double passedValue = 0.0;
+            for(int i=0; i<hiddenLayer.getLayerSize(); i++) {
+                passedValue += weigthL2[j][i] * hiddenLayer.getNeuron(i);
             }
-
-    }
-
-    private void updateOutputLayerWeights() {
-        Double newWeight;
-        Neuron neuron;
-        int weightIndex = 0;
-        for (; weightIndex < hiddenLayer.getLayerSize(); weightIndex++) {
-            for (int neuronIndex = 0; neuronIndex < outputLayer.getLayerSize(); neuronIndex++) {
-                neuron = outputLayer.getNeuron(neuronIndex);
-                newWeight =
-                        neuron.getWeight(weightIndex) + (
-                                learningStep
-                                        * neuron.getError()
-                                        * neuron.getDiverativeOutput()
-                                        * neuron.getInputValue(weightIndex)
-                        );
-                outputLayer.setNeuronWeight(neuronIndex, weightIndex, newWeight);
-            }
+            output.add(ActivationFunc.sigmoid(passedValue));
         }
-        if(ifBias) {
-            updateBias(weightIndex);
-        }
-    }
+        outputLayer.setInput(output);
+        outputLayer.addBias(ifBias);
 
-    private void updateBias(int weightIndex) {
-        Neuron neuron;
-        Double newWeight;
-        for (int neuronIndex = 0; neuronIndex < outputLayer.getLayerSize(); neuronIndex++) {
-            neuron = outputLayer.getNeuron(neuronIndex);
-            newWeight =
-                    neuron.getWeight(weightIndex) + (
-                        learningStep
-                                * neuron.getError()
-                                * neuron.getDiverativeOutput()
-                );
-            outputLayer.setNeuronWeight(neuronIndex, weightIndex, newWeight);
-        }
-    }
-
-    private void calculateHiddenLayerErrors() {
-        Double error;
-        for (int i = 0; i < hiddenLayer.getLayerSize(); i++) {
-            error = 0.0;
-
-            for (int j = 0; j < outputLayer.getLayerSize(); j++) {
-                error += outputLayer.getNeuronError(j) * outputLayer.getNeuronWeight(j, i);
-            }
-
-            hiddenLayer.setNeuronError(i, error);
-        }
-    }
-
-    private void calculateOutputErrors(List<Double> expectedValues) {
-        Double error;
-        for (int i = 0; i < expectedValues.size(); i++) {
-            error = expectedValues.get(i) - outputValues.get(i);
-            outputLayer.setNeuronError(i, error);
-        }
-    }
-
-    public void train(List<List<Double>> trainList, List<List<Double>> expectedValues){
-        int iteration = 0;
-        double cost;
-        do {
-            iteration++;
-            cost = 0;
-            for (int epoch = 0; epoch < trainList.size(); epoch++) {
-                propagate(trainList.get(epoch));
-                calculateErrors(expectedValues.get(epoch));
-                backPropagation();
-
-                cost += calculateCosts();
-            }
-        } while (iteration < maxIter || cost <= epsilon);
-
-        System.out.println("Training completed. Summary:");
-        System.out.println("Iterations: " + iteration);
-        System.out.println("Costs: " + cost);
-    }
-
-    private double calculateCosts() {
-        Double error = 0.0;
-        for (Neuron neuron : outputLayer.getNeuronList()) {
-            Double neuronError = neuron.getError();
-            error += 0.5 * neuronError * neuronError;
-        }
-
-        return error;
-    }
-
-    public List<Double> run(List<Double> input){
-        propagate(input);
-        return this.outputValues;
+        return outputLayer.getOutput();
     }
 
 }

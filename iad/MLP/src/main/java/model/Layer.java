@@ -1,99 +1,47 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Layer {
-    private List<Neuron> neuronList;
-    private boolean ifInputLayer;
+    private List<Double> neurons;
 
-    public Layer(int layerSize, boolean ifBias, int prevLayerSize, boolean ifInputLayer){
-        neuronList = new ArrayList<>();
-        this.ifInputLayer = ifInputLayer;
-        if(ifInputLayer){
-            neuronList = prepareInputLayer(layerSize, ifBias);
+    public Layer() {
+        neurons = new ArrayList<>();
+    }
+
+    public void addBias(boolean ifBias){
+        if(ifBias){
+            neurons.add(0,1.0);
         } else {
-            neuronList = prepareLayer(layerSize, ifBias, prevLayerSize);
+            neurons.add(0,0.0);
         }
-    }
-
-    private List<Neuron> prepareLayer(int layerSize, boolean ifBias, int prevLayerSize) {
-        List<Neuron> output = new ArrayList<>();
-        for (int i = 0; i < layerSize; i++) {
-            output.add(
-                    new Neuron(
-                            ifBias,
-                            prevLayerSize
-                    )
-            );
-        }
-        return output;
-    }
-
-    private List<Neuron> prepareInputLayer(int layerSize, boolean ifBias) {
-        List<Neuron> output = new ArrayList<>();
-        for (int i = 0; i < layerSize; i++) {
-            output.add(
-                    new Neuron(
-                            ifBias,
-                            1)
-            );
-        }
-        return output;
     }
 
     public int getLayerSize(){
-        return neuronList.size();
+        return neurons.size();
     }
 
-    public List<Neuron> getNeuronList(){
-        return neuronList;
+    public void addInput(int index, Double value){
+        neurons.set(index, value);
     }
 
-    public Double getNeuronWeight(int neuronIndex, int weightIndex){
-        return neuronList.get(neuronIndex).getWeight(weightIndex);
+    public double getNeuron(int index){
+        return neurons.get(index);
     }
 
-    public void setNeuronWeight(int neuronIndex, int weightIndex, Double weightValue){
-        Neuron neuron = neuronList.get(neuronIndex);
-        neuron.updateWeight(weightIndex, weightValue);
-        neuronList.set(neuronIndex, neuron);
+    public void setNeuron(int index, Double neuron){
+        neurons.set(index, neuron);
     }
 
-    public Double getNeuronError(int neuronIndex){
-        return neuronList.get(neuronIndex).getError();
+    public List<Double> getOutput(){
+        return neurons;
     }
 
-    public void setNeuronError(int neuronIndex, Double error){
-        Neuron neuron = neuronList.get(neuronIndex);
-        neuron.setError(error);
-        neuronList.set(neuronIndex, neuron);
-    }
-
-    public Double getOutput(int neuronNumb){
-        if(ifInputLayer){
-            return neuronList.get(neuronNumb).duplicateInput();
-        }
-        return neuronList.get(neuronNumb).getOutput();
-    }
-
-    public void setInput(List<Double> inputValues){
-        int iteration = 0;
-        if(ifInputLayer){
-            for (Neuron neuron : neuronList) {
-                neuron.addInput(inputValues.get(iteration));
-                iteration++;
-            }
-        } else {
-            for (Neuron neuron : neuronList) {
-                neuron.setInputValues(inputValues);
-            }
+    public void setInput(List<Double> input) {
+        neurons.clear();
+        for (Double in : input) {
+            neurons.add(in);
         }
     }
-
-    public Neuron getNeuron(int index){
-        return neuronList.get(index);
-    }
-
 }

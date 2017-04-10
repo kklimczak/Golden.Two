@@ -1,4 +1,4 @@
-package model;
+package oldShit.model;
 
 import utils.ActivationFunc;
 import utils.MyUtil;
