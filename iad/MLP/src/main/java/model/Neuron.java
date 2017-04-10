@@ -10,16 +10,9 @@ public class Neuron {
 
     private List<Double> inputValues;
     private List<Double> weights;
+    private Double error;
 
     private boolean ifBias;
-
-    public Neuron(List<Double> inputValues, boolean bias, int inputSize){
-        this.inputValues = inputValues;
-        this.weights = new ArrayList<>(inputSize);
-
-        generateWeights(inputSize);
-        addBias(bias);
-    }
 
     public Neuron(boolean bias, int inputSize){
         this.inputValues = new ArrayList<>();
@@ -29,8 +22,16 @@ public class Neuron {
         addBias(bias);
     }
 
+    public void addInput(Double input){
+        inputValues.add(input);
+    }
+
     public double getOutput(){
         return ActivationFunc.sigmoid(calculateOutput());
+    }
+
+    public double getDiverativeOutput(){
+        return ActivationFunc.sigmoidDerivative(calculateOutput());
     }
 
     public void setInputValues(List<Double> inputValues){
@@ -81,5 +82,17 @@ public class Neuron {
 
     public double duplicateInput(){
         return inputValues.get(0);
+    }
+
+    public Double getError(){
+        return error;
+    }
+
+    public void setError(Double error){
+        this.error = error;
+    }
+
+    public Double getInputValue(int index){
+        return inputValues.get(index);
     }
 }

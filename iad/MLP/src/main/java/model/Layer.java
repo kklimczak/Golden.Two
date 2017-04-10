@@ -8,21 +8,14 @@ public class Layer {
     private List<Neuron> neuronList;
     private boolean ifInputLayer;
 
-    public Layer(int layerSize, List<Double> inputValues, boolean ifBias, int prevLayerSize){
+    public Layer(int layerSize, boolean ifBias, int prevLayerSize, boolean ifInputLayer){
         neuronList = new ArrayList<>();
-        if(prevLayerSize == 1){
-            ifInputLayer = true;
-            neuronList = prepareInputLayer(layerSize, inputValues, ifBias);
+        this.ifInputLayer = ifInputLayer;
+        if(ifInputLayer){
+            neuronList = prepareInputLayer(layerSize, ifBias);
         } else {
-            ifInputLayer = false;
-            neuronList = prepareLayer(layerSize, inputValues, ifBias, prevLayerSize);
+            neuronList = prepareLayer(layerSize, ifBias, prevLayerSize);
         }
-    }
-
-    public Layer(int layerSize, boolean ifBias, int prevLayerSize){
-        ifInputLayer = false;
-        neuronList = new ArrayList<>();
-        neuronList = prepareLayer(layerSize, ifBias, prevLayerSize);
     }
 
     private List<Neuron> prepareLayer(int layerSize, boolean ifBias, int prevLayerSize) {
@@ -38,26 +31,11 @@ public class Layer {
         return output;
     }
 
-    private List<Neuron> prepareLayer(int layerSize, List<Double> inputValues, boolean ifBias, int prevLayerSize) {
+    private List<Neuron> prepareInputLayer(int layerSize, boolean ifBias) {
         List<Neuron> output = new ArrayList<>();
         for (int i = 0; i < layerSize; i++) {
             output.add(
                     new Neuron(
-                            inputValues,
-                            ifBias,
-                            prevLayerSize
-                    )
-            );
-        }
-        return output;
-    }
-
-    private List<Neuron> prepareInputLayer(int layerSize, List<Double> inputValues, boolean ifBias) {
-        List<Neuron> output = new ArrayList<>();
-        for (int i = 0; i < layerSize; i++) {
-            output.add(
-                    new Neuron(
-                            Collections.singletonList(inputValues.get(i)),
                             ifBias,
                             1)
             );
@@ -69,6 +47,30 @@ public class Layer {
         return neuronList.size();
     }
 
+    public List<Neuron> getNeuronList(){
+        return neuronList;
+    }
+
+    public Double getNeuronWeight(int neuronIndex, int weightIndex){
+        return neuronList.get(neuronIndex).getWeight(weightIndex);
+    }
+
+    public void setNeuronWeight(int neuronIndex, int weightIndex, Double weightValue){
+        Neuron neuron = neuronList.get(neuronIndex);
+        neuron.updateWeight(weightIndex, weightValue);
+        neuronList.set(neuronIndex, neuron);
+    }
+
+    public Double getNeuronError(int neuronIndex){
+        return neuronList.get(neuronIndex).getError();
+    }
+
+    public void setNeuronError(int neuronIndex, Double error){
+        Neuron neuron = neuronList.get(neuronIndex);
+        neuron.setError(error);
+        neuronList.set(neuronIndex, neuron);
+    }
+
     public Double getOutput(int neuronNumb){
         if(ifInputLayer){
             return neuronList.get(neuronNumb).duplicateInput();
@@ -77,9 +79,21 @@ public class Layer {
     }
 
     public void setInput(List<Double> inputValues){
-        for (Neuron neuron : neuronList) {
-            neuron.setInputValues(inputValues);
+        int iteration = 0;
+        if(ifInputLayer){
+            for (Neuron neuron : neuronList) {
+                neuron.addInput(inputValues.get(iteration));
+                iteration++;
+            }
+        } else {
+            for (Neuron neuron : neuronList) {
+                neuron.setInputValues(inputValues);
+            }
         }
+    }
+
+    public Neuron getNeuron(int index){
+        return neuronList.get(index);
     }
 
 }
