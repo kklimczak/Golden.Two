@@ -1,0 +1,65 @@
+            TYTUŁ                |            AUTOR            |    CENA(PLN)    |    CENA(EUR)    |    CENA(USD)
+________________________________________________________________________________________________________________________
+    Bułki z bananami             |    Adam Małysz              |    64.04        |    14.29        |    15.25        
+
+
+    Chlebek z masełkiem          |    Adam Małysz              |    73.49        |    16.40        |    17.50        
+
+
+    Chyba, nie wiem, może...     |    Tajemniczy Jegomość      |    106.04       |    23.67        |    25.25        
+
+
+    Jak umrzeć godnie            |    Filip Zkonopijski        |    64.04        |    14.29        |    15.25        
+
+
+    Jak żyć                      |    Doktor Oetker            |    64.04        |    14.29        |    15.25        
+
+
+    Łososiowa szminka            |    Dorota Robaczewska       |    11.54        |    2.58         |    2.75         
+
+
+    Kocha to poczeka...          |    Dorota Robaczewska       |    104.99       |    23.44        |    25.00        
+
+
+    Królewska para               |    Jan Janowicz             |    11.54        |    2.58         |    2.75         
+
+
+    Kto jest kim                 |    Tajemniczy Jegomość      |    64.04        |    14.29        |    15.25        
+
+
+    Mroczny Rycerz               |    Dorota Robaczewska       |    73.49        |    16.40        |    17.50        
+
+
+    Myślę, że jestem             |    Filip Zkonopijski        |    73.49        |    16.40        |    17.50        
+
+
+    O jak smacznie               |    Izabela Łęcka            |    11.54        |    2.58         |    2.75         
+
+
+    Przylepki - smaczne?         |    Adam Małysz              |    64.04        |    14.29        |    15.25        
+
+
+    Spojrzenia                   |    Jan Janowicz             |    169.04       |    37.73        |    40.25        
+
+
+    Status: to skomplikowane     |    Dorota Robaczewska       |    11.54        |    2.58         |    2.75         
+
+
+    Wiedźmin                     |    Andrzej Sapkowski        |    32.03        |    7.15         |    7.62         
+
+
+    Wiedźmin - Czas Ultrona      |    Andrzej Sapkowski        |    64.04        |    14.29        |    15.25        
+
+
+    Wiedźmin - Nawrócenie        |    Andrzej Sapkowski        |    37.28        |    8.32         |    8.88         
+
+
+    Zabójcza pomidorówka         |    Jan Klatka               |    64.04        |    14.29        |    15.25        
+
+
+    Życie jak w Madrycie         |    Jan Janowicz             |    64.04        |    14.29        |    15.25        
+
+
+
+
+Liczba autorów:     9Ilość książek:      20Wartość książek:    1169.82PLN     |    261.12EUROOcena księgarni:    Księgarnia daje możliwości wyboru książki
