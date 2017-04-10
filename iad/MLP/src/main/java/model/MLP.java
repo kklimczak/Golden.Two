@@ -89,8 +89,7 @@ public class MLP {
     }
 
     public List<Double> propagate(List<Double> pattern) {
-        inputLayer.setInput(pattern);
-        inputLayer.addBias(ifBias);
+        inputLayer.setInput(pattern, ifBias);
         List<Double> output = new ArrayList<>();
 
         // Passing through hidden layer
@@ -101,8 +100,7 @@ public class MLP {
             }
             output.add(ActivationFunc.sigmoid(passedValue));
         }
-        hiddenLayer.setInput(output);
-        hiddenLayer.addBias(ifBias);
+        hiddenLayer.setInput(output, ifBias);
 
         // Passing through output layer
         output.clear();
@@ -113,8 +111,7 @@ public class MLP {
             }
             output.add(ActivationFunc.sigmoid(passedValue));
         }
-        outputLayer.setInput(output);
-        outputLayer.addBias(ifBias);
+        outputLayer.setInput(output, ifBias);
 
         return outputLayer.getOutput();
     }

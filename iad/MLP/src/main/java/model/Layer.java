@@ -38,10 +38,13 @@ public class Layer {
         return neurons;
     }
 
-    public void setInput(List<Double> input) {
+    public void setInput(List<Double> input, boolean ifBias) {
         neurons.clear();
+
+        addBias(ifBias);
         for (Double in : input) {
             neurons.add(in);
         }
+
     }
 }
