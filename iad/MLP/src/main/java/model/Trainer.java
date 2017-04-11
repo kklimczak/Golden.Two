@@ -21,7 +21,7 @@ public class Trainer {
         this.expectedOutputs = expectedOutputs;
     }
 
-    public void train(){
+    public void train() {
         int iterator = 0;
         double cost;
         List<Double> result;
@@ -38,7 +38,7 @@ public class Trainer {
                 cost += calculateCost(result, expectedOutputs.get(epoch));
             }
 
-        } while (iterator < maxIterations && cost > eps );
+        } while (iterator < maxIterations && cost > eps);
 
         System.out.println("Trening summary: ");
         System.out.println("Iterations: " + iterator);
@@ -48,7 +48,7 @@ public class Trainer {
     private double calculateCost(List<Double> result, List<Double> expectedOutput) {
         Double cost = 0.0, localError;
         for (int i = 0; i < expectedOutput.size(); i++) {
-            localError = expectedOutput.get(i) - result.get(i+1);
+            localError = expectedOutput.get(i) - result.get(i + 1);
             cost += 0.5 * localError * localError;
         }
 
