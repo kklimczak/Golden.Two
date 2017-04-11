@@ -11,10 +11,7 @@ class Layer {
     Layer(int layerSize, boolean ifBias) {
         neurons = new ArrayList<>();
         this.ifBias = ifBias;
-        this.layerSize = layerSize;
-        if (ifBias) {
-            this.layerSize++;
-        }
+        this.layerSize = layerSize + 1; // + 1 for bias
     }
 
     private void addBias() {
