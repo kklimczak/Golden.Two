@@ -22,6 +22,9 @@ public class Trainer {
     }
 
     public void train() {
+
+        mlp.setLearningRate(learningRate);
+
         int iterator = 0;
         double cost;
         List<Double> result;
@@ -31,8 +34,7 @@ public class Trainer {
             for (int epoch = 0; epoch < inputs.size(); epoch++) {
                 result = mlp.train(
                         inputs.get(epoch),
-                        expectedOutputs.get(epoch),
-                        learningRate
+                        expectedOutputs.get(epoch)
                 );
 
                 cost += calculateCost(result, expectedOutputs.get(epoch));

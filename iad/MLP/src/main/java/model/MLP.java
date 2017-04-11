@@ -11,6 +11,8 @@ public class MLP {
     private Layer hiddenLayer;
     private Layer outputLayer;
 
+    private double learningRate = 0.1;
+
     public MLP(int inputNeurons, int hiddenNeurons, int outputNeurons, boolean ifBias) {
         inputLayer = new Layer(inputNeurons, ifBias, 1);
         hiddenLayer = new Layer(hiddenNeurons, ifBias, inputNeurons);
@@ -27,25 +29,25 @@ public class MLP {
         return outputLayer.getOutput();
     }
 
-    List<Double> train(List<Double> pattern, List<Double> expectedOutput, double learningRate) {
+    List<Double> train(List<Double> pattern, List<Double> expectedOutput) {
         List<Double> output = propagate(pattern);
-        backPropagation(expectedOutput, learningRate);
+        backPropagation(expectedOutput);
 
         return output;
     }
 
-    private void backPropagation(List<Double> expectedOutput, double learningRate) {
+    private void backPropagation(List<Double> expectedOutput) {
         resetErrors();
 
         calculateOutputErrors(expectedOutput);
         calculateHiddenLayerErrors();
 
-        updateNeuronErrors(outputLayer, hiddenLayer, learningRate);
-        updateNeuronErrors(hiddenLayer, inputLayer, learningRate);
+        updateNeuronErrors(outputLayer, hiddenLayer);
+        updateNeuronErrors(hiddenLayer, inputLayer);
 
     }
 
-    private void updateNeuronErrors(Layer layerToUpdate, Layer prevLayer, double learningRate) {
+    private void updateNeuronErrors(Layer layerToUpdate, Layer prevLayer) {
         double newWeight;
         for (int j = 1; j < layerToUpdate.getLayerSize(); j++) {
             for (int i = 0; i < prevLayer.getLayerSize(); i++) {
@@ -100,6 +102,14 @@ public class MLP {
 
     private void setNetworkInput(List<Double> pattern) {
         inputLayer.setInput(pattern);
+    }
+
+    double getLearningRate() {
+        return learningRate;
+    }
+
+    void setLearningRate(double learningRate) {
+        this.learningRate = learningRate;
     }
 
 }
