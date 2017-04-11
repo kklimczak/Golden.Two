@@ -8,16 +8,31 @@ import java.util.List;
 class Layer {
     private List<Double> neurons;
     private List<List<Double>> weights;
+    private List<Double> errors;
     private int layerSize;
     private boolean ifBias;
 
     Layer(int layerSize, boolean ifBias, int prevLayerSize) {
         neurons = new ArrayList<>();
         weights = new ArrayList<>();
+        errors = new ArrayList<>();
         this.ifBias = ifBias;
         this.layerSize = layerSize + 1; // + 1 for bias
 
         generateWeights(prevLayerSize);
+    }
+
+    void resetErrors() {
+        errors.clear();
+        errors.add(0.0); // dummy bias error
+    }
+
+    void addError(Double error) {
+        errors.add(error);
+    }
+
+    double getError(int errorIndex) {
+        return errors.get(errorIndex);
     }
 
     private void generateWeights(int prevLayerSize) {
@@ -32,11 +47,11 @@ class Layer {
         }
     }
 
-    double getWeight(int neuronIndex, int weightIndex){
+    double getWeight(int neuronIndex, int weightIndex) {
         return weights.get(neuronIndex).get(weightIndex);
     }
 
-    void setWeight(int neuronIndex, int weightIndex, double newWeight){
+    void setWeight(int neuronIndex, int weightIndex, double newWeight) {
         weights.get(neuronIndex).set(weightIndex, newWeight);
     }
 
@@ -67,6 +82,5 @@ class Layer {
         for (Double in : input) {
             neurons.add(in);
         }
-
     }
 }

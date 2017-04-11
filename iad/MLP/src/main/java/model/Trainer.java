@@ -12,7 +12,7 @@ public class Trainer {
     private List<List<Double>> expectedOutputs;
 
     private double learningRate = 0.1;
-    private int maxIterations = 100000;
+    private int maxIterations = 10000;
     private double eps = 0.01;
 
     public Trainer(MLP mlp, List<List<Double>> inputs, List<List<Double>> expectedOutputs) {
@@ -54,5 +54,4 @@ public class Trainer {
 
         return cost;
     }
-
 }
