@@ -14,6 +14,7 @@ public class Trainer {
     private double learningRate = 0.1;
     private int maxIterations = 10000;
     private double eps = 0.01;
+    private double momentum = 0.5;
 
     public Trainer(MLP mlp, List<List<Double>> inputs, List<List<Double>> expectedOutputs) {
         this.mlp = mlp;
@@ -24,6 +25,7 @@ public class Trainer {
     public void train() {
 
         mlp.setLearningRate(learningRate);
+        mlp.setMomentum(momentum);
 
         int iterator = 0;
         double cost;

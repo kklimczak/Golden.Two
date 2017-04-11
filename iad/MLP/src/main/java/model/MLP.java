@@ -12,6 +12,7 @@ public class MLP {
     private Layer outputLayer;
 
     private double learningRate = 0.1;
+    private double momentum = 0.5;
 
     public MLP(int inputNeurons, int hiddenNeurons, int outputNeurons, boolean ifBias) {
         inputLayer = new Layer(inputNeurons, ifBias, 1);
@@ -42,19 +43,28 @@ public class MLP {
         calculateOutputErrors(expectedOutput);
         calculateHiddenLayerErrors();
 
-        updateNeuronErrors(outputLayer, hiddenLayer);
-        updateNeuronErrors(hiddenLayer, inputLayer);
+        updateNeuronWeights(outputLayer, hiddenLayer);
+        updateNeuronWeights(hiddenLayer, inputLayer);
 
     }
 
-    private void updateNeuronErrors(Layer layerToUpdate, Layer prevLayer) {
-        double newWeight;
+    private void updateNeuronWeights(Layer layerToUpdate, Layer prevLayer) {
+        double newWeight, deltaWeight, prevDeltaWeight;
         for (int j = 1; j < layerToUpdate.getLayerSize(); j++) {
             for (int i = 0; i < prevLayer.getLayerSize(); i++) {
-                newWeight = layerToUpdate.getWeight(j, i) + learningRate * layerToUpdate.getError(j) * prevLayer.getNeuron(i);
+                deltaWeight = learningRate * layerToUpdate.getError(j) * prevLayer.getNeuron(i);
+                prevDeltaWeight = getAndUpdatePrevDeltaWeight(layerToUpdate, j, i, deltaWeight);
+                newWeight = layerToUpdate.getWeight(j, i) + deltaWeight + prevDeltaWeight * momentum;
                 layerToUpdate.setWeight(j, i, newWeight);
             }
         }
+    }
+
+    private double getAndUpdatePrevDeltaWeight(Layer layerToUpdate, int neuronIndex, int weightIndex, double deltaWeight) {
+        double output = layerToUpdate.getPrevDelta(neuronIndex, weightIndex);
+        layerToUpdate.setPrevDelta(neuronIndex, weightIndex, deltaWeight);
+
+        return output;
     }
 
     private void calculateHiddenLayerErrors() {
@@ -104,12 +114,12 @@ public class MLP {
         inputLayer.setInput(pattern);
     }
 
-    double getLearningRate() {
-        return learningRate;
-    }
-
     void setLearningRate(double learningRate) {
         this.learningRate = learningRate;
+    }
+
+    void setMomentum(double momentum){
+        this.momentum = momentum;
     }
 
 }

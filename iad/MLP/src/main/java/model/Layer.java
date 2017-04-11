@@ -8,6 +8,7 @@ import java.util.List;
 class Layer {
     private List<Double> neurons;
     private List<List<Double>> weights;
+    private List<List<Double>> prevDeltaWeights;
     private List<Double> errors;
     private int layerSize;
     private boolean ifBias;
@@ -16,10 +17,31 @@ class Layer {
         neurons = new ArrayList<>();
         weights = new ArrayList<>();
         errors = new ArrayList<>();
+        prevDeltaWeights = new ArrayList<>();
         this.ifBias = ifBias;
         this.layerSize = layerSize + 1; // + 1 for bias
 
         generateWeights(prevLayerSize);
+        initPrevDeltaWeights(prevLayerSize);
+    }
+
+    private void initPrevDeltaWeights(int prevLayerSize) {
+        List<Double> weights;
+        for (int i = 0; i < this.layerSize; i++) {
+            weights = new ArrayList<>();
+            for (int j = 0; j < prevLayerSize + 1; j++) {
+               weights.add(0.0);
+            }
+            this.prevDeltaWeights.add(weights);
+        }
+    }
+
+    double getPrevDelta(int neuronIndex, int weightIndex){
+        return prevDeltaWeights.get(neuronIndex).get(weightIndex);
+    }
+
+    void setPrevDelta(int neuronIndex, int weightIndex, double prevDeltaWeight){
+        this.prevDeltaWeights.get(neuronIndex).set(weightIndex, prevDeltaWeight);
     }
 
     void resetErrors() {
