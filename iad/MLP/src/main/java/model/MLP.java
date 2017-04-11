@@ -12,31 +12,11 @@ public class MLP {
     private Layer hiddenLayer;
     private Layer outputLayer;
 
-    private double[][] weightL1, weightL2;
-
     public MLP(int inputNeurons, int hiddenNeurons, int outputNeurons, boolean ifBias) {
-        inputLayer = new Layer(inputNeurons, ifBias);
-        hiddenLayer = new Layer(hiddenNeurons, ifBias);
-        outputLayer = new Layer(outputNeurons, ifBias);
+        inputLayer = new Layer(inputNeurons, ifBias, 1);
+        hiddenLayer = new Layer(hiddenNeurons, ifBias, inputNeurons);
+        outputLayer = new Layer(outputNeurons, ifBias, hiddenNeurons);
 
-        weightL1 = new double[hiddenNeurons + 1][inputNeurons + 1];
-        weightL2 = new double[outputNeurons + 1][hiddenNeurons + 1];
-
-        generateRandomWeights();
-    }
-
-
-    private void generateRandomWeights() {
-
-        for (int j = 1; j < hiddenLayer.getLayerSize(); j++)
-            for (int i = 0; i < inputLayer.getLayerSize(); i++) {
-                weightL1[j][i] = MyUtil.randomNumber(-0.5, 0.5);
-            }
-
-        for (int j = 1; j < outputLayer.getLayerSize(); j++)
-            for (int i = 0; i < hiddenLayer.getLayerSize(); i++) {
-                weightL2[j][i] = MyUtil.randomNumber(-0.5, 0.5);
-            }
     }
 
     List<Double> train(List<Double> pattern, List<Double> desiredOutput, double learningRate) {
@@ -50,6 +30,7 @@ public class MLP {
         double[] errorL2 = new double[outputLayer.getLayerSize()];
         double[] errorL1 = new double[hiddenLayer.getLayerSize()];
         double Esum = 0.0;
+        double newWeigth;
 
         for (int i = 1; i < outputLayer.getLayerSize(); i++) { // Layer 2 error gradient
             Double neuron = outputLayer.getNeuron(i);
@@ -59,20 +40,23 @@ public class MLP {
 
         for (int i = 0; i < hiddenLayer.getLayerSize(); i++) {  // Layer 1 error gradient
             for (int j = 1; j < outputLayer.getLayerSize(); j++)
-                Esum += weightL2[j][i] * errorL2[j];
+                Esum += outputLayer.getWeight(j, i) * errorL2[j];
 
             errorL1[i] = hiddenLayer.getNeuron(i) * (1.0 - hiddenLayer.getNeuron(i)) * Esum;
             Esum = 0.0;
         }
 
         for (int j = 1; j < outputLayer.getLayerSize(); j++)
-            for (int i = 0; i < hiddenLayer.getLayerSize(); i++)
-                weightL2[j][i] += learningRate * errorL2[j] * hiddenLayer.getNeuron(i);
+            for (int i = 0; i < hiddenLayer.getLayerSize(); i++) {
+                newWeigth = outputLayer.getWeight(j, i) + learningRate * errorL2[j] * hiddenLayer.getNeuron(i);
+                outputLayer.setWeight(j, i, newWeigth);
+            }
 
         for (int j = 1; j < hiddenLayer.getLayerSize(); j++)
-            for (int i = 0; i < inputLayer.getLayerSize(); i++)
-                weightL1[j][i] += learningRate * errorL1[j] * inputLayer.getNeuron(i);
-
+            for (int i = 0; i < inputLayer.getLayerSize(); i++) {
+                newWeigth = hiddenLayer.getWeight(j, i) + learningRate * errorL1[j] * inputLayer.getNeuron(i);
+                hiddenLayer.setWeight(j, i, newWeigth);
+            }
     }
 
     public List<Double> propagate(List<Double> pattern) {
@@ -83,7 +67,7 @@ public class MLP {
         for (int j = 1; j < hiddenLayer.getLayerSize(); j++) {
             double passedValue = 0.0;
             for (int i = 0; i < inputLayer.getLayerSize(); i++) {
-                passedValue += weightL1[j][i] * inputLayer.getNeuron(i);
+                passedValue += hiddenLayer.getWeight(j, i) * inputLayer.getNeuron(i);
             }
             output.add(ActivationFunc.sigmoid(passedValue));
         }
@@ -94,7 +78,7 @@ public class MLP {
         for (int j = 1; j < outputLayer.getLayerSize(); j++) {
             double passedValue = 0.0;
             for (int i = 0; i < hiddenLayer.getLayerSize(); i++) {
-                passedValue += weightL2[j][i] * hiddenLayer.getNeuron(i);
+                passedValue += outputLayer.getWeight(j, i) * hiddenLayer.getNeuron(i);
             }
             output.add(ActivationFunc.sigmoid(passedValue));
         }

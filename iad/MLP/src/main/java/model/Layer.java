@@ -1,17 +1,43 @@
 package model;
 
+import utils.MyUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
 class Layer {
     private List<Double> neurons;
+    private List<List<Double>> weights;
     private int layerSize;
     private boolean ifBias;
 
-    Layer(int layerSize, boolean ifBias) {
+    Layer(int layerSize, boolean ifBias, int prevLayerSize) {
         neurons = new ArrayList<>();
+        weights = new ArrayList<>();
         this.ifBias = ifBias;
         this.layerSize = layerSize + 1; // + 1 for bias
+
+        generateWeights(prevLayerSize);
+    }
+
+    private void generateWeights(int prevLayerSize) {
+        List<Double> weights = new ArrayList<>();
+        this.weights.add(weights);
+        for (int i = 1; i < this.layerSize; i++) {
+            weights = new ArrayList<>();
+            for (int j = 0; j < prevLayerSize + 1; j++) {
+                weights.add(MyUtil.randomNumber(-0.5, 0.5));
+            }
+            this.weights.add(weights);
+        }
+    }
+
+    double getWeight(int neuronIndex, int weightIndex){
+        return weights.get(neuronIndex).get(weightIndex);
+    }
+
+    void setWeight(int neuronIndex, int weightIndex, double newWeight){
+        weights.get(neuronIndex).set(weightIndex, newWeight);
     }
 
     private void addBias() {
