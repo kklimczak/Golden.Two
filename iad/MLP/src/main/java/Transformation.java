@@ -66,10 +66,10 @@ class Transformation {
         Trainer trainer = new Trainer(mlp, trainList, trainList);
         trainer.train();
 
-        simpleTreningCheck(trainList);
+        simpleTrainingCheck(trainList);
     }
 
-    private void simpleTreningCheck(List<List<Double>> trainList) {
+    private void simpleTrainingCheck(List<List<Double>> trainList) {
         for (List<Double> example : trainList) {
             mlp.propagate(example)
                     .stream()

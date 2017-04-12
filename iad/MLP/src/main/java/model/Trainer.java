@@ -27,25 +27,25 @@ public class Trainer {
         mlp.setLearningRate(learningRate);
         mlp.setMomentum(momentum);
 
-        int iterator = 0;
+        int epoch = 0;
         double cost;
         List<Double> result;
         do {
-            iterator++;
+            epoch++;
             cost = 0.0;
-            for (int epoch = 0; epoch < inputs.size(); epoch++) {
+            for (int i = 0; i < inputs.size(); i++) {
                 result = mlp.train(
-                        inputs.get(epoch),
-                        expectedOutputs.get(epoch)
+                        inputs.get(i),
+                        expectedOutputs.get(i)
                 );
 
-                cost += calculateCost(result, expectedOutputs.get(epoch));
+                cost += calculateCost(result, expectedOutputs.get(i));
             }
 
-        } while (iterator < maxIterations && cost > eps);
+        } while (epoch < maxIterations && cost > eps);
 
         System.out.println("Trening summary: ");
-        System.out.println("Iterations: " + iterator);
+        System.out.println("Iterations: " + epoch);
         System.out.println("Cost: " + cost);
     }
 
