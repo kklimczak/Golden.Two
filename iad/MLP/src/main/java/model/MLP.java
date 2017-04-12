@@ -5,7 +5,6 @@ import utils.ActivationFunc;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MLP {
     private Layer inputLayer;
     private Layer hiddenLayer;
@@ -118,7 +117,7 @@ public class MLP {
         this.learningRate = learningRate;
     }
 
-    void setMomentum(double momentum){
+    void setMomentum(double momentum) {
         this.momentum = momentum;
     }
 
