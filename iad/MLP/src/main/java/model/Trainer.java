@@ -21,47 +21,56 @@ public class Trainer {
 
     private GraphUtil graphUtil;
 
-    public Trainer(MLP mlp, List<List<Double>> inputs, List<List<Double>> expectedOutputs) {
+    public Trainer(MLP mlp, List<List<Double>> inputs, List<List<Double>> expectedOutputs, double learningRate, double momentum) {
         this.mlp = mlp;
         this.inputs = inputs;
         this.expectedOutputs = expectedOutputs;
         this.graphUtil = new GraphUtil();
+        this.learningRate = learningRate;
+        this.momentum = momentum;
     }
 
     public void train() {
 
-        mlp.setLearningRate(learningRate);
-        mlp.setMomentum(momentum);
+        prepareLearningParameters();
 
-        List<XYDataItem> dataItems = new ArrayList<>();
-
+        double MSE;
         int epoch = 0;
-        double cost;
         List<Double> result;
+        List<XYDataItem> dataItems = new ArrayList<>();
         do {
             epoch++;
-            cost = 0.0;
+            MSE = 0.0;
             for (int i = 0; i < inputs.size(); i++) {
                 result = mlp.train(
                         inputs.get(i),
                         expectedOutputs.get(i)
                 );
-
-                cost += calculateCost(result, expectedOutputs.get(i));
+                MSE += calculateMSE(result, expectedOutputs.get(i));
             }
+            dataItems.add(new XYDataItem(epoch, MSE));
+        } while (epoch < maxIterations && MSE > eps);
 
-            dataItems.add(new XYDataItem(epoch, cost));
+        printTrainingSummary(epoch, MSE);
+        plotMSE(dataItems);
+    }
 
-        } while (epoch < maxIterations && cost > eps);
+    private void prepareLearningParameters() {
+        mlp.setLearningRate(learningRate);
+        mlp.setMomentum(momentum);
+    }
 
+    private void printTrainingSummary(int epoch, double cost) {
         System.out.println("Trening summary: ");
         System.out.println("Iterations: " + epoch);
         System.out.println("Cost: " + cost);
-
-        graphUtil.printGraph("MSU errors", dataItems, "epoch", "MSU");
     }
 
-    private double calculateCost(List<Double> result, List<Double> expectedOutput) {
+    private void plotMSE(List<XYDataItem> dataItems) {
+        graphUtil.printGraph("MSE error", dataItems, "epoch", "MSE");
+    }
+
+    private double calculateMSE(List<Double> result, List<Double> expectedOutput) {
         Double cost = 0.0, localError;
         for (int i = 0; i < expectedOutput.size(); i++) {
             localError = expectedOutput.get(i) - result.get(i + 1);

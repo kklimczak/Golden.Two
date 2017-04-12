@@ -12,10 +12,15 @@ class Transformation {
     private MLP mlp;
 
     private List<List<Double>> trainList;
+    private double learningRate;
+    private double momentum;
 
-    Transformation(int networkNumb) {
+    Transformation(int networkNumb, double learningRate, double momentum) {
         createNetworks();
         setNetwork(networkNumb);
+
+        this.learningRate = learningRate;
+        this.momentum = momentum;
 
         trainList = loadTrainList();
     }
@@ -63,13 +68,14 @@ class Transformation {
     }
 
     void train() {
-        Trainer trainer = new Trainer(mlp, trainList, trainList);
+        Trainer trainer = new Trainer(mlp, trainList, trainList, learningRate, momentum);
         trainer.train();
 
         simpleTrainingCheck(trainList);
     }
 
     private void simpleTrainingCheck(List<List<Double>> trainList) {
+        System.out.println("Below should be printed identity matrix");
         for (List<Double> example : trainList) {
             mlp.propagate(example)
                     .stream()
