@@ -1,5 +1,5 @@
 package algorithm.keyGen;
 
 public interface KeyGenerator {
-    long[] generatePrivateKey();
+    void generateKeys();
 }
