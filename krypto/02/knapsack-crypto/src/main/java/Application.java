@@ -11,8 +11,14 @@ public class Application {
     public static void main(String[] args) {
 //        runKnapsack();
 //        runPlecakowy();
+        runMine();
+    }
+
+    private static void runMine() {
         SimpleKeyGenerator keyGenerator = new SimpleKeyGenerator();
         MHCipher cipher = new MHCipher(keyGenerator);
+        long[] encrypt = cipher.encrypt("hello hello hello hello hello hello hello hello");
+        System.out.println(cipher.decrypt(encrypt));
     }
 
 
@@ -40,10 +46,10 @@ public class Application {
         int[] wt = new int[n + 1];
         int[] val = new int[n + 1];
 
-        System.out.println("\nEnter weight for "+ n +" elements");
+        System.out.println("\nEnter weight for " + n + " elements");
         for (int i = 1; i <= n; i++)
             wt[i] = scan.nextInt();
-        System.out.println("\nEnter value for "+ n +" elements");
+        System.out.println("\nEnter value for " + n + " elements");
         for (int i = 1; i <= n; i++)
             val[i] = scan.nextInt();
 
