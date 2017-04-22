@@ -1,20 +1,22 @@
-package algorithm.keyGen.impl;
+package algorithm;
 
-import algorithm.keyGen.KeyGenerator;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
-public class SimpleKeyGenerator implements KeyGenerator {
+public class SimpleKeyGenerator {
 
+    @Getter(AccessLevel.PACKAGE)
+    @Setter(AccessLevel.PACKAGE)
+    private long[] privateKey;
+
+    private long[] publicKey;
     private int keySize = 8;
-    private long[] privateKey, publicKey;
     private long multiplier, modulus;
 
     public SimpleKeyGenerator() {
-        this.multiplier = 1110;
-        this.modulus = 4141;
+        this.multiplier = 4571;
+        this.modulus = 7187;
         generateKeys();
     }
 
@@ -24,7 +26,6 @@ public class SimpleKeyGenerator implements KeyGenerator {
         generateKeys();
     }
 
-    @Override
     public void generateKeys() {
         privateKey = generatePrivateKey();
         publicKey = generatePublicKey();

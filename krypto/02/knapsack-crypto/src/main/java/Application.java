@@ -1,3 +1,5 @@
+import algorithm.MHCipher;
+import algorithm.SimpleKeyGenerator;
 import examples.Knapsack;
 import examples.Plecakowy;
 
@@ -9,6 +11,8 @@ public class Application {
     public static void main(String[] args) {
 //        runKnapsack();
 //        runPlecakowy();
+        SimpleKeyGenerator keyGenerator = new SimpleKeyGenerator();
+        MHCipher cipher = new MHCipher(keyGenerator);
     }
 
 

@@ -81,11 +81,11 @@ public class Encrypt extends Applet implements ActionListener {
                     getInt(modulus)), publickey[i]);
     }
 
-    private int translateChar(char x, JTextField[] k) {
+    private int translateChar(char x, JTextField[] publicKey) {
         int sum=0;
 
         for(int i=0; i < 8; i++) {
-            if(2*(x/2) != x) sum += getInt(k[i]);
+            if(2*(x/2) != x) sum += getInt(publicKey[i]);
             x /=2;
         }
         return sum;
