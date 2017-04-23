@@ -6,32 +6,19 @@ import lombok.*;
 @AllArgsConstructor
 public class SimpleKeyGenerator {
 
-    @Getter(AccessLevel.PACKAGE)
-    @Setter(AccessLevel.PACKAGE)
-    private long[] privateKey;
-
-    private long[] publicKey;
     private int keySize = 8;
     private long multiplier, modulus;
 
     public SimpleKeyGenerator() {
-        this.multiplier = 4571;
-        this.modulus = 7187;
-        generateKeys();
+        this(4571L, 7187L);
     }
 
     public SimpleKeyGenerator(long multiplier, long modulus) {
         this.multiplier = multiplier;
         this.modulus = modulus;
-        generateKeys();
     }
 
-    public void generateKeys() {
-        privateKey = generatePrivateKey();
-        publicKey = generatePublicKey();
-    }
-
-    private long[] generatePrivateKey() {
+    long[] generateDefaultPrivateKey() {
         long[] newPrivateKey = new long[keySize];
         long keyElement = 1;
         for (int i = 0; i < newPrivateKey.length; i++) {
@@ -41,7 +28,7 @@ public class SimpleKeyGenerator {
         return newPrivateKey;
     }
 
-    private long[] generatePublicKey() {
+    long[] generatePublicKey(long[] privateKey) {
         long[] newPublicKey = new long[keySize];
         for (int i = 0; i < privateKey.length; i++) {
             newPublicKey[i] = (privateKey[i] * multiplier) % modulus;

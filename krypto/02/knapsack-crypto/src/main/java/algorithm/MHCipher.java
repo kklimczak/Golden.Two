@@ -1,11 +1,10 @@
 package algorithm;
 
-import lombok.Getter;
-import lombok.Setter;
+import exception.MessageException;
+import lombok.Data;
 
+@Data
 public class MHCipher {
-    @Getter
-    @Setter
     private SimpleKeyGenerator keyGen;
     private long[] privateKey, publicKey;
 
@@ -15,75 +14,78 @@ public class MHCipher {
     }
 
     private void generateKeys() {
-        this.privateKey = keyGen.getPrivateKey();
-        this.publicKey = keyGen.getPublicKey();
+        privateKey = keyGen.generateDefaultPrivateKey();
+        publicKey = keyGen.generatePublicKey(privateKey);
     }
 
-    public long[] encrypt(String message) {
-        int len = message.length();
-        if (len <= 0)
-            return null;
+    public void generatePublicKey() {
+        publicKey = keyGen.generatePublicKey(privateKey);
+    }
 
-        long[] output = new long[len];
-        output[0] = translateChar(message.charAt(0));
-        for (int i = 1; i < len; i++) {
-            output[i] = translateChar(message.charAt(i));
+    public long[] encrypt(String message) throws MessageException {
+        int length = message.length();
+        if (length <= 0)
+            throw new MessageException("Message is empty");
+
+        long[] output = new long[length];
+        for (int i = 0; i < length; i++) {
+            output[i] = calculateChar(message.charAt(i));
         }
         return output;
     }
 
     public String decrypt(long[] cipher) {
-        StringBuilder str = new StringBuilder();
-        long inv = inverse();
+        StringBuilder stringBuilder = new StringBuilder();
+        long multiInverse = calculateMultiplierModuloInverse();
 
         for (long element : cipher) {
-            str.append((char) xlateBack(((inv * element) % keyGen.getModulus())));
+            long encryptedChar = (multiInverse * element) % keyGen.getModulus();
+            stringBuilder.append(decryptChar(encryptedChar));
         }
 
-        return str.toString();
+        return stringBuilder.toString();
     }
 
-    private int xlateBack(long x) {
-        int m = 128;
-        int ch = 0;
-        for (int i = 7; i >= 0 && x > 0; i--) {
-            if (privateKey[i] <= x) {
-                x -= privateKey[i];
-                ch += m;
+    private char decryptChar(long encryptedChar) {
+        int MSB = 0x80;
+        int outputChar = 0;
+        for (int i = 7; i >= 0 && encryptedChar > 0; i--) {
+            if (privateKey[i] <= encryptedChar) {
+                encryptedChar -= privateKey[i];
+                outputChar += MSB;
             }
-            m /= 2;
+            MSB /= 2;
         }
-        return ch;
+        return (char) outputChar;
     }
 
-    private long inverse() {
-        long f;
-        long multiplier = keyGen.getMultiplier();
-        long modulus = keyGen.getModulus();
-
-        for (int k = 1; k < modulus; k++) {
-            f = 0;
-            for (int j = 0; j < modulus; j++) {
-                if (((k * ((multiplier * j) % modulus)) % modulus) == j) {
-                    f += 1;
-                } else {
-                    break;
-                }
-            }
-            if (f == modulus) {
-                return k;
-            }
-        }
-        return 0;
+    private long calculateMultiplierModuloInverse() {
+        long[] response = extendedEuclid(keyGen.getMultiplier(), keyGen.getModulus());
+        return response[0];
     }
 
-    private long translateChar(char x) {
-        long sum = 0;
+    private long[] extendedEuclid(long c, long d) {
+        if (d == 0)
+            return new long[]{1, 0};
 
+        long[] response = extendedEuclid(d, c % d);
+        long a = response[1];
+        long b = response[0] - (c / d) * response[1];
+        return new long[]{a, b};
+    }
+
+    private long calculateChar(char x) {
+        long output = 0;
         for (int i = 0; i < 8; i++) {
-            if (2 * (x / 2) != x) sum += publicKey[i];
+            if (isOdd(x)) {
+                output += publicKey[i];
+            }
             x /= 2;
         }
-        return sum;
+        return output;
+    }
+
+    private boolean isOdd(char x) {
+        return x % 2 != 0;
     }
 }
