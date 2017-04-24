@@ -29,7 +29,7 @@ public class MHCipher {
 
         long[] output = new long[length];
         for (int i = 0; i < length; i++) {
-            output[i] = calculateChar(message.charAt(i));
+            output[i] = calculateEncryptedChar(message.charAt(i));
         }
         return output;
     }
@@ -50,7 +50,7 @@ public class MHCipher {
         int MSB = 0x80;
         int outputChar = 0;
         for (int i = 7; i >= 0 && encryptedChar > 0; i--) {
-            if (privateKey[i] <= encryptedChar) {
+            if (encryptedChar >= privateKey[i]) {
                 encryptedChar -= privateKey[i];
                 outputChar += MSB;
             }
@@ -74,7 +74,7 @@ public class MHCipher {
         return new long[]{a, b};
     }
 
-    private long calculateChar(char x) {
+    private long calculateEncryptedChar(char x) {
         long output = 0;
         for (int i = 0; i < 8; i++) {
             if (isOdd(x)) {
