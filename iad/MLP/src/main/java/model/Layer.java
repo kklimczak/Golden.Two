@@ -19,7 +19,7 @@ class Layer {
         errors = new ArrayList<>();
         prevDeltaWeights = new ArrayList<>();
         this.ifBias = ifBias;
-        this.layerSize = layerSize + 1; // + 1 for bias
+        this.layerSize = layerSize + 1;
 
         generateWeights(prevLayerSize);
         initPrevDeltaWeights(prevLayerSize);
@@ -30,17 +30,17 @@ class Layer {
         for (int i = 0; i < this.layerSize; i++) {
             weights = new ArrayList<>();
             for (int j = 0; j < prevLayerSize + 1; j++) {
-               weights.add(0.0);
+                weights.add(0.0);
             }
             this.prevDeltaWeights.add(weights);
         }
     }
 
-    double getPrevDelta(int neuronIndex, int weightIndex){
+    double getPrevDelta(int neuronIndex, int weightIndex) {
         return prevDeltaWeights.get(neuronIndex).get(weightIndex);
     }
 
-    void setPrevDelta(int neuronIndex, int weightIndex, double prevDeltaWeight){
+    void setPrevDelta(int neuronIndex, int weightIndex, double prevDeltaWeight) {
         this.prevDeltaWeights.get(neuronIndex).set(weightIndex, prevDeltaWeight);
     }
 
@@ -78,11 +78,7 @@ class Layer {
     }
 
     private void addBias() {
-        if (ifBias) {
-            neurons.add(1.0);
-        } else {
-            neurons.add(0.0);
-        }
+        neurons.add(ifBias ? 1.0 : 0.0);
     }
 
     int getLayerSize() {
@@ -100,9 +96,6 @@ class Layer {
     void setInput(List<Double> input) {
         neurons.clear();
         addBias();
-
-        for (Double in : input) {
-            neurons.add(in);
-        }
+        neurons.addAll(input);
     }
 }
