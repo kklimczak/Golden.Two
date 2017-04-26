@@ -39,6 +39,8 @@ public class Application {
                     strategyType = StrategyType.ASTR;
                     strategy = new AStarStrategy();
                     break;
+                case "exit":
+                    System.exit(0);
                 default:
             }
 
@@ -49,13 +51,12 @@ public class Application {
                 System.out.println(strategyType.toString());
             }
 
-            Board board = FileUtils.getInitialSetup(params[2]);
-            System.out.println(board.toString());
-
             strategy.setPattern(params[1])
+                    .setInitialBoard(FileUtils.getInitialSetup(params[2]))
                     .run();
 
             strategyType = null;
+            strategy = null;
         }
     }
 }
