@@ -126,4 +126,16 @@ public class State {
         return next;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        int numbersSize = sizeX * sizeY - 1;
+        for (int i = 0; i < numbersSize; i++) {
+            hash *= 31;
+            hash += numbers[i];
+        }
+        return hash;
+
+    }
+
 }
