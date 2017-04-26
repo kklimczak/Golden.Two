@@ -1,10 +1,12 @@
 package com.goldentwo;
 
+import com.goldentwo.models.Board;
 import com.goldentwo.models.StrategyType;
 import com.goldentwo.strategies.AStarStrategy;
 import com.goldentwo.strategies.BfsStrategy;
 import com.goldentwo.strategies.DfsStrategy;
 import com.goldentwo.strategies.Strategy;
+import com.goldentwo.utils.FileUtils;
 
 import java.util.Scanner;
 
@@ -40,14 +42,17 @@ public class Application {
                 default:
             }
 
-            if (strategyType == null || strategy == null) {
+            if (strategyType == null) {
                 System.out.println("Wrong strategy");
                 continue;
             } else {
                 System.out.println(strategyType.toString());
             }
 
-            strategy.setParams(params[1])
+            Board board = FileUtils.getInitialSetup(params[2]);
+            System.out.println(board.toString());
+
+            strategy.setPattern(params[1])
                     .run();
 
             strategyType = null;
