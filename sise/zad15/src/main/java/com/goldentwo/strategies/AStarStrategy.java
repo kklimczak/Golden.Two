@@ -2,7 +2,10 @@ package com.goldentwo.strategies;
 
 import com.goldentwo.models.Node;
 import com.goldentwo.models.NodeAStar;
+import com.goldentwo.models.Summary;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.PriorityQueue;
@@ -13,16 +16,15 @@ public class AStarStrategy implements Strategy {
     private String pattern;
     private PriorityQueue<NodeAStar> openNodes = new PriorityQueue<>();
     private Set<NodeAStar> closeNodes = new HashSet<>();
-    private int visited;
+
+    private Node solvedPuzzle;
 
     public Strategy setPattern(String pattern) {
-        System.out.println(pattern);
         this.pattern = pattern;
         return this;
     }
 
-    public void run(Node node) {
-        System.out.println("run()");
+    public Summary run(Node node) {
 
         NodeAStar stateAStar = new NodeAStar(
                 node.getSizeX(),
@@ -32,7 +34,33 @@ public class AStarStrategy implements Strategy {
                 getHeuristicFromPattern()
         );
 
+        long startTime = System.nanoTime();
         astr(stateAStar);
+        long endTime = System.nanoTime();
+
+        double spendTimeToSolve = (endTime - startTime) / 1e6;
+
+        DecimalFormat df = new DecimalFormat("#.###");
+        df.setRoundingMode(RoundingMode.CEILING);
+
+        Node solvedPuzzleTemp = solvedPuzzle;
+
+        StringBuffer string = new StringBuffer();
+        string.append(solvedPuzzleTemp.getMove());
+        while (solvedPuzzleTemp.getPreviousNode() != null) {
+            if (solvedPuzzleTemp.getPreviousNode().getMove() != null) {
+                string.append(solvedPuzzleTemp.getPreviousNode().getMove().toString());
+            }
+            solvedPuzzleTemp = solvedPuzzleTemp.getPreviousNode();
+        }
+
+        return Summary.builder()
+                .moves(string.length())
+                .path(string.reverse().toString())
+                .nodeVisited(openNodes.size())
+                .nodeProcessed(closeNodes.size())
+                .spendTime(df.format(spendTimeToSolve))
+                .build();
     }
 
     private int getHeuristicFromPattern() {
@@ -55,6 +83,7 @@ public class AStarStrategy implements Strategy {
 
             if (state.isSolved()) {
                 System.out.println(Arrays.toString(state.getNumbers()));
+                solvedPuzzle = state;
                 break;
             }
 
@@ -68,28 +97,24 @@ public class AStarStrategy implements Strategy {
 
             if (next != null && !closeNodes.contains(next)) {
                 openNodes.add(next);
-                visited++;
             }
 
             next = NodeAStar.moveDown(state);
 
             if (next != null && !closeNodes.contains(next)) {
                 openNodes.add(next);
-                visited++;
             }
 
             next = NodeAStar.moveLeft(state);
 
             if (next != null && !closeNodes.contains(next)) {
                 openNodes.add(next);
-                visited++;
             }
 
             next = NodeAStar.moveRight(state);
 
             if (next != null && !closeNodes.contains(next)) {
                 openNodes.add(next);
-                visited++;
             }
 
         }

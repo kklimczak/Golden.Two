@@ -2,7 +2,7 @@ package com.goldentwo.utils;
 
 import com.goldentwo.models.Node;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,6 +62,24 @@ public class FileUtils {
         }
 
         return output;
+    }
+
+    public static void writeFile(List<String> stringList, String fileName) {
+        try {
+            File fout = new File(fileName);
+            FileOutputStream fos = new FileOutputStream(fout);
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+
+            for (String aStringList : stringList) {
+                bw.write(aStringList);
+                bw.newLine();
+            }
+
+            bw.close();
+        } catch (IOException e) {
+            e.getStackTrace();
+        }
     }
 
 }
