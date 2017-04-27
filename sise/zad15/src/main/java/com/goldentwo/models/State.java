@@ -51,9 +51,12 @@ public class State {
             return null;
         }
 
+        int[] newNumbers = new int[state.getNumbers().length];
+        System.arraycopy(state.getNumbers(), 0, newNumbers, 0, state.getNumbers().length);
+
         State next = State.builder()
                 .blankTilePosition(state.getBlankTilePosition())
-                .numbers(state.getNumbers())
+                .numbers(newNumbers)
                 .sizeX(state.getSizeX())
                 .sizeY(state.getSizeY())
                 .build();
@@ -71,9 +74,12 @@ public class State {
             return null;
         }
 
+        int[] newNumbers = new int[state.getNumbers().length];
+        System.arraycopy(state.getNumbers(), 0, newNumbers, 0, state.getNumbers().length);
+
         State next = State.builder()
                 .blankTilePosition(state.getBlankTilePosition())
-                .numbers(state.getNumbers())
+                .numbers(newNumbers)
                 .sizeX(state.getSizeX())
                 .sizeY(state.getSizeY())
                 .build();
@@ -91,9 +97,12 @@ public class State {
             return null;
         }
 
+        int[] newNumbers = new int[state.getNumbers().length];
+        System.arraycopy(state.getNumbers(), 0, newNumbers, 0, state.getNumbers().length);
+
         State next = State.builder()
                 .blankTilePosition(state.getBlankTilePosition())
-                .numbers(state.getNumbers())
+                .numbers(newNumbers)
                 .sizeX(state.getSizeX())
                 .sizeY(state.getSizeY())
                 .build();
@@ -111,9 +120,12 @@ public class State {
             return null;
         }
 
+        int[] newNumbers = new int[state.getNumbers().length];
+        System.arraycopy(state.getNumbers(), 0, newNumbers, 0, state.getNumbers().length);
+
         State next = State.builder()
                 .blankTilePosition(state.getBlankTilePosition())
-                .numbers(state.getNumbers())
+                .numbers(newNumbers)
                 .sizeX(state.getSizeX())
                 .sizeY(state.getSizeY())
                 .build();
