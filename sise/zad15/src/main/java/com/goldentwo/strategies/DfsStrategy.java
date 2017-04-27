@@ -23,13 +23,12 @@ public class DfsStrategy implements Strategy {
 
     public void run(Node node) {
         System.out.println("run()");
-        dfs(node, 50);
+        prepareToSolve(node);
+        dfs(node, 30);
         System.out.println("run() end");
     }
 
     private void dfs(Node node, int depth) {
-        prepareToSolve(node);
-
         Node next;
 
         if (depth < 0) {
@@ -39,6 +38,7 @@ public class DfsStrategy implements Strategy {
         if (node.isSolved()) {
             rightNode = node;
             System.out.println(Arrays.toString(node.getNumbers()));
+            System.out.println(depth);
         }
 
         if (rightNode != null) {
