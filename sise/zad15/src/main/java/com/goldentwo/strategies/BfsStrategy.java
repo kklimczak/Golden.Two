@@ -54,49 +54,38 @@ public class BfsStrategy implements Strategy {
                     case 'U':
 
                         next = State.moveUp(state);
-                        if (next != null && !states.contains(next)) {
-
-                            states.add(next);
-                            stateQueue.add(next);
-                            visited++;
-
-                        }
+                        checkIsStateCorrect(next);
 
                         break;
                     case 'D':
 
                         next = State.moveDown(state);
-                        if (next != null && !states.contains(next)) {
-
-                            states.add(next);
-                            stateQueue.add(next);
-                            visited++;
-                        }
+                        checkIsStateCorrect(next);
 
                         break;
                     case 'L':
                         next = State.moveLeft(state);
-                        if (next != null && !states.contains(next)) {
-
-                            states.add(next);
-                            stateQueue.add(next);
-                            visited++;
-                        }
+                        checkIsStateCorrect(next);
 
                         break;
                     case 'R':
                         next = State.moveRight(state);
-                        if (next != null && !states.contains(next)) {
-
-                            states.add(next);
-                            stateQueue.add(next);
-                            visited++;
-                        }
+                        checkIsStateCorrect(next);
 
                         break;
                 }
 
             }
+
+        }
+    }
+
+    private void checkIsStateCorrect(State next) {
+        if (next != null && !states.contains(next)) {
+
+            states.add(next);
+            stateQueue.add(next);
+            visited++;
 
         }
     }
