@@ -29,10 +29,19 @@ public class AStarStrategy implements Strategy {
                 node.getSizeY(),
                 node.getBlankTilePosition(),
                 node.getNumbers(),
-                0
+                getHeuristicFromPattern()
         );
 
         astr(stateAStar);
+    }
+
+    private int getHeuristicFromPattern() {
+        if (pattern.equals("manh")) {
+            return 1;
+        } else if (pattern.equals("hamm")) {
+            return 0;
+        }
+        return -1;
     }
 
     private void astr(NodeAStar state) {
