@@ -4,10 +4,15 @@ import com.goldentwo.models.Board;
 import com.goldentwo.models.MoveType;
 import com.goldentwo.models.State;
 
+import java.util.*;
+
 public class BfsStrategy implements Strategy {
 
     private String pattern;
     private Board initialBoard;
+    private Set<State> states = new HashSet<>();
+    private Queue<State> stateQueue = new LinkedList<>();
+    private int visited = 0;
 
     public Strategy setPattern(String pattern) {
         System.out.println(pattern);
@@ -23,16 +28,85 @@ public class BfsStrategy implements Strategy {
 
     public void run() {
         System.out.println("run()");
-        int[] array = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,0,15};
-        State state = new State(4, 4, 14, array);
+        State state = new State(initialBoard.getSizeX(), initialBoard.getSizeY(), initialBoard.getBlankTilePosition(), initialBoard.getNumbers());
 
-        State newState = State.moveLeft(state);
-        if (newState.isSolved()) {
-            System.out.println("solved!");
+        bfs(state);
+        System.out.println("run() end");
+    }
+
+    private void bfs(State state) {
+        prepareToSolve(state);
+
+        State next;
+
+        while (!stateQueue.isEmpty()) {
+            visited++;
+            state = stateQueue.poll();
+
+            if (state.isSolved()) {
+                System.out.println("");
+                System.out.println(Arrays.toString(state.getNumbers()));
+                break;
+            }
+
+            for (int i = 0; i < pattern.length(); i++) {
+                switch (pattern.charAt(i)) {
+                    case 'U':
+
+                        next = State.moveUp(state);
+                        if (next != null && !states.contains(next)) {
+
+                            states.add(next);
+                            stateQueue.add(next);
+                            visited++;
+
+                        }
+
+                        break;
+                    case 'D':
+
+                        next = State.moveDown(state);
+                        if (next != null && !states.contains(next)) {
+
+                            states.add(next);
+                            stateQueue.add(next);
+                            visited++;
+                        }
+
+                        break;
+                    case 'L':
+                        next = State.moveLeft(state);
+                        if (next != null && !states.contains(next)) {
+
+                            states.add(next);
+                            stateQueue.add(next);
+                            visited++;
+                        }
+
+                        break;
+                    case 'R':
+                        next = State.moveRight(state);
+                        if (next != null && !states.contains(next)) {
+
+                            states.add(next);
+                            stateQueue.add(next);
+                            visited++;
+                        }
+
+                        break;
+                }
+
+            }
+
         }
     }
 
-    private void bfs() {
+    private void prepareToSolve(State state) {
+        states.clear();
+        stateQueue.clear();
+
+        states.add(state);
+        stateQueue.add(state);
 
     }
 }
