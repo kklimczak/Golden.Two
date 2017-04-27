@@ -1,6 +1,6 @@
 package com.goldentwo.strategies;
 
-import com.goldentwo.models.Board;
+import com.goldentwo.models.Node;
 import com.goldentwo.models.NodeAStar;
 
 import java.util.Arrays;
@@ -11,7 +11,6 @@ import java.util.Set;
 public class AStarStrategy implements Strategy {
 
     private String pattern;
-    private Board initialBoard;
     private PriorityQueue<NodeAStar> openNodes = new PriorityQueue<>();
     private Set<NodeAStar> closeNodes = new HashSet<>();
     private int visited;
@@ -22,17 +21,16 @@ public class AStarStrategy implements Strategy {
         return this;
     }
 
-    public Strategy setInitialBoard(Board board) {
-        this.initialBoard = board;
-        System.out.println(board);
-        return this;
-    }
-
-    public void run() {
+    public void run(Node node) {
         System.out.println("run()");
 
-        NodeAStar stateAStar = new NodeAStar(initialBoard.getSizeX(), initialBoard.getSizeY(), initialBoard.getBlankTilePosition(),
-                initialBoard.getNumbers(), 0);
+        NodeAStar stateAStar = new NodeAStar(
+                node.getSizeX(),
+                node.getSizeY(),
+                node.getBlankTilePosition(),
+                node.getNumbers(),
+                0
+        );
 
         astr(stateAStar);
     }
@@ -43,7 +41,7 @@ public class AStarStrategy implements Strategy {
 
         NodeAStar next;
 
-        while(!openNodes.isEmpty()) {
+        while (!openNodes.isEmpty()) {
             state = openNodes.poll();
 
             if (state.isSolved()) {

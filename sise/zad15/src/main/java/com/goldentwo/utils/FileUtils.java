@@ -1,49 +1,67 @@
 package com.goldentwo.utils;
 
-import com.goldentwo.models.Board;
+import com.goldentwo.models.Node;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileUtils {
 
-    private static BufferedReader readFile(String fileName) throws IOException {
-        InputStream fis = new FileInputStream(fileName);
-        InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
-        return new BufferedReader(isr);
-    }
+    public static Node readNodeFromFile(String fileName) {
+        Path path = Paths.get(fileName);
+        List<Integer> fileValues = readFileValues(path);
 
-    public static Board getInitialSetup(String fileName) {
-        try {
-            BufferedReader br = readFile(fileName);
-            Board board = new Board();
-            String line;
-            String[] lineAfterSplit;
-            int counter = -1;
-            while ((line = br.readLine()) != null) {
-                lineAfterSplit = line.split(" ");
-                if (counter == -1) {
-                    board.setSizeY(Integer.parseInt(lineAfterSplit[0]));
-                    board.setSizeX(Integer.parseInt(lineAfterSplit[1]));
-                    board.setNumbers(new int[board.getSizeX()*board.getSizeY()]);
-                    counter++;
-                } else {
-                    for (String aLineSplitted : lineAfterSplit) {
-                        board.getNumbers()[counter] = Integer.parseInt(aLineSplitted);
-                        if (Integer.parseInt(aLineSplitted) == 0) {
-                            board.setBlankTilePosition(counter);
-                        }
-                        counter++;
-                    }
-                }
-            }
+        Node output = new Node();
 
-            return board;
-        } catch (IOException e) {
-            e.getStackTrace();
-            return null;
+        int sizeX = fileValues.get(0);
+        int sizeY = fileValues.get(1);
+
+        output.setSizeX(sizeX);
+        output.setSizeY(sizeY);
+
+        int[] numbers = new int[sizeX * sizeY];
+
+        for (int i = 2; i < fileValues.size(); i++) {
+            numbers[i - 2] = fileValues.get(i);
         }
 
+        int blankTaleIndex = getBlankTaleIndex(numbers);
+        output.setBlankTilePosition(blankTaleIndex);
+
+        output.setNumbers(numbers);
+
+        return output;
+    }
+
+    private static int getBlankTaleIndex(int[] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            if (numbers[i] == 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private static List<Integer> readFileValues(Path path) {
+        List<Integer> output = new ArrayList<>();
+        try {
+            Files.lines(path).forEach(
+                    line -> {
+                        String[] split = line.split(" ");
+                        for (String lineElement : split) {
+                            output.add(Integer.valueOf(lineElement));
+                        }
+                    }
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return output;
     }
 
 }

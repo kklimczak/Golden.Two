@@ -1,6 +1,6 @@
 package com.goldentwo;
 
-import com.goldentwo.models.Board;
+import com.goldentwo.models.Node;
 import com.goldentwo.models.StrategyType;
 import com.goldentwo.strategies.AStarStrategy;
 import com.goldentwo.strategies.BfsStrategy;
@@ -51,9 +51,10 @@ public class Application {
                 System.out.println(strategyType.toString());
             }
 
+            Node initialNode = FileUtils.readNodeFromFile(params[2]);
+
             strategy.setPattern(params[1])
-                    .setInitialBoard(FileUtils.getInitialSetup(params[2]))
-                    .run();
+                    .run(initialNode);
 
             strategyType = null;
             strategy = null;

@@ -1,7 +1,5 @@
 package com.goldentwo.strategies;
 
-import com.goldentwo.models.Board;
-import com.goldentwo.models.MoveType;
 import com.goldentwo.models.Node;
 
 import java.util.*;
@@ -9,7 +7,6 @@ import java.util.*;
 public class BfsStrategy implements Strategy {
 
     private String pattern;
-    private Board initialBoard;
     private Set<Node> nodes = new HashSet<>();
     private Queue<Node> nodeQueue = new LinkedList<>();
     private int visited = 0;
@@ -20,16 +17,8 @@ public class BfsStrategy implements Strategy {
         return this;
     }
 
-    public Strategy setInitialBoard(Board board) {
-        this.initialBoard = board;
-        System.out.println(board);
-        return this;
-    }
-
-    public void run() {
+    public void run(Node node) {
         System.out.println("run()");
-        Node node = new Node(initialBoard.getSizeX(), initialBoard.getSizeY(), initialBoard.getBlankTilePosition(), initialBoard.getNumbers());
-
         bfs(node);
         System.out.println("run() end");
     }
@@ -44,7 +33,6 @@ public class BfsStrategy implements Strategy {
             node = nodeQueue.poll();
 
             if (node.isSolved()) {
-                System.out.println("");
                 System.out.println(Arrays.toString(node.getNumbers()));
                 break;
             }

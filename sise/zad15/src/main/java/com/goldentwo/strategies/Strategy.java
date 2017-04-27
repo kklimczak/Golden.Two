@@ -1,11 +1,10 @@
 package com.goldentwo.strategies;
 
-import com.goldentwo.models.Board;
+import com.goldentwo.models.Node;
 
 public interface Strategy {
 
     Strategy setPattern(String pattern);
-    Strategy setInitialBoard(Board board);
-    void run();
+    void run(Node node);
 
 }

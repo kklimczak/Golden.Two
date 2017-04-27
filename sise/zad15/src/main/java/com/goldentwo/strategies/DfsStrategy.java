@@ -1,10 +1,8 @@
 package com.goldentwo.strategies;
 
-import com.goldentwo.models.Board;
 import com.goldentwo.models.Node;
 import lombok.NoArgsConstructor;
 
-import javax.management.StandardEmitterMBean;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +11,6 @@ import java.util.Set;
 public class DfsStrategy implements Strategy {
 
     private String pattern;
-    private Board initialBoard;
     private Set<Node> nodes = new HashSet<>();
     private int visited = 0;
     private Node rightNode;
@@ -24,17 +21,10 @@ public class DfsStrategy implements Strategy {
         return this;
     }
 
-    public Strategy setInitialBoard(Board board) {
-        this.initialBoard = board;
-        System.out.println(board);
-        return this;
-    }
-
-    public void run() {
+    public void run(Node node) {
         System.out.println("run()");
-        Node node = new Node(initialBoard.getSizeX(), initialBoard.getSizeY(), initialBoard.getBlankTilePosition(), initialBoard.getNumbers());
         dfs(node, 50);
-
+        System.out.println("run() end");
     }
 
     private void dfs(Node node, int depth) {
@@ -86,7 +76,7 @@ public class DfsStrategy implements Strategy {
             nodes.add(next);
             visited++;
 
-            dfs(next, depth-1);
+            dfs(next, depth - 1);
 
             if (rightNode != null) {
                 return true;
