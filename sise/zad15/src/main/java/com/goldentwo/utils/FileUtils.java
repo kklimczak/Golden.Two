@@ -17,8 +17,8 @@ public class FileUtils {
 
         Node output = new Node();
 
-        int sizeX = fileValues.get(0);
-        int sizeY = fileValues.get(1);
+        int sizeY = fileValues.get(0);
+        int sizeX = fileValues.get(1);
 
         output.setSizeX(sizeX);
         output.setSizeY(sizeY);
