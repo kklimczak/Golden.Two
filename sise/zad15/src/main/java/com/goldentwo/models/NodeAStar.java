@@ -35,7 +35,23 @@ public class NodeAStar extends Node implements Comparable<NodeAStar> {
     }
 
     private int manhattanHeuristic() {
-        return -1;
+        // count tile moves to right position
+        int heuristicValue = 0;
+        int boardNumbers = sizeX * sizeY;
+
+        for (int i = 0; i < boardNumbers; i++) {
+            if (i != getBlankTilePosition()) {
+                int rightPosition = numbers[i] - 1;
+                int xTile = i / sizeX;
+                int yTile = i % sizeY;
+                int xRightTile = rightPosition / sizeX;
+                int yRightTile = rightPosition % sizeY;
+                heuristicValue += Math.abs(xRightTile - xTile);
+                heuristicValue += Math.abs(yRightTile - yTile);
+            }
+        }
+
+        return heuristicValue;
     }
 
     private int hammingHeuristic() {
