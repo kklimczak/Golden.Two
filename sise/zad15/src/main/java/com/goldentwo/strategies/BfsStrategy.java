@@ -2,7 +2,7 @@ package com.goldentwo.strategies;
 
 import com.goldentwo.models.Board;
 import com.goldentwo.models.MoveType;
-import com.goldentwo.models.State;
+import com.goldentwo.models.Node;
 
 import java.util.*;
 
@@ -10,8 +10,8 @@ public class BfsStrategy implements Strategy {
 
     private String pattern;
     private Board initialBoard;
-    private Set<State> states = new HashSet<>();
-    private Queue<State> stateQueue = new LinkedList<>();
+    private Set<Node> nodes = new HashSet<>();
+    private Queue<Node> nodeQueue = new LinkedList<>();
     private int visited = 0;
 
     public Strategy setPattern(String pattern) {
@@ -28,24 +28,24 @@ public class BfsStrategy implements Strategy {
 
     public void run() {
         System.out.println("run()");
-        State state = new State(initialBoard.getSizeX(), initialBoard.getSizeY(), initialBoard.getBlankTilePosition(), initialBoard.getNumbers());
+        Node node = new Node(initialBoard.getSizeX(), initialBoard.getSizeY(), initialBoard.getBlankTilePosition(), initialBoard.getNumbers());
 
-        bfs(state);
+        bfs(node);
         System.out.println("run() end");
     }
 
-    private void bfs(State state) {
-        prepareToSolve(state);
+    private void bfs(Node node) {
+        prepareToSolve(node);
 
-        State next;
+        Node next;
 
-        while (!stateQueue.isEmpty()) {
+        while (!nodeQueue.isEmpty()) {
             visited++;
-            state = stateQueue.poll();
+            node = nodeQueue.poll();
 
-            if (state.isSolved()) {
+            if (node.isSolved()) {
                 System.out.println("");
-                System.out.println(Arrays.toString(state.getNumbers()));
+                System.out.println(Arrays.toString(node.getNumbers()));
                 break;
             }
 
@@ -53,23 +53,23 @@ public class BfsStrategy implements Strategy {
                 switch (pattern.charAt(i)) {
                     case 'U':
 
-                        next = State.moveUp(state);
+                        next = Node.moveUp(node);
                         checkIsStateCorrect(next);
 
                         break;
                     case 'D':
 
-                        next = State.moveDown(state);
+                        next = Node.moveDown(node);
                         checkIsStateCorrect(next);
 
                         break;
                     case 'L':
-                        next = State.moveLeft(state);
+                        next = Node.moveLeft(node);
                         checkIsStateCorrect(next);
 
                         break;
                     case 'R':
-                        next = State.moveRight(state);
+                        next = Node.moveRight(node);
                         checkIsStateCorrect(next);
 
                         break;
@@ -80,22 +80,22 @@ public class BfsStrategy implements Strategy {
         }
     }
 
-    private void checkIsStateCorrect(State next) {
-        if (next != null && !states.contains(next)) {
+    private void checkIsStateCorrect(Node next) {
+        if (next != null && !nodes.contains(next)) {
 
-            states.add(next);
-            stateQueue.add(next);
+            nodes.add(next);
+            nodeQueue.add(next);
             visited++;
 
         }
     }
 
-    private void prepareToSolve(State state) {
-        states.clear();
-        stateQueue.clear();
+    private void prepareToSolve(Node node) {
+        nodes.clear();
+        nodeQueue.clear();
 
-        states.add(state);
-        stateQueue.add(state);
+        nodes.add(node);
+        nodeQueue.add(node);
 
     }
 }
