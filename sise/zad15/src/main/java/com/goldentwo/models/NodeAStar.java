@@ -59,7 +59,7 @@ public class NodeAStar extends Node implements Comparable<NodeAStar> {
         int boardNumbers = sizeX * sizeY;
 
         for (int i = 0; i < boardNumbers; i++) {
-            if (numbers[i] != correctOrder[i]) {
+            if (numbers[i] != 0 && numbers[i] != correctOrder[i]) {
                 heuristicValue++;
             }
         }
