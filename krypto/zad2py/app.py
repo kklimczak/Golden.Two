@@ -1,0 +1,16 @@
+from mh_cipher import MHCipher
+
+a = MHCipher()
+print("multiplier:")
+print(a.keygen.multiplier)
+print("modulus:")
+print(a.keygen.modulus)
+print("private key:")
+print(a.private_key)
+print("public key:")
+print(a.public_key)
+encrypted_message = a.encrypt("Your message")
+print("encrypted message:")
+print(encrypted_message)
+print("decrypted message:")
+print(a.decrypt(encrypted_message))
