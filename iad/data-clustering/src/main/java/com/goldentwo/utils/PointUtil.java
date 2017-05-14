@@ -17,16 +17,8 @@ public class PointUtil {
         return new Point(x, y);
     }
 
-    public static List<Point> createRandomPoints(int min, int max, int number) {
-        List<Point> points = new ArrayList<>(number);
-        for (int i = 0; i < number; i++) {
-            points.add(createRandomPoint(min, max));
-        }
-        return points;
-    }
-
-    public static double distance(Point p, Point centroid) {
-        return Math.sqrt(Math.pow((centroid.getY() - p.getY()), 2) + Math.pow((centroid.getX() - p.getX()), 2));
+    public static double distance(Point p1, Point p2) {
+        return Math.sqrt(Math.pow((p2.getY() - p1.getY()), 2) + Math.pow((p2.getX() - p1.getX()), 2));
     }
 
     public static List<Point> loadPointsFromFile(String fileName) {

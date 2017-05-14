@@ -1,5 +1,7 @@
 package com.goldentwo.program;
 
+import com.goldentwo.utils.PointUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +46,14 @@ public class Cluster {
         points.clear();
     }
 
-    void plotCluster() {
-        System.out.println("[Cluster: " + id+"]");
-        System.out.println("[Centroid: " + centroid + "]");
+    public double getClusterSquareError() {
+        double temp = 0;
+        double distance;
+        for (Point point : points) {
+            distance = PointUtil.distance(point, this.centroid);
+            temp += distance * distance;
+        }
+        return temp / points.size();
     }
 
 }
