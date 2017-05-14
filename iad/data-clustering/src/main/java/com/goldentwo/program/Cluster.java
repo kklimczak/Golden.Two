@@ -5,15 +5,12 @@ import com.goldentwo.utils.PointUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cluster {
+class Cluster {
 
     private List<Point> points;
     private Point centroid;
-    private int id;
 
-    //Creates a new Cluster
-    Cluster(int id) {
-        this.id = id;
+    Cluster() {
         this.points = new ArrayList<>();
         this.centroid = null;
     }
@@ -26,10 +23,6 @@ public class Cluster {
         points.add(point);
     }
 
-    public void setPoints(List<Point> points) {
-        this.points = points;
-    }
-
     Point getCentroid() {
         return centroid;
     }
@@ -38,15 +31,11 @@ public class Cluster {
         this.centroid = centroid;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    void clear() {
+    void clearPoints() {
         points.clear();
     }
 
-    public double getClusterSquareError() {
+    double getClusterSquareError() {
         double temp = 0;
         double distance;
         for (Point point : points) {

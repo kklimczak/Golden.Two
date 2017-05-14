@@ -21,6 +21,8 @@ public class KMeans {
     private List<Cluster> clusters;
     private AppProperties properties = new AppProperties();
 
+    private List<Double> errors = new ArrayList<>();
+
     private int clustersNumb, minXY, maxXY;
     private double epsilon;
 
@@ -44,7 +46,7 @@ public class KMeans {
 
         if (properties.getProperty("init.method").equals("random partition")) {
             for (int i = 0; i < clustersNumb; i++) {
-                Cluster cluster = new Cluster(i);
+                Cluster cluster = new Cluster();
                 Point centroid = PointUtil.createRandomPoint(minXY, maxXY);
                 cluster.setCentroid(centroid);
                 clusters.add(cluster);
@@ -53,7 +55,7 @@ public class KMeans {
             Collections.shuffle(points);
 
             for (int i = 0; i < clustersNumb; i++) {
-                Cluster cluster = new Cluster(i);
+                Cluster cluster = new Cluster();
                 Point centroid = points.get(i);
                 cluster.setCentroid(centroid);
                 clusters.add(cluster);
@@ -65,36 +67,57 @@ public class KMeans {
 
     public void calculate() {
         boolean finish = false;
-        int iteration = 0;
+
+        double error, prevError;
+        boolean centroidChanged;
+
+        List<Point> prevCentroids = getCentroids();
+        List<Point> currentCentroids;
+        prevError = calculateError();
 
         while (!finish) {
 
             clearClusters();
 
-            List<Point> lastCentroids = getCentroids();
-
             assignCluster();
             calculateCentroids();
 
-            List<Point> currentCentroids = getCentroids();
+            currentCentroids = getCentroids();
+            error = calculateError();
 
-            double distance = 0;
-            for (int i = 0; i < lastCentroids.size(); i++) {
-                distance += PointUtil.distance(lastCentroids.get(i), currentCentroids.get(i));
-            }
-            System.out.println("#################");
-            System.out.println("Iteration: " + (++iteration));
-            System.out.println("Centroid distances: " + distance);
+            errors.add((prevError - error) / error);
 
-            if (distance == 0) {
+            centroidChanged = checkIfCentroidMoved(prevCentroids, currentCentroids);
+            if (!centroidChanged) {
                 finish = true;
             }
+
+            prevError = error;
+            prevCentroids = currentCentroids;
         }
+    }
+
+    private boolean checkIfCentroidMoved(List<Point> prevCentroids, List<Point> currentCentroids) {
+        for (int i = 0; i < prevCentroids.size(); i++) {
+            if (PointUtil.distance(prevCentroids.get(i), currentCentroids.get(i)) != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private double calculateError() {
+        double output = 0;
+        for (Cluster cluster : clusters) {
+            output += cluster.getClusterSquareError();
+        }
+
+        return (output / this.clustersNumb);
     }
 
     private void clearClusters() {
         for (Cluster cluster : clusters) {
-            cluster.clear();
+            cluster.clearPoints();
         }
     }
 
