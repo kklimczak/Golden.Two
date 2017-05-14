@@ -6,10 +6,7 @@ import com.goldentwo.models.Summary;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 public class AStarStrategy implements Strategy {
 
@@ -54,6 +51,8 @@ public class AStarStrategy implements Strategy {
             solvedPuzzleTemp = solvedPuzzleTemp.getPreviousNode();
         }
 
+        System.out.println(Arrays.toString(solvedPuzzle.getNumbers()));
+
         return Summary.builder()
                 .moves(string.length())
                 .path(string.reverse().toString())
@@ -81,39 +80,48 @@ public class AStarStrategy implements Strategy {
         while (!openNodes.isEmpty()) {
             state = openNodes.poll();
 
+//            state = openNodes.stream()
+//                    .min(Comparator.comparingInt(NodeAStar::getHEstimatedMovementCost))
+//                    .orElse(null);
+
+            openNodes.remove(state);
+
+            System.out.println(Arrays.toString(state.getNumbers()));
+//            System.out.println(state.getMove());
+
             if (state.isSolved()) {
                 System.out.println(Arrays.toString(state.getNumbers()));
                 solvedPuzzle = state;
                 break;
             }
 
-            if (closeNodes.contains(state)) {
-                continue;
+            if (!closeNodes.contains(state)) {
+                closeNodes.add(state);
             }
 
-            closeNodes.add(state);
+
 
             next = NodeAStar.moveUp(state);
 
-            if (next != null && !closeNodes.contains(next)) {
+            if (next != null) {
                 openNodes.add(next);
             }
 
             next = NodeAStar.moveDown(state);
 
-            if (next != null && !closeNodes.contains(next)) {
+            if (next != null) {
                 openNodes.add(next);
             }
 
             next = NodeAStar.moveLeft(state);
 
-            if (next != null && !closeNodes.contains(next)) {
+            if (next != null) {
                 openNodes.add(next);
             }
 
             next = NodeAStar.moveRight(state);
 
-            if (next != null && !closeNodes.contains(next)) {
+            if (next != null) {
                 openNodes.add(next);
             }
 
