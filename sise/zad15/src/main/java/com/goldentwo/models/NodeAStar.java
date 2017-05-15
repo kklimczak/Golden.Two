@@ -30,7 +30,7 @@ public class NodeAStar extends Node implements Comparable<NodeAStar> {
         return heuristic == 1 ? manhattanHeuristic() : hammingHeuristic();
     }
 
-    private int getPathScore() {
+    public int getPathScore() {
         return gMovementCost + hEstimatedMovementCost;
     }
 
@@ -64,6 +64,9 @@ public class NodeAStar extends Node implements Comparable<NodeAStar> {
             }
         }
 
+//        System.out.print(heuristicValue);
+        // TODO is zero to break while loop, check this!!!
+
         return heuristicValue;
     }
 
@@ -95,7 +98,11 @@ public class NodeAStar extends Node implements Comparable<NodeAStar> {
         NodeAStar next = null;
 
         if (nextBase != null) {
-            next = new NodeAStar(nextBase.getSizeX(), nextBase.getSizeY(), nextBase.getBlankTilePosition(), nextBase.getNumbers(), state.getHeuristic());
+
+            int[] newNumbers = new int[nextBase.getNumbers().length];
+            System.arraycopy(nextBase.getNumbers(), 0, newNumbers, 0, nextBase.getNumbers().length);
+
+            next = new NodeAStar(nextBase.getSizeX(), nextBase.getSizeY(), nextBase.getBlankTilePosition(), newNumbers, state.getHeuristic());
             next.setMove(nextBase.getMove());
             next.setPreviousNode(state);
 
