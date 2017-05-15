@@ -11,7 +11,6 @@ import org.jfree.ui.RefineryUtilities;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class KMeans {
@@ -19,20 +18,26 @@ public class KMeans {
     private final Logger LOG = Logger.getLogger(getClass().getName());
 
     private List<Point> points;
-    private List<List<Cluster>> allEpochClusters;
-    private List<Cluster> oneEpochCluster;
+    private List<List<Cluster>> allEpochClustersRP;
+    private List<List<Cluster>> allEpochClustersForgy;
+    private List<Cluster> oneEpochClusterRP;
+    private List<Cluster> oneEpochClusterForgy;
+
     private AppProperties properties = new AppProperties();
 
-    private List<List<Double>> errorsPerIteration = new ArrayList<>();
+    private List<List<Double>> errorsPerIterationRP = new ArrayList<>();
+    private List<List<Double>> errorsPerIterationForgy = new ArrayList<>();
 
     private int clustersNumb, minXY, maxXY, repeats;
 
-    private short bestIteration;
+    private short bestIterationRP, bestIterationForgy;
 
     public KMeans() {
         this.points = new ArrayList<>();
-        this.allEpochClusters = new ArrayList<>();
-        this.oneEpochCluster = new ArrayList<>();
+        this.allEpochClustersRP = new ArrayList<>();
+        this.allEpochClustersForgy = new ArrayList<>();
+        this.oneEpochClusterRP = new ArrayList<>();
+        this.oneEpochClusterForgy = new ArrayList<>();
 
         readProperties();
     }
@@ -45,97 +50,106 @@ public class KMeans {
     }
 
     private void init(String pointsFileName) {
-        oneEpochCluster.clear();
+        oneEpochClusterRP.clear();
+        oneEpochClusterForgy.clear();
         points.clear();
 
         points = PointUtil.loadPointsFromFile(pointsFileName);
 
-        if (properties.getProperty("init.method").equals("random partition")) {
-            for (int i = 0; i < clustersNumb; i++) {
-                Cluster cluster = new Cluster();
-                Point centroid = PointUtil.createRandomPoint(minXY, maxXY);
-                cluster.setCentroid(centroid);
-                oneEpochCluster.add(cluster);
-            }
-        } else if (properties.getProperty("init.method").equals("forgy")) {
-            Collections.shuffle(points);
-
-            for (int i = 0; i < clustersNumb; i++) {
-                Cluster cluster = new Cluster();
-                Point centroid = points.get(i);
-                cluster.setCentroid(centroid);
-                oneEpochCluster.add(cluster);
-            }
-        } else {
-            LOG.log(Level.SEVERE, "Cannot recognize init method");
+        for (int i = 0; i < clustersNumb; i++) {
+            Cluster cluster = new Cluster();
+            Point centroid = PointUtil.createRandomPoint(minXY, maxXY);
+            cluster.setCentroid(centroid);
+            oneEpochClusterRP.add(cluster);
         }
+
+        Collections.shuffle(points);
+        for (int i = 0; i < clustersNumb; i++) {
+            Cluster cluster = new Cluster();
+            Point centroid = points.get(i);
+            cluster.setCentroid(centroid);
+            oneEpochClusterForgy.add(cluster);
+        }
+
     }
 
     public void run(String pointsFileName) {
         for (int i = 0; i < repeats; i++) {
             init(pointsFileName);
-            calculate();
-            allEpochClusters.add(new ArrayList<>(oneEpochCluster));
+            calculate(false);
+            calculate(true);
+            allEpochClustersRP.add(new ArrayList<>(oneEpochClusterRP));
+            allEpochClustersForgy.add(new ArrayList<>(oneEpochClusterForgy));
         }
 
         calculateIterationWithLeastError();
     }
 
     private void calculateIterationWithLeastError() {
-        this.bestIteration = 0;
-        double leastError = calculateSummaryError(errorsPerIteration.get(0));
+        this.bestIterationRP = 0;
+        this.bestIterationForgy = 0;
+
+        double leastErrorRP = calculateSummaryError(errorsPerIterationRP.get(0));
+        double leastErrorForgy = calculateSummaryError(errorsPerIterationForgy.get(0));
         double localError;
 
-        for (short i = 1; i < errorsPerIteration.size(); i++) {
-            localError = calculateSummaryError(errorsPerIteration.get(i));
-            if (localError < leastError) {
-                leastError = localError;
-                this.bestIteration = i;
+        for (short i = 1; i < errorsPerIterationRP.size(); i++) {
+            localError = calculateSummaryError(errorsPerIterationRP.get(i));
+            if (localError < leastErrorRP) {
+                leastErrorRP = localError;
+                this.bestIterationRP = i;
+            }
+        }
+        for (short i = 1; i < errorsPerIterationForgy.size(); i++) {
+            localError = calculateSummaryError(errorsPerIterationForgy.get(i));
+            if (localError < leastErrorForgy) {
+                leastErrorForgy = localError;
+                this.bestIterationForgy = i;
             }
         }
     }
 
     private double calculateSummaryError(List<Double> errorList) {
-        double output;
-        output = errorList.stream().mapToDouble(Double::doubleValue).sum();
+        double output = errorList.stream().mapToDouble(Double::doubleValue).sum();
         output /= errorList.size();
 
         return output;
     }
 
-    private void calculate() {
+    private void calculate(boolean isRandomPartition) {
         boolean finish = false;
 
-        double error, prevError;
+        double error;
         boolean centroidChanged;
 
-        List<Point> prevCentroids = getCentroids();
+        List<Point> prevCentroids = getCentroids(isRandomPartition);
         List<Point> currentCentroids;
         List<Double> errors = new ArrayList<>();
-        prevError = Double.MAX_VALUE;
 
         while (!finish) {
 
-            clearClusters();
+            clearClusters(isRandomPartition);
 
-            assignCluster();
-            calculateCentroids();
+            assignCluster(isRandomPartition);
+            calculateCentroids(isRandomPartition);
 
-            currentCentroids = getCentroids();
-            error = calculateClustersError();
+            currentCentroids = getCentroids(isRandomPartition);
+            error = calculateClustersError(isRandomPartition);
 
-            errors.add(Math.abs((prevError - error)));
+            errors.add(Math.abs(error));
 
             centroidChanged = checkIfCentroidMoved(prevCentroids, currentCentroids);
             if (!centroidChanged) {
                 finish = true;
             }
 
-            prevError = error;
             prevCentroids = currentCentroids;
         }
-
-        errorsPerIteration.add(new ArrayList<>(errors));
+        if (isRandomPartition) {
+            errorsPerIterationRP.add(new ArrayList<>(errors));
+        } else {
+            errorsPerIterationForgy.add(new ArrayList<>(errors));
+        }
     }
 
     private boolean checkIfCentroidMoved(List<Point> prevCentroids, List<Point> currentCentroids) {
@@ -147,24 +161,27 @@ public class KMeans {
         return false;
     }
 
-    private double calculateClustersError() {
+    private double calculateClustersError(boolean isRandomPartition) {
         double output = 0;
-        for (Cluster cluster : oneEpochCluster) {
+        List<Cluster> clusterTocalculateError = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+        for (Cluster cluster : clusterTocalculateError) {
             output += cluster.getClusterSquareError();
         }
 
         return (output / this.clustersNumb);
     }
 
-    private void clearClusters() {
-        for (Cluster cluster : oneEpochCluster) {
+    private void clearClusters(boolean isRandomPartition) {
+        List<Cluster> clusterToClear = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+        for (Cluster cluster : clusterToClear) {
             cluster.clearPoints();
         }
     }
 
-    private List<Point> getCentroids() {
+    private List<Point> getCentroids(boolean isRandomPartition) {
         List<Point> centroids = new ArrayList<>(clustersNumb);
-        for (Cluster cluster : oneEpochCluster) {
+        List<Cluster> clusterToGetCentroids = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+        for (Cluster cluster : clusterToGetCentroids) {
             Point aux = cluster.getCentroid();
             Point point = new Point(aux.getX(), aux.getY());
             centroids.add(point);
@@ -172,15 +189,17 @@ public class KMeans {
         return centroids;
     }
 
-    private void assignCluster() {
+    private void assignCluster(boolean isRandomPartition) {
         double max = Double.MAX_VALUE;
         double min, distance;
         int cluster = 0;
 
+        List<Cluster> clusterToAssign = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+
         for (Point point : points) {
             min = max;
             for (int i = 0; i < clustersNumb; i++) {
-                Cluster c = oneEpochCluster.get(i);
+                Cluster c = clusterToAssign.get(i);
                 distance = PointUtil.distance(point, c.getCentroid());
                 if (distance < min) {
                     min = distance;
@@ -188,12 +207,14 @@ public class KMeans {
                 }
             }
             point.setCluster(cluster);
-            oneEpochCluster.get(cluster).addPoint(point);
+            clusterToAssign.get(cluster).addPoint(point);
         }
     }
 
-    private void calculateCentroids() {
-        for (Cluster cluster : oneEpochCluster) {
+    private void calculateCentroids(boolean isRandomPartition) {
+        List<Cluster> clusterToCalculate = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+
+        for (Cluster cluster : clusterToCalculate) {
             double sumX = 0;
             double sumY = 0;
             List<Point> list = cluster.getPoints();
@@ -214,12 +235,12 @@ public class KMeans {
         }
     }
 
-    public void plotResult() {
+    public void plotResultRP() {
         XYSeriesCollection result = new XYSeriesCollection();
         XYSeries pointSeries = new XYSeries("Points");
         XYSeries centroidSeries = new XYSeries("Centroids");
 
-        allEpochClusters.get(bestIteration).forEach(
+        allEpochClustersRP.get(bestIterationRP).forEach(
                 cluster -> centroidSeries.add(cluster.getCentroid().getX(), cluster.getCentroid().getY())
         );
 
@@ -229,7 +250,7 @@ public class KMeans {
 
         result.addSeries(centroidSeries);
         result.addSeries(pointSeries);
-        GraphPlot plot = new GraphPlot("ATTEMPT NO." + bestIteration, result, GraphStyle.SCATTER);
+        GraphPlot plot = new GraphPlot("Random partition ATTEMPT NO." + bestIterationRP, result, GraphStyle.SCATTER);
 
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);
@@ -238,17 +259,70 @@ public class KMeans {
 
     public void plotError() {
         XYSeriesCollection result = new XYSeriesCollection();
-        XYSeries errorSeries = new XYSeries("Errors for attemtp no." + bestIteration);
+        XYSeries errorSeriesRP = new XYSeries("Random partition");
+        XYSeries errorSeriesForgy = new XYSeries("Forgy");
 
-        List<Double> bestIterationErrors = errorsPerIteration.get(bestIteration);
+        List<Double> errorsRP = calculateAllEpochErrors(true);
+        List<Double> errorsForgy = calculateAllEpochErrors(false);
 
-        for (int i = 1; i < bestIterationErrors.size(); i++) {
-            errorSeries.add(i, bestIterationErrors.get(i));
+        for (int i = 0; i < errorsRP.size(); i++) {
+            errorSeriesRP.add(i, errorsRP.get(i));
+        }
+        for (int i = 0; i < errorsForgy.size(); i++) {
+            errorSeriesForgy.add(i, errorsForgy.get(i));
         }
 
-        result.addSeries(errorSeries);
+        result.addSeries(errorSeriesRP);
+        result.addSeries(errorSeriesForgy);
 
         GraphPlot plot = new GraphPlot("Errors", result, GraphStyle.LINE);
+        plot.pack();
+        RefineryUtilities.centerFrameOnScreen(plot);
+        plot.setVisible(true);
+    }
+
+    private List<Double> calculateAllEpochErrors(boolean isRandomPartition) {
+        List<List<Double>> errorsToCalculate = isRandomPartition ? errorsPerIterationRP : errorsPerIterationForgy;
+        List<Double> output = new ArrayList<>();
+        double tmp;
+
+        int minSize = Integer.MAX_VALUE;
+
+        for (List<Double> anErrorsToCalculate : errorsToCalculate) {
+            if (anErrorsToCalculate.size() < minSize) {
+                minSize = anErrorsToCalculate.size();
+            }
+        }
+
+        for (int i = 0; i < minSize; i++) {
+            tmp = 0.0;
+            for (List<Double> anErrorsToCalculate : errorsToCalculate) {
+                tmp += anErrorsToCalculate.get(i);
+            }
+            tmp /= repeats;
+            output.add(tmp);
+        }
+
+        return output;
+    }
+
+    public void plotResultForgy() {
+        XYSeriesCollection result = new XYSeriesCollection();
+        XYSeries pointSeries = new XYSeries("Points");
+        XYSeries centroidSeries = new XYSeries("Centroids");
+
+        allEpochClustersForgy.get(bestIterationForgy).forEach(
+                cluster -> centroidSeries.add(cluster.getCentroid().getX(), cluster.getCentroid().getY())
+        );
+
+        points.forEach(
+                point -> pointSeries.add(point.getX(), point.getY())
+        );
+
+        result.addSeries(centroidSeries);
+        result.addSeries(pointSeries);
+        GraphPlot plot = new GraphPlot("Forgy ATTEMPT NO." + bestIterationForgy, result, GraphStyle.SCATTER);
+
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);
         plot.setVisible(true);

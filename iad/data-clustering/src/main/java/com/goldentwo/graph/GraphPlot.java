@@ -37,16 +37,12 @@ public class GraphPlot extends ApplicationFrame {
             Shape cross2 = ShapeUtilities.createDiagonalCross((float) 2.0, (float) 2.0);
 
             XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
-            xyPlot.setDomainCrosshairVisible(true);
-            xyPlot.setRangeCrosshairVisible(true);
             XYItemRenderer renderer = xyPlot.getRenderer();
             renderer.setSeriesShape(0, cross2);
-            renderer.setSeriesPaint(0, Color.black);
+            renderer.setSeriesPaint(0, Color.red);
             renderer.setSeriesShape(1, cross);
-            renderer.setSeriesPaint(1, Color.gray);
+            renderer.setSeriesPaint(1, Color.black);
 
-
-            xyPlot.getSeriesCount();
         } else {
             jfreechart = ChartFactory.createXYLineChart(
                     "Errors", "iteration", "error value", dataset,
