@@ -21,7 +21,7 @@ public class GraphPlot extends ApplicationFrame {
         add(jpanel);
     }
 
-    private static JPanel createDemoPanel(XYSeriesCollection dataset) {
+    private JPanel createDemoPanel(XYSeriesCollection dataset) {
         JFreeChart jfreechart = ChartFactory.createScatterPlot(
                 "Scatter Plot Demo", "X", "Y", dataset,
                 PlotOrientation.VERTICAL, true, true, false);

@@ -7,5 +7,6 @@ public class Application {
         KMeans kmeans = new KMeans();
         kmeans.run("attract.txt");
         kmeans.plotResult();
+        kmeans.plotError();
     }
 }

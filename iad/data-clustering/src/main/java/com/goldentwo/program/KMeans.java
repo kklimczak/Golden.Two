@@ -18,16 +18,20 @@ public class KMeans {
     private final Logger LOG = Logger.getLogger(getClass().getName());
 
     private List<Point> points;
-    private List<Cluster> clusters;
+    private List<List<Cluster>> allEpochClusters;
+    private List<Cluster> oneEpochCluster;
     private AppProperties properties = new AppProperties();
 
     private List<List<Double>> errorsPerIteration = new ArrayList<>();
 
     private int clustersNumb, minXY, maxXY, repeats;
 
+    private short bestIteration;
+
     public KMeans() {
         this.points = new ArrayList<>();
-        this.clusters = new ArrayList<>();
+        this.allEpochClusters = new ArrayList<>();
+        this.oneEpochCluster = new ArrayList<>();
 
         readProperties();
     }
@@ -40,9 +44,8 @@ public class KMeans {
     }
 
     private void init(String pointsFileName) {
-        clusters.clear();
+        oneEpochCluster.clear();
         points.clear();
-
 
         points = PointUtil.loadPointsFromFile(pointsFileName);
 
@@ -51,7 +54,7 @@ public class KMeans {
                 Cluster cluster = new Cluster();
                 Point centroid = PointUtil.createRandomPoint(minXY, maxXY);
                 cluster.setCentroid(centroid);
-                clusters.add(cluster);
+                oneEpochCluster.add(cluster);
             }
         } else if (properties.getProperty("init.method").equals("forgy")) {
             Collections.shuffle(points);
@@ -60,7 +63,7 @@ public class KMeans {
                 Cluster cluster = new Cluster();
                 Point centroid = points.get(i);
                 cluster.setCentroid(centroid);
-                clusters.add(cluster);
+                oneEpochCluster.add(cluster);
             }
         } else {
             LOG.log(Level.SEVERE, "Cannot recognize init method");
@@ -71,7 +74,32 @@ public class KMeans {
         for (int i = 0; i < repeats; i++) {
             init(pointsFileName);
             calculate();
+            allEpochClusters.add(new ArrayList<>(oneEpochCluster));
         }
+
+        calculateIterationWithLeastError();
+    }
+
+    private void calculateIterationWithLeastError() {
+        this.bestIteration = 0;
+        double leastError = calculateSummaryError(errorsPerIteration.get(0));
+        double localError;
+
+        for (short i = 1; i < errorsPerIteration.size(); i++) {
+            localError = calculateSummaryError(errorsPerIteration.get(i));
+            if (localError < leastError) {
+                leastError = localError;
+                this.bestIteration = i;
+            }
+        }
+    }
+
+    private double calculateSummaryError(List<Double> errorList) {
+        double output;
+        output = errorList.stream().mapToDouble(Double::doubleValue).sum();
+        output /= errorList.size();
+
+        return output;
     }
 
     private void calculate() {
@@ -83,7 +111,7 @@ public class KMeans {
         List<Point> prevCentroids = getCentroids();
         List<Point> currentCentroids;
         List<Double> errors = new ArrayList<>();
-        prevError = Double.MAX_VALUE;
+        prevError = 10;
 
         while (!finish) {
 
@@ -93,7 +121,7 @@ public class KMeans {
             calculateCentroids();
 
             currentCentroids = getCentroids();
-            error = calculateError();
+            error = calculateClustersError();
 
             errors.add((prevError - error) / error);
 
@@ -118,9 +146,9 @@ public class KMeans {
         return false;
     }
 
-    private double calculateError() {
+    private double calculateClustersError() {
         double output = 0;
-        for (Cluster cluster : clusters) {
+        for (Cluster cluster : oneEpochCluster) {
             output += cluster.getClusterSquareError();
         }
 
@@ -128,14 +156,14 @@ public class KMeans {
     }
 
     private void clearClusters() {
-        for (Cluster cluster : clusters) {
+        for (Cluster cluster : oneEpochCluster) {
             cluster.clearPoints();
         }
     }
 
     private List<Point> getCentroids() {
         List<Point> centroids = new ArrayList<>(clustersNumb);
-        for (Cluster cluster : clusters) {
+        for (Cluster cluster : oneEpochCluster) {
             Point aux = cluster.getCentroid();
             Point point = new Point(aux.getX(), aux.getY());
             centroids.add(point);
@@ -151,7 +179,7 @@ public class KMeans {
         for (Point point : points) {
             min = max;
             for (int i = 0; i < clustersNumb; i++) {
-                Cluster c = clusters.get(i);
+                Cluster c = oneEpochCluster.get(i);
                 distance = PointUtil.distance(point, c.getCentroid());
                 if (distance < min) {
                     min = distance;
@@ -159,12 +187,12 @@ public class KMeans {
                 }
             }
             point.setCluster(cluster);
-            clusters.get(cluster).addPoint(point);
+            oneEpochCluster.get(cluster).addPoint(point);
         }
     }
 
     private void calculateCentroids() {
-        for (Cluster cluster : clusters) {
+        for (Cluster cluster : oneEpochCluster) {
             double sumX = 0;
             double sumY = 0;
             List<Point> list = cluster.getPoints();
@@ -189,7 +217,8 @@ public class KMeans {
         XYSeriesCollection result = new XYSeriesCollection();
         XYSeries pointSeries = new XYSeries("Points");
         XYSeries centroidSeries = new XYSeries("Centroids");
-        clusters.forEach(
+
+        allEpochClusters.get(bestIteration).forEach(
                 cluster -> centroidSeries.add(cluster.getCentroid().getX(), cluster.getCentroid().getY())
         );
 
@@ -199,10 +228,14 @@ public class KMeans {
 
         result.addSeries(centroidSeries);
         result.addSeries(pointSeries);
-        GraphPlot plot = new GraphPlot("PLOT", result);
+        GraphPlot plot = new GraphPlot("ATTEMPT NO." + bestIteration, result);
 
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);
         plot.setVisible(true);
+    }
+
+    public void plotError() {
+        //todo
     }
 }
