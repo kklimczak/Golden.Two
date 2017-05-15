@@ -2,6 +2,7 @@ package com.goldentwo.program;
 
 import com.goldentwo.graph.GraphPlot;
 import com.goldentwo.utils.AppProperties;
+import com.goldentwo.utils.GraphStyle;
 import com.goldentwo.utils.PointUtil;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -111,7 +112,7 @@ public class KMeans {
         List<Point> prevCentroids = getCentroids();
         List<Point> currentCentroids;
         List<Double> errors = new ArrayList<>();
-        prevError = 10;
+        prevError = Double.MAX_VALUE;
 
         while (!finish) {
 
@@ -123,7 +124,7 @@ public class KMeans {
             currentCentroids = getCentroids();
             error = calculateClustersError();
 
-            errors.add((prevError - error) / error);
+            errors.add(Math.abs((prevError - error)));
 
             centroidChanged = checkIfCentroidMoved(prevCentroids, currentCentroids);
             if (!centroidChanged) {
@@ -228,7 +229,7 @@ public class KMeans {
 
         result.addSeries(centroidSeries);
         result.addSeries(pointSeries);
-        GraphPlot plot = new GraphPlot("ATTEMPT NO." + bestIteration, result);
+        GraphPlot plot = new GraphPlot("ATTEMPT NO." + bestIteration, result, GraphStyle.SCATTER);
 
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);
@@ -236,6 +237,20 @@ public class KMeans {
     }
 
     public void plotError() {
-        //todo
+        XYSeriesCollection result = new XYSeriesCollection();
+        XYSeries errorSeries = new XYSeries("Errors for attemtp no." + bestIteration);
+
+        List<Double> bestIterationErrors = errorsPerIteration.get(bestIteration);
+
+        for (int i = 1; i < bestIterationErrors.size(); i++) {
+            errorSeries.add(i, bestIterationErrors.get(i));
+        }
+
+        result.addSeries(errorSeries);
+
+        GraphPlot plot = new GraphPlot("Errors", result, GraphStyle.LINE);
+        plot.pack();
+        RefineryUtilities.centerFrameOnScreen(plot);
+        plot.setVisible(true);
     }
 }
