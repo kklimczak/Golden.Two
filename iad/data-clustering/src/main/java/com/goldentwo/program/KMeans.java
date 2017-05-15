@@ -21,27 +21,29 @@ public class KMeans {
     private List<Cluster> clusters;
     private AppProperties properties = new AppProperties();
 
-    private List<Double> errors = new ArrayList<>();
+    private List<List<Double>> errorsPerIteration = new ArrayList<>();
 
-    private int clustersNumb, minXY, maxXY;
-    private double epsilon;
+    private int clustersNumb, minXY, maxXY, repeats;
 
-    public KMeans(String pointsFileName) {
+    public KMeans() {
         this.points = new ArrayList<>();
         this.clusters = new ArrayList<>();
 
         readProperties();
-        init(pointsFileName);
     }
 
     private void readProperties() {
         this.clustersNumb = Integer.parseInt(properties.getProperty("clusters"));
         this.minXY = Integer.parseInt(properties.getProperty("minXY"));
         this.maxXY = Integer.parseInt(properties.getProperty("maxXY"));
-        this.epsilon = Double.parseDouble(properties.getProperty("epsilon"));
+        this.repeats = Integer.parseInt(properties.getProperty("repeats"));
     }
 
     private void init(String pointsFileName) {
+        clusters.clear();
+        points.clear();
+
+
         points = PointUtil.loadPointsFromFile(pointsFileName);
 
         if (properties.getProperty("init.method").equals("random partition")) {
@@ -65,7 +67,14 @@ public class KMeans {
         }
     }
 
-    public void calculate() {
+    public void run(String pointsFileName) {
+        for (int i = 0; i < repeats; i++) {
+            init(pointsFileName);
+            calculate();
+        }
+    }
+
+    private void calculate() {
         boolean finish = false;
 
         double error, prevError;
@@ -73,7 +82,8 @@ public class KMeans {
 
         List<Point> prevCentroids = getCentroids();
         List<Point> currentCentroids;
-        prevError = calculateError();
+        List<Double> errors = new ArrayList<>();
+        prevError = Double.MAX_VALUE;
 
         while (!finish) {
 
@@ -95,6 +105,8 @@ public class KMeans {
             prevError = error;
             prevCentroids = currentCentroids;
         }
+
+        errorsPerIteration.add(new ArrayList<>(errors));
     }
 
     private boolean checkIfCentroidMoved(List<Point> prevCentroids, List<Point> currentCentroids) {

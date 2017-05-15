@@ -31,8 +31,6 @@ public class GraphPlot extends ApplicationFrame {
         Shape cross2 = ShapeUtilities.createDiagonalCross((float) 2.0, (float) 2.0);
 
         XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
-        xyPlot.getDomainAxis().setRange(-10, 12.5);
-        xyPlot.getRangeAxis().setRange(-12, 8.5);
         xyPlot.setDomainCrosshairVisible(true);
         xyPlot.setRangeCrosshairVisible(true);
         XYItemRenderer renderer = xyPlot.getRenderer();

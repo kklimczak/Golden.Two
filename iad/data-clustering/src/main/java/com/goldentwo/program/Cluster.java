@@ -38,6 +38,9 @@ class Cluster {
     double getClusterSquareError() {
         double temp = 0;
         double distance;
+        if (points.size() <= 0) {
+            return 0;
+        }
         for (Point point : points) {
             distance = PointUtil.distance(point, this.centroid);
             temp += distance * distance;
