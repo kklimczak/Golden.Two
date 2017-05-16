@@ -20,7 +20,7 @@ public class GraphPlot extends ApplicationFrame {
 
         JPanel jpanel = createDemoPanel(series, graphStyle);
 
-        jpanel.setPreferredSize(new Dimension(640, 480));
+        jpanel.setPreferredSize(new Dimension(1000, 600));
         add(jpanel);
     }
 
@@ -40,7 +40,7 @@ public class GraphPlot extends ApplicationFrame {
 
 
             Shape cross = ShapeUtilities.createDiagonalCross(0.1f, 0.1f);
-            Rectangle rectangle = new Rectangle(4, 4);
+            Rectangle rectangle = new Rectangle(7, 7);
 
             XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
             XYItemRenderer renderer = xyPlot.getRenderer();
