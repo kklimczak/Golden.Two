@@ -17,27 +17,29 @@ public class KMeans {
 
     private final Logger LOG = Logger.getLogger(getClass().getName());
 
-    private List<Point> points;
-    private List<List<Cluster>> allEpochClustersRP;
-    private List<List<Cluster>> allEpochClustersForgy;
-    private List<Cluster> oneEpochClusterRP;
-    private List<Cluster> oneEpochClusterForgy;
-
     private AppProperties properties = new AppProperties();
 
-    private List<List<Double>> errorsPerIterationRP = new ArrayList<>();
-    private List<List<Double>> errorsPerIterationForgy = new ArrayList<>();
+    private List<Point> points;
+    private List<List<Cluster>> allRepetitionClustersRP;
+    private List<List<Cluster>> allRepetitionClustersForgy;
+    private List<Cluster> currentRepetitionClusterRP;
+    private List<Cluster> currentRepetitionClusterForgy;
+
+    private List<List<Double>> errorsPerRepetitionRP;
+    private List<List<Double>> errorsPerRepetitionForgy;
 
     private int clustersNumb, minXY, maxXY, repeats;
 
-    private short bestIterationRP, bestIterationForgy;
+    private short bestRepetitionRP, bestRepetitionForgy;
 
     public KMeans() {
         this.points = new ArrayList<>();
-        this.allEpochClustersRP = new ArrayList<>();
-        this.allEpochClustersForgy = new ArrayList<>();
-        this.oneEpochClusterRP = new ArrayList<>();
-        this.oneEpochClusterForgy = new ArrayList<>();
+        this.allRepetitionClustersRP = new ArrayList<>();
+        this.allRepetitionClustersForgy = new ArrayList<>();
+        this.currentRepetitionClusterRP = new ArrayList<>();
+        this.currentRepetitionClusterForgy = new ArrayList<>();
+        this.errorsPerRepetitionRP = new ArrayList<>();
+        this.errorsPerRepetitionForgy = new ArrayList<>();
 
         readProperties();
     }
@@ -50,61 +52,77 @@ public class KMeans {
     }
 
     private void init(String pointsFileName) {
-        oneEpochClusterRP.clear();
-        oneEpochClusterForgy.clear();
+        currentRepetitionClusterRP.clear();
+        currentRepetitionClusterForgy.clear();
         points.clear();
 
         points = PointUtil.loadPointsFromFile(pointsFileName);
 
-        for (int i = 0; i < clustersNumb; i++) {
-            Cluster cluster = new Cluster();
-            Point centroid = PointUtil.createRandomPoint(minXY, maxXY);
-            cluster.setCentroid(centroid);
-            oneEpochClusterRP.add(cluster);
-        }
+        initClustersRP();
+        initClustersForgy();
 
+    }
+
+    private void initClustersForgy() {
         Collections.shuffle(points);
         for (int i = 0; i < clustersNumb; i++) {
             Cluster cluster = new Cluster();
             Point centroid = points.get(i);
             cluster.setCentroid(centroid);
-            oneEpochClusterForgy.add(cluster);
+            currentRepetitionClusterForgy.add(cluster);
         }
+    }
 
+    private void initClustersRP() {
+        for (int i = 0; i < clustersNumb; i++) {
+            Cluster cluster = new Cluster();
+            Point centroid = PointUtil.createRandomPoint(minXY, maxXY);
+            cluster.setCentroid(centroid);
+            currentRepetitionClusterRP.add(cluster);
+        }
     }
 
     public void run(String pointsFileName) {
         for (int i = 0; i < repeats; i++) {
             init(pointsFileName);
-            calculate(false);
-            calculate(true);
-            allEpochClustersRP.add(new ArrayList<>(oneEpochClusterRP));
-            allEpochClustersForgy.add(new ArrayList<>(oneEpochClusterForgy));
+
+            proceed(false);
+            proceed(true);
+
+            allRepetitionClustersRP.add(new ArrayList<>(currentRepetitionClusterRP));
+            allRepetitionClustersForgy.add(new ArrayList<>(currentRepetitionClusterForgy));
         }
 
-        calculateIterationWithLeastError();
+        findRepetitionWithLeastError();
     }
 
-    private void calculateIterationWithLeastError() {
-        this.bestIterationRP = 0;
-        this.bestIterationForgy = 0;
+    private void findRepetitionWithLeastError() {
+        findRPRepetition();
+        findForgyRepetition();
+    }
 
-        double leastErrorRP = calculateSummaryError(errorsPerIterationRP.get(0));
-        double leastErrorForgy = calculateSummaryError(errorsPerIterationForgy.get(0));
+    private void findForgyRepetition() {
+        this.bestRepetitionForgy = 0;
+        double leastErrorForgy = calculateSummaryError(errorsPerRepetitionForgy.get(0));
         double localError;
-
-        for (short i = 1; i < errorsPerIterationRP.size(); i++) {
-            localError = calculateSummaryError(errorsPerIterationRP.get(i));
-            if (localError < leastErrorRP) {
-                leastErrorRP = localError;
-                this.bestIterationRP = i;
-            }
-        }
-        for (short i = 1; i < errorsPerIterationForgy.size(); i++) {
-            localError = calculateSummaryError(errorsPerIterationForgy.get(i));
+        for (short i = 1; i < errorsPerRepetitionForgy.size(); i++) {
+            localError = calculateSummaryError(errorsPerRepetitionForgy.get(i));
             if (localError < leastErrorForgy) {
                 leastErrorForgy = localError;
-                this.bestIterationForgy = i;
+                this.bestRepetitionForgy = i;
+            }
+        }
+    }
+
+    private void findRPRepetition() {
+        this.bestRepetitionRP = 0;
+        double leastErrorRP = calculateSummaryError(errorsPerRepetitionRP.get(0));
+        double localError;
+        for (short i = 1; i < errorsPerRepetitionRP.size(); i++) {
+            localError = calculateSummaryError(errorsPerRepetitionRP.get(i));
+            if (localError < leastErrorRP) {
+                leastErrorRP = localError;
+                this.bestRepetitionRP = i;
             }
         }
     }
@@ -116,7 +134,7 @@ public class KMeans {
         return output;
     }
 
-    private void calculate(boolean isRandomPartition) {
+    private void proceed(boolean isRandomPartition) {
         boolean finish = false;
 
         double error;
@@ -130,7 +148,7 @@ public class KMeans {
 
             clearClusters(isRandomPartition);
 
-            assignCluster(isRandomPartition);
+            assignPointsToCluster(isRandomPartition);
             calculateCentroids(isRandomPartition);
 
             currentCentroids = getCentroids(isRandomPartition);
@@ -145,10 +163,11 @@ public class KMeans {
 
             prevCentroids = currentCentroids;
         }
+
         if (isRandomPartition) {
-            errorsPerIterationRP.add(new ArrayList<>(errors));
+            errorsPerRepetitionRP.add(new ArrayList<>(errors));
         } else {
-            errorsPerIterationForgy.add(new ArrayList<>(errors));
+            errorsPerRepetitionForgy.add(new ArrayList<>(errors));
         }
     }
 
@@ -163,16 +182,18 @@ public class KMeans {
 
     private double calculateClustersError(boolean isRandomPartition) {
         double output = 0;
-        List<Cluster> clusterTocalculateError = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
-        for (Cluster cluster : clusterTocalculateError) {
+        List<Cluster> clusterToCalculateError = isRandomPartition ? currentRepetitionClusterRP : currentRepetitionClusterForgy;
+        for (Cluster cluster : clusterToCalculateError) {
             output += cluster.getClusterSquareError();
         }
 
-        return (output / this.clustersNumb);
+        output /= this.clustersNumb;
+
+        return output;
     }
 
     private void clearClusters(boolean isRandomPartition) {
-        List<Cluster> clusterToClear = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+        List<Cluster> clusterToClear = isRandomPartition ? currentRepetitionClusterRP : currentRepetitionClusterForgy;
         for (Cluster cluster : clusterToClear) {
             cluster.clearPoints();
         }
@@ -180,21 +201,20 @@ public class KMeans {
 
     private List<Point> getCentroids(boolean isRandomPartition) {
         List<Point> centroids = new ArrayList<>(clustersNumb);
-        List<Cluster> clusterToGetCentroids = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+        List<Cluster> clusterToGetCentroids = isRandomPartition ? currentRepetitionClusterRP : currentRepetitionClusterForgy;
         for (Cluster cluster : clusterToGetCentroids) {
-            Point aux = cluster.getCentroid();
-            Point point = new Point(aux.getX(), aux.getY());
-            centroids.add(point);
+            Point centroidCopy = new Point(cluster.getCentroid());
+            centroids.add(centroidCopy);
         }
         return centroids;
     }
 
-    private void assignCluster(boolean isRandomPartition) {
+    private void assignPointsToCluster(boolean isRandomPartition) {
         double max = Double.MAX_VALUE;
         double min, distance;
         int cluster = 0;
 
-        List<Cluster> clusterToAssign = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+        List<Cluster> clusterToAssign = isRandomPartition ? currentRepetitionClusterRP : currentRepetitionClusterForgy;
 
         for (Point point : points) {
             min = max;
@@ -212,7 +232,7 @@ public class KMeans {
     }
 
     private void calculateCentroids(boolean isRandomPartition) {
-        List<Cluster> clusterToCalculate = isRandomPartition ? oneEpochClusterRP : oneEpochClusterForgy;
+        List<Cluster> clusterToCalculate = isRandomPartition ? currentRepetitionClusterRP : currentRepetitionClusterForgy;
 
         for (Cluster cluster : clusterToCalculate) {
             double sumX = 0;
@@ -240,7 +260,7 @@ public class KMeans {
         XYSeries pointSeries = new XYSeries("Points");
         XYSeries centroidSeries = new XYSeries("Centroids");
 
-        allEpochClustersRP.get(bestIterationRP).forEach(
+        allRepetitionClustersRP.get(bestRepetitionRP).forEach(
                 cluster -> centroidSeries.add(cluster.getCentroid().getX(), cluster.getCentroid().getY())
         );
 
@@ -250,7 +270,7 @@ public class KMeans {
 
         result.addSeries(centroidSeries);
         result.addSeries(pointSeries);
-        GraphPlot plot = new GraphPlot("Random partition ATTEMPT NO." + bestIterationRP, result, GraphStyle.SCATTER);
+        GraphPlot plot = new GraphPlot("Random partition ATTEMPT NO." + bestRepetitionRP, result, GraphStyle.SCATTER);
 
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);
@@ -292,7 +312,7 @@ public class KMeans {
     }
 
     private List<Double> calculateAllEpochErrors(boolean isRandomPartition) {
-        List<List<Double>> errorsToCalculate = isRandomPartition ? errorsPerIterationRP : errorsPerIterationForgy;
+        List<List<Double>> errorsToCalculate = isRandomPartition ? errorsPerRepetitionRP : errorsPerRepetitionForgy;
         List<Double> output = new ArrayList<>();
         double tmp;
 
@@ -321,7 +341,7 @@ public class KMeans {
         XYSeries pointSeries = new XYSeries("Points");
         XYSeries centroidSeries = new XYSeries("Centroids");
 
-        allEpochClustersForgy.get(bestIterationForgy).forEach(
+        allRepetitionClustersForgy.get(bestRepetitionForgy).forEach(
                 cluster -> centroidSeries.add(cluster.getCentroid().getX(), cluster.getCentroid().getY())
         );
 
@@ -331,7 +351,7 @@ public class KMeans {
 
         result.addSeries(centroidSeries);
         result.addSeries(pointSeries);
-        GraphPlot plot = new GraphPlot("Forgy ATTEMPT NO." + bestIterationForgy, result, GraphStyle.SCATTER);
+        GraphPlot plot = new GraphPlot("Forgy ATTEMPT NO." + bestRepetitionForgy, result, GraphStyle.SCATTER);
 
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);

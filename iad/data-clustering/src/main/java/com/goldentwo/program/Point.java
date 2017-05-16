@@ -11,6 +11,11 @@ public class Point {
         this.setY(y);
     }
 
+    Point(Point p){
+        this.setX(p.getX());
+        this.setY(p.getY());
+    }
+
     void setX(double x) {
         this.x = x;
     }
