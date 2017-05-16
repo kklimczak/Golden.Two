@@ -148,7 +148,7 @@ public class KMeans {
 
             clearClusters(isRandomPartition);
 
-            assignPointsToCluster(isRandomPartition);
+            assignPointsToClosestCluster(isRandomPartition);
             calculateCentroids(isRandomPartition);
 
             currentCentroids = getCentroids(isRandomPartition);
@@ -209,10 +209,10 @@ public class KMeans {
         return centroids;
     }
 
-    private void assignPointsToCluster(boolean isRandomPartition) {
+    private void assignPointsToClosestCluster(boolean isRandomPartition) {
         double max = Double.MAX_VALUE;
         double min, distance;
-        int cluster = 0;
+        int closestCluster = 0;
 
         List<Cluster> clusterToAssign = isRandomPartition ? currentRepetitionClusterRP : currentRepetitionClusterForgy;
 
@@ -223,11 +223,11 @@ public class KMeans {
                 distance = PointUtil.distance(point, c.getCentroid());
                 if (distance < min) {
                     min = distance;
-                    cluster = i;
+                    closestCluster = i;
                 }
             }
-            point.setCluster(cluster);
-            clusterToAssign.get(cluster).addPoint(point);
+
+            clusterToAssign.get(closestCluster).addPoint(point);
         }
     }
 
@@ -235,22 +235,23 @@ public class KMeans {
         List<Cluster> clusterToCalculate = isRandomPartition ? currentRepetitionClusterRP : currentRepetitionClusterForgy;
 
         for (Cluster cluster : clusterToCalculate) {
-            double sumX = 0;
-            double sumY = 0;
+            double pointsSummaryX = 0;
+            double pointsSummaryY = 0;
             List<Point> list = cluster.getPoints();
-            int n_points = list.size();
+            int pointsAmount = list.size();
 
             for (Point point : list) {
-                sumX += point.getX();
-                sumY += point.getY();
+                pointsSummaryX += point.getX();
+                pointsSummaryY += point.getY();
             }
 
             Point centroid = cluster.getCentroid();
-            if (n_points > 0) {
-                double newX = sumX / n_points;
-                double newY = sumY / n_points;
-                centroid.setX(newX);
-                centroid.setY(newY);
+            if (pointsAmount > 0) {
+                double centroidX = pointsSummaryX / pointsAmount;
+                double centroidY = pointsSummaryY / pointsAmount;
+
+                centroid.setX(centroidX);
+                centroid.setY(centroidY);
             }
         }
     }
