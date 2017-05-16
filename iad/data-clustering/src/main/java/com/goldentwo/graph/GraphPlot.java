@@ -29,25 +29,41 @@ public class GraphPlot extends ApplicationFrame {
 
         if (graphStyle.equals(GraphStyle.SCATTER)) {
             jfreechart = ChartFactory.createScatterPlot(
-                    "Points and centroids", "X", "Y", dataset,
-                    PlotOrientation.VERTICAL, true, true, false);
+                    "Points and centroids",
+                    "X",
+                    "Y",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true,
+                    true,
+                    false);
 
 
-            Shape cross = ShapeUtilities.createDiagonalCross((float) 0.3, (float) 0.3);
-            Shape cross2 = ShapeUtilities.createDiagonalCross((float) 2.0, (float) 2.0);
+            Shape cross = ShapeUtilities.createDiagonalCross(0.1f, 0.1f);
+            Rectangle rectangle = new Rectangle(4, 4);
 
             XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
             XYItemRenderer renderer = xyPlot.getRenderer();
-            renderer.setSeriesShape(0, cross2);
+            renderer.setSeriesShape(0, rectangle);
             renderer.setSeriesPaint(0, Color.red);
             renderer.setSeriesShape(1, cross);
             renderer.setSeriesPaint(1, Color.black);
 
         } else {
             jfreechart = ChartFactory.createXYLineChart(
-                    "Errors", "iteration", "error value", dataset,
-                    PlotOrientation.VERTICAL, true, true, false
+                    "Errors",
+                    "iteration",
+                    "error value",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true,
+                    true,
+                    false
             );
+
+            XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
+            XYItemRenderer renderer = xyPlot.getRenderer();
+            renderer.setSeriesPaint(2, Color.BLACK);
         }
 
         return new ChartPanel(jfreechart);

@@ -262,18 +262,28 @@ public class KMeans {
         XYSeries errorSeriesRP = new XYSeries("Random partition");
         XYSeries errorSeriesForgy = new XYSeries("Forgy");
 
+        XYSeries errorDiff = new XYSeries("Error diff");
+
         List<Double> errorsRP = calculateAllEpochErrors(true);
         List<Double> errorsForgy = calculateAllEpochErrors(false);
 
-        for (int i = 0; i < errorsRP.size(); i++) {
+        int sizeRP = errorsRP.size();
+        int sizeForgy = errorsForgy.size();
+
+        for (int i = 0; i < sizeRP; i++) {
             errorSeriesRP.add(i, errorsRP.get(i));
         }
-        for (int i = 0; i < errorsForgy.size(); i++) {
+        for (int i = 0; i < sizeForgy; i++) {
             errorSeriesForgy.add(i, errorsForgy.get(i));
+        }
+
+        for (int i = 0; i < sizeRP && i < sizeForgy; i++) {
+            errorDiff.add(i, Math.abs(errorsRP.get(i) - errorsForgy.get(i)));
         }
 
         result.addSeries(errorSeriesRP);
         result.addSeries(errorSeriesForgy);
+        result.addSeries(errorDiff);
 
         GraphPlot plot = new GraphPlot("Errors", result, GraphStyle.LINE);
         plot.pack();
