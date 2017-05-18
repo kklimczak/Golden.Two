@@ -12,6 +12,7 @@ public class BfsStrategy implements Strategy {
     private String pattern;
     private Set<Node> nodes = new HashSet<>();
     private Queue<Node> nodeQueue = new LinkedList<>();
+    private Summary summary;
 
     private Node solvedPuzzle;
 
@@ -41,14 +42,16 @@ public class BfsStrategy implements Strategy {
             solvedPuzzleTemp = solvedPuzzleTemp.getPreviousNode();
         }
 
-        return Summary.builder()
+        summary = Summary.builder()
                 .moves(string.length())
                 .path(string.reverse().toString())
                 .nodeVisited(nodes.size())
                 .nodeProcessed(nodeQueue.size())
+                .depth(string.length())
                 .spendTime(df.format(spendTimeToSolve))
                 .build();
 
+        return summary;
     }
 
     private void bfs(Node node) {

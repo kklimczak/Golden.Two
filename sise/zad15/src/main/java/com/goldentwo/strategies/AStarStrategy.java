@@ -6,6 +6,8 @@ import com.goldentwo.models.Summary;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class AStarStrategy implements Strategy {
@@ -13,6 +15,7 @@ public class AStarStrategy implements Strategy {
     private String pattern;
     private PriorityQueue<NodeAStar> openNodes = new PriorityQueue<>();
     private Set<NodeAStar> closeNodes = new HashSet<>();
+    private Summary summary;
 
     private Node solvedPuzzle;
 
@@ -53,13 +56,16 @@ public class AStarStrategy implements Strategy {
 
         System.out.println(Arrays.toString(solvedPuzzle.getNumbers()));
 
-        return Summary.builder()
+        summary = Summary.builder()
                 .moves(string.length())
                 .path(string.reverse().toString())
                 .nodeVisited(openNodes.size())
                 .nodeProcessed(closeNodes.size())
+                .depth(string.length())
                 .spendTime(df.format(spendTimeToSolve))
                 .build();
+
+        return summary;
     }
 
     private int getHeuristicFromPattern() {
@@ -77,17 +83,15 @@ public class AStarStrategy implements Strategy {
 
         NodeAStar next;
 
+        LocalDateTime astrStartTime = LocalDateTime.now();
         while (!openNodes.isEmpty()) {
+            LocalDateTime checkTime = LocalDateTime.now();
+
+            if (ChronoUnit.MILLIS.between(astrStartTime, checkTime) >= 500) {
+                System.exit(1);
+            }
+
             state = openNodes.poll();
-
-//            state = openNodes.stream()
-//                    .min(Comparator.comparingInt(NodeAStar::getHEstimatedMovementCost))
-//                    .orElse(null);
-
-            openNodes.remove(state);
-
-            System.out.println(Arrays.toString(state.getNumbers()));
-//            System.out.println(state.getMove());
 
             if (state.isSolved()) {
                 System.out.println(Arrays.toString(state.getNumbers()));
@@ -95,38 +99,36 @@ public class AStarStrategy implements Strategy {
                 break;
             }
 
-            if (!closeNodes.contains(state)) {
-                closeNodes.add(state);
+            if (closeNodes.contains(state)) {
+                continue;
             }
 
-
+            closeNodes.add(state);
 
             next = NodeAStar.moveUp(state);
 
-            if (next != null) {
+            if (next != null && !closeNodes.contains(next)) {
                 openNodes.add(next);
             }
 
             next = NodeAStar.moveDown(state);
 
-            if (next != null) {
-                openNodes.add(next);
-            }
-
-            next = NodeAStar.moveLeft(state);
-
-            if (next != null) {
+            if (next != null && !closeNodes.contains(next)) {
                 openNodes.add(next);
             }
 
             next = NodeAStar.moveRight(state);
 
-            if (next != null) {
+            if (next != null && !closeNodes.contains(next)) {
                 openNodes.add(next);
             }
 
-        }
+            next = NodeAStar.moveLeft(state);
 
+            if (next != null && !closeNodes.contains(next)) {
+                openNodes.add(next);
+            }
+        }
     }
 
     private void prepareToSolve(NodeAStar state) {

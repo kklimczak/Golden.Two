@@ -16,6 +16,9 @@ public class DfsStrategy implements Strategy {
     private String pattern;
     private Set<Node> nodes = new HashSet<>();
     private Node rightNode;
+    private int visitedNodes;
+    private int processedNodes;
+    private Summary summary;
 
     public Strategy setPattern(String pattern) {
         this.pattern = pattern;
@@ -25,7 +28,7 @@ public class DfsStrategy implements Strategy {
     public Summary run(Node node) {
         prepareToSolve(node);
         long startTime = System.nanoTime();
-        dfs(node, 30);
+        dfs(node, 25);
         long endTime = System.nanoTime();
 
         double spendTimeToSolve = (endTime - startTime) / 1e6;
@@ -44,12 +47,16 @@ public class DfsStrategy implements Strategy {
             solvedPuzzleTemp = solvedPuzzleTemp.getPreviousNode();
         }
 
-        return Summary.builder()
+        summary = Summary.builder()
                 .moves(string.length())
                 .path(string.reverse().toString())
-                .nodeVisited(nodes.size())
+                .nodeVisited(visitedNodes)
+                .nodeProcessed(processedNodes)
+                .depth(string.length())
                 .spendTime(df.format(spendTimeToSolve))
                 .build();
+
+        return summary;
     }
 
     private void dfs(Node node, int depth) {
@@ -61,13 +68,13 @@ public class DfsStrategy implements Strategy {
 
         if (node.isSolved()) {
             rightNode = node;
-            System.out.println(Arrays.toString(node.getNumbers()));
-            System.out.println(depth);
         }
 
         if (rightNode != null) {
             return;
         }
+
+        processedNodes--;
 
         for (int i = 0; i < pattern.length(); i++) {
             switch (pattern.charAt(i)) {
@@ -98,6 +105,8 @@ public class DfsStrategy implements Strategy {
     private boolean checkIsCorrectState(int depth, Node next) {
         if (next != null && !nodes.contains(next)) {
             nodes.add(next);
+            visitedNodes++;
+            processedNodes++;
 
             dfs(next, depth - 1);
 
