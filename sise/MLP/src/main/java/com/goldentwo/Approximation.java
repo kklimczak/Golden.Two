@@ -19,15 +19,13 @@ class Approximation {
     private double momentum;
 
     private GraphUtil graphUtil = new GraphUtil();
-
-    private int inputAndOutputSize;
+    private int inputOutputSize = Integer.parseInt(AppProperties.getProperty("inputOutput.size"));
 
     Approximation() {
         setNetwork();
 
         this.learningRate = Double.parseDouble(AppProperties.getProperty("learningRate"));
         this.momentum = Double.parseDouble(AppProperties.getProperty("momentum"));
-        this.inputAndOutputSize = Integer.parseInt(AppProperties.getProperty("inputOutput.size"));
 
         loadTrainList();
     }
@@ -53,7 +51,7 @@ class Approximation {
                 dataRows.add(dataScanner.nextDouble());
                 outputRows.add(resultScanner.nextDouble());
                 iterator++;
-            } while (iterator % inputAndOutputSize != 0);
+            } while (iterator % inputOutputSize != 0);
             dataOutput.add(dataRows);
             resultOutput.add(outputRows);
         }
@@ -85,7 +83,6 @@ class Approximation {
 
     private void setNetwork() {
         int hiddenLayerSize = Integer.parseInt(AppProperties.getProperty("hiddenLayerSize"));
-
-        mlp = new MLP(inputAndOutputSize, hiddenLayerSize, inputAndOutputSize, false);
+        mlp = new MLP(inputOutputSize, hiddenLayerSize, inputOutputSize, false);
     }
 }
