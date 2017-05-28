@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 class Approximation {
-    private MLP[] networks;
     private MLP mlp;
 
     private List<List<Double>> trainList;
@@ -21,11 +20,14 @@ class Approximation {
 
     private GraphUtil graphUtil = new GraphUtil();
 
+    private int inputAndOutputSize;
+
     Approximation() {
         setNetwork();
 
         this.learningRate = Double.parseDouble(AppProperties.getProperty("learningRate"));
         this.momentum = Double.parseDouble(AppProperties.getProperty("momentum"));
+        this.inputAndOutputSize = Integer.parseInt(AppProperties.getProperty("inputOutput.size"));
 
         loadTrainList();
     }
@@ -51,7 +53,7 @@ class Approximation {
                 dataRows.add(dataScanner.nextDouble());
                 outputRows.add(resultScanner.nextDouble());
                 iterator++;
-            } while (iterator % 1 != 0);
+            } while (iterator % inputAndOutputSize != 0);
             dataOutput.add(dataRows);
             resultOutput.add(outputRows);
         }
@@ -84,6 +86,6 @@ class Approximation {
     private void setNetwork() {
         int hiddenLayerSize = Integer.parseInt(AppProperties.getProperty("hiddenLayerSize"));
 
-        mlp = new MLP(1, hiddenLayerSize, 1, false);
+        mlp = new MLP(inputAndOutputSize, hiddenLayerSize, inputAndOutputSize, false);
     }
 }
