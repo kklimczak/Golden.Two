@@ -63,7 +63,7 @@ public class Trainer {
         System.out.println("Training completed after: " + (after - before) + "ms");
 
         printTrainingSummary(epoch, MSE);
-        plotMSE(dataItems);
+//        plotMSE(dataItems);                plotting this is useless here
     }
 
     private void prepareLearningParameters() {
@@ -79,9 +79,9 @@ public class Trainer {
         System.out.println("Momentum: " + momentum);
     }
 
-    private void plotMSE(List<XYDataItem> dataItems) {
-        graphUtil.printGraph("MSE error", dataItems, "epoch", "MSE");
-    }
+//    private void plotMSE(List<XYDataItem> dataItems) {
+//        graphUtil.printGraph("MSE error", dataItems, "epoch", "MSE");
+//    }
 
     private double calculateMSE(List<Double> result, List<Double> expectedOutput) {
         Double cost = 0.0, localError;

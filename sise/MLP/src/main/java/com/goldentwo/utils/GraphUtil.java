@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GraphUtil {
 
-    public void printGraph(String title, List<XYDataItem> data, String xLabel, String yLabel){
+    public void printGraph(String title, XYSeriesCollection data, String xLabel, String yLabel){
         final Graph demo = new Graph(title, data, xLabel, yLabel);
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
@@ -22,15 +22,9 @@ public class GraphUtil {
     }
 
     private class Graph extends ApplicationFrame{
-        Graph(String title, List<XYDataItem> dataItems, String xLabel, String yLabel) {
+        Graph(String title, XYSeriesCollection data, String xLabel, String yLabel) {
             super(title);
-            final XYSeries series = new XYSeries(title);
 
-            for (XYDataItem dataItem : dataItems) {
-                series.add(dataItem);
-            }
-
-            final XYSeriesCollection data = new XYSeriesCollection(series);
             final JFreeChart chart = ChartFactory.createXYLineChart(
                     title,
                     xLabel,

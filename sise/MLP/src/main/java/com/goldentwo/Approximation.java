@@ -5,6 +5,8 @@ import com.goldentwo.model.Trainer;
 import org.jfree.data.xy.XYDataItem;
 import com.goldentwo.utils.AppProperties;
 import com.goldentwo.utils.GraphUtil;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -72,13 +74,20 @@ class Approximation {
     }
 
     private void printNetworkLearningResults() {
-        List<XYDataItem> dataItems = new ArrayList<>();
+        XYSeriesCollection collection = new XYSeriesCollection();
+
+        XYSeries dataItems = new XYSeries("result");
+        XYSeries sampleDataItems = new XYSeries("proper");
 
         for (int i = 1; i <= 100; i++) {
             dataItems.add(new XYDataItem(new Double(i), mlp.propagate(Collections.singletonList(i * 1.0)).get(1)));
+            sampleDataItems.add(new XYDataItem(new Double(i), new Double(Math.sqrt(i))));
         }
 
-        graphUtil.printGraph("Learning results", dataItems, "number", "root square");
+        collection.addSeries(dataItems);
+        collection.addSeries(sampleDataItems);
+
+        graphUtil.printGraph("Learning results", collection, "number", "root square");
     }
 
     private void setNetwork() {
