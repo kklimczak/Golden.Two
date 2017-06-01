@@ -74,12 +74,18 @@ public class KMeans {
     }
 
     private void initClustersRP() {
+        Collections.shuffle(points);
         for (int i = 0; i < clustersNumb; i++) {
             Cluster cluster = new Cluster();
-            Point centroid = PointUtil.createRandomPoint(minXY, maxXY);
-            cluster.setCentroid(centroid);
+            cluster.setCentroid(new Point());
             currentRepetitionClusterRP.add(cluster);
         }
+
+        for (int j = 0; j < points.size(); j++) {
+            currentRepetitionClusterRP.get(j % clustersNumb).addPoint(points.get(j));
+        }
+
+        calculateCentroids(true);
     }
 
     public void run(String pointsFileName) {
@@ -256,6 +262,53 @@ public class KMeans {
         }
     }
 
+    private List<Double> calculateAllEpochErrors(boolean isRandomPartition) {
+        List<List<Double>> errorsToCalculate = isRandomPartition ? errorsPerRepetitionRP : errorsPerRepetitionForgy;
+        List<Double> output = new ArrayList<>();
+        double tmp;
+
+        int minSize = Integer.MAX_VALUE;
+
+        for (List<Double> anErrorsToCalculate : errorsToCalculate) {
+            if (anErrorsToCalculate.size() < minSize) {
+                minSize = anErrorsToCalculate.size();
+            }
+        }
+
+        for (int i = 0; i < minSize; i++) {
+            tmp = 0.0;
+            for (List<Double> anErrorsToCalculate : errorsToCalculate) {
+                tmp += anErrorsToCalculate.get(i);
+            }
+            tmp /= repeats;
+            output.add(tmp);
+        }
+
+        return output;
+    }
+
+    public void plotResultForgy() {
+        XYSeriesCollection result = new XYSeriesCollection();
+        XYSeries pointSeries = new XYSeries("Points");
+        XYSeries centroidSeries = new XYSeries("Centroids");
+
+        allRepetitionClustersForgy.get(bestRepetitionForgy).forEach(
+                cluster -> centroidSeries.add(cluster.getCentroid().getX(), cluster.getCentroid().getY())
+        );
+
+        points.forEach(
+                point -> pointSeries.add(point.getX(), point.getY())
+        );
+
+        result.addSeries(centroidSeries);
+        result.addSeries(pointSeries);
+        GraphPlot plot = new GraphPlot("Forgy ATTEMPT NO." + bestRepetitionForgy, result, GraphStyle.SCATTER);
+
+        plot.pack();
+        RefineryUtilities.centerFrameOnScreen(plot);
+        plot.setVisible(true);
+    }
+
     public void plotResultRP() {
         XYSeriesCollection result = new XYSeriesCollection();
         XYSeries pointSeries = new XYSeries("Points");
@@ -307,53 +360,6 @@ public class KMeans {
         result.addSeries(errorDiff);
 
         GraphPlot plot = new GraphPlot("Errors", result, GraphStyle.LINE);
-        plot.pack();
-        RefineryUtilities.centerFrameOnScreen(plot);
-        plot.setVisible(true);
-    }
-
-    private List<Double> calculateAllEpochErrors(boolean isRandomPartition) {
-        List<List<Double>> errorsToCalculate = isRandomPartition ? errorsPerRepetitionRP : errorsPerRepetitionForgy;
-        List<Double> output = new ArrayList<>();
-        double tmp;
-
-        int minSize = Integer.MAX_VALUE;
-
-        for (List<Double> anErrorsToCalculate : errorsToCalculate) {
-            if (anErrorsToCalculate.size() < minSize) {
-                minSize = anErrorsToCalculate.size();
-            }
-        }
-
-        for (int i = 0; i < minSize; i++) {
-            tmp = 0.0;
-            for (List<Double> anErrorsToCalculate : errorsToCalculate) {
-                tmp += anErrorsToCalculate.get(i);
-            }
-            tmp /= repeats;
-            output.add(tmp);
-        }
-
-        return output;
-    }
-
-    public void plotResultForgy() {
-        XYSeriesCollection result = new XYSeriesCollection();
-        XYSeries pointSeries = new XYSeries("Points");
-        XYSeries centroidSeries = new XYSeries("Centroids");
-
-        allRepetitionClustersForgy.get(bestRepetitionForgy).forEach(
-                cluster -> centroidSeries.add(cluster.getCentroid().getX(), cluster.getCentroid().getY())
-        );
-
-        points.forEach(
-                point -> pointSeries.add(point.getX(), point.getY())
-        );
-
-        result.addSeries(centroidSeries);
-        result.addSeries(pointSeries);
-        GraphPlot plot = new GraphPlot("Forgy ATTEMPT NO." + bestRepetitionForgy, result, GraphStyle.SCATTER);
-
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);
         plot.setVisible(true);

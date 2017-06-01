@@ -5,6 +5,8 @@ public class Point {
     private double x = 0;
     private double y = 0;
 
+    public Point() {}
+
     public Point(double x, double y) {
         this.setX(x);
         this.setY(y);
