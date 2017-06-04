@@ -6,7 +6,7 @@ class SimpleKeyGenerator:
 
     def generate_default_private_key(self):
         new_private_key = []
-        key_element = 18000000000000
+        key_element = 18446744073709551615
         for i in range(self.key_size):
             key_element /= 2
             new_private_key.append(int(key_element))
