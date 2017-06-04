@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from sign_utils import hash_to_int, blind, signature, unblind, verefy
+from sign_utils import hash_to_int, blind, signature, unblind, verify
 from key_gen_utils import keygen
 
 pub_key, priv_key = keygen(2 ** 1024)
@@ -42,7 +42,7 @@ def unblind_message(*args):
 
 def verified_message(*args):
     try:
-        verefy(unblinded_signed_message.get(), pub_key)
+        verify(unblinded_signed_message.get(), pub_key)
         f = open("verified_message")
         h = open("hashedmsg")
         v_msg = f.read()

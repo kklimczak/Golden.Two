@@ -4,47 +4,47 @@ from random import random
 from key_gen_utils import multinv
 
 
-def signature(msg, privkey):
-    f = open('signedfile', 'w')
-    coded = pow(int(msg), *privkey) % privkey[1]
-    print("Blinded Signed Message:     " + str(coded))
-    f.write(str(coded))
-
-
-def blindingfactor(N):
-    b = Decimal(Decimal(random()) * (N - 1))
+def blinding_factor(n):
+    b = Decimal(Decimal(random()) * (n - 1))
     r = int(b)
-    while gcd(r, N) != 1:
+    while gcd(r, n) != 1:
         r = r + 1
     return r
 
 
-def blind(msg, pubkey):
+def blind(message, public_key):
     f = open('blindmsg', 'w')
-    r = blindingfactor(pubkey[1])
-    m = int(msg)
-    blindmsg = (pow(r, *pubkey) * m) % pubkey[1]
-    print("Blinded Message:            " + str(blindmsg))
-    f.write(str(blindmsg))
+    r = blinding_factor(public_key[1])
+    m = int(message)
+    blind_message = (pow(r, *public_key) * m) % public_key[1]
+    print("Blinded Message:            " + str(blind_message))
+    f.write(str(blind_message))
     return r
 
 
-def unblind(msg, r, pubkey):
+def signature(message, private_key):
+    f = open('signedfile', 'w')
+    coded = pow(int(message), *private_key) % private_key[1]
+    print("Blinded Signed Message:     " + str(coded))
+    f.write(str(coded))
+
+
+def unblind(message, r, public_key):
     f = open('unblindsigned', 'w')
-    bsm = int(msg)
-    ubsm = (bsm * multinv(pubkey[1], r)) % pubkey[1]
-    print("Unblinded Signed Message:   " + str(ubsm))
-    f.write(str(ubsm))
+    blind_signed_message = int(message)
+    unblind_signed_message = (blind_signed_message * multinv(public_key[1], r)) % public_key[1]
+    print("Unblinded Signed Message:   " + str(unblind_signed_message))
+    f.write(str(unblind_signed_message))
 
 
-def verefy(msg, pubkey):
+def verify(message, public_key):
     f = open('verified_message', 'w')
-    verefy_message = str(pow(int(msg), *pubkey) % pubkey[1])
-    print("Message After Verification: " + verefy_message)
-    while len(verefy_message) % 3 != 0:
-        verefy_message = "0" + verefy_message
+    verify_message = str(pow(int(message), *public_key) % public_key[1])
+    print("Message After Verification: " + verify_message)
+    while len(verify_message) % 3 != 0:
+        verify_message = "0" + verify_message
 
-    f.write(verefy_message)
+    f.write(verify_message)
 
 
 def hash_to_int(hash_message):
@@ -55,17 +55,3 @@ def hash_to_int(hash_message):
             number = "0" + number
         int_message += number
     return int_message
-
-
-def int_to_hash(int_message):
-    str_message = ""
-    last = ""
-    j = 0
-    for i in int_message:
-        if j % 3 == 0 or j % 3 == 1:
-            last += i
-        else:
-            str_message += chr(int(last + i))
-            last = ""
-        j += 1
-    return str_message
