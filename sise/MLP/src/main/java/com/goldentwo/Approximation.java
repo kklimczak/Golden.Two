@@ -22,6 +22,7 @@ class Approximation {
 
     private GraphUtil graphUtil = new GraphUtil();
     private int inputOutputSize = Integer.parseInt(AppProperties.getProperty("inputOutput.size"));
+    private boolean bias = Boolean.parseBoolean(AppProperties.getProperty("bias"));
 
     Approximation() {
         setNetwork();
@@ -92,6 +93,6 @@ class Approximation {
 
     private void setNetwork() {
         int hiddenLayerSize = Integer.parseInt(AppProperties.getProperty("hiddenLayerSize"));
-        mlp = new MLP(inputOutputSize, hiddenLayerSize, inputOutputSize, false);
+        mlp = new MLP(inputOutputSize, hiddenLayerSize, inputOutputSize, bias);
     }
 }
