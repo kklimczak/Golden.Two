@@ -2,6 +2,7 @@ package com.goldentwo.rbf.model;
 
 import com.goldentwo.kmeans.KMeans;
 import com.goldentwo.rbf.graph.GraphPlot;
+import com.goldentwo.rbf.graph.GraphStyle;
 import com.goldentwo.rbf.model.layers.HiddenLayer;
 import com.goldentwo.rbf.model.layers.InputLayer;
 import com.goldentwo.rbf.model.layers.OutputLayer;
@@ -24,12 +25,17 @@ public class Network {
     private HiddenLayer hiddenLayer = new HiddenLayer();
     private OutputLayer outputLayer = new OutputLayer();
 
+    private List<Double> errors = new ArrayList<>();
+    private double epsilon;
+
     private KMeans kMeans;
 
     public Network() {
         inputLayer.setPoints(FileUtil.loadPointsFromFile("approximation_train.txt"));
 
         int hiddenLayerSize = Integer.parseInt(AppProperties.getProperty("hidden.size"));
+
+        epsilon = Double.parseDouble(AppProperties.getProperty("epsilon"));
         kMeans = new KMeans(inputLayer.getPoints(), hiddenLayerSize, 5);
     }
 
@@ -39,6 +45,8 @@ public class Network {
 
         trainHiddenLayer();
         trainOutputLayer(epoch, learningRate);
+
+        System.out.println("Training completed.");
     }
 
     public double propagate(double input) {
@@ -59,15 +67,22 @@ public class Network {
     private void trainOutputLayer(int epoch, double learningRate) {
         List<Point> points = new ArrayList<>(inputLayer.getPoints());
         outputLayer.activateLayer(learningRate, hiddenLayer.getNeurons().size());
-        for (int i = 0; i < epoch; i++) {
+
+        double error = 10;
+        for (int i = 0; i < epoch && error > epsilon; i++) {
+            error = 0;
             Collections.shuffle(points);
             for (Point point : points) {
                 outputLayer.train(hiddenLayer.calculateOutput(point.getX()), point);
+                double outputDelta = point.getY() - propagate(point.getX());
+                error += outputDelta * outputDelta;
             }
+            error /= points.size();
+            errors.add(error);
         }
     }
 
-    public void plotApproximation() {
+    public void plotResult() {
         XYSeriesCollection result = new XYSeriesCollection();
         XYSeries centers = new XYSeries("Centers");
         XYSeries trainingSeries = new XYSeries("Training set");
@@ -93,7 +108,24 @@ public class Network {
         result.addSeries(trainingSeries);
         result.addSeries(approximation);
 
-        GraphPlot plot = new GraphPlot("Network results", result);
+        GraphPlot plot = new GraphPlot("Network results", result, GraphStyle.SCATTER);
+
+        plot.pack();
+        RefineryUtilities.centerFrameOnScreen(plot);
+        plot.setVisible(true);
+    }
+
+    public void plotError() {
+        XYSeriesCollection result = new XYSeriesCollection();
+        XYSeries errorSeries = new XYSeries("MSE");
+
+        for (int i = 0; i < errors.size(); i++) {
+            errorSeries.add(i, errors.get(i));
+        }
+
+        result.addSeries(errorSeries);
+
+        GraphPlot plot = new GraphPlot("MSE", result, GraphStyle.LINE);
 
         plot.pack();
         RefineryUtilities.centerFrameOnScreen(plot);

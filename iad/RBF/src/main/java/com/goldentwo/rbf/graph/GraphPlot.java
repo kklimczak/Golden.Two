@@ -14,42 +14,57 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GraphPlot extends ApplicationFrame {
-    public GraphPlot(String s, XYSeriesCollection series) {
+    public GraphPlot(String s, XYSeriesCollection series, GraphStyle graphStyle) {
         super(s);
 
-        JPanel jpanel = createDemoPanel(series);
+        JPanel jpanel = createDemoPanel(series, graphStyle);
 
         jpanel.setPreferredSize(new Dimension(1000, 600));
         add(jpanel);
     }
 
-    private JPanel createDemoPanel(XYSeriesCollection dataset) {
+    private JPanel createDemoPanel(XYSeriesCollection dataset, GraphStyle graphStyle) {
         JFreeChart jfreechart;
 
+        if (graphStyle.equals(GraphStyle.SCATTER)) {
+            jfreechart = ChartFactory.createScatterPlot(
+                    "Approximation result",
+                    "X",
+                    "Y",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true,
+                    true,
+                    false);
 
-        jfreechart = ChartFactory.createScatterPlot(
-                "Approximation result",
-                "X",
-                "Y",
-                dataset,
-                PlotOrientation.VERTICAL,
-                true,
-                true,
-                false);
 
+            Shape cross = ShapeUtilities.createDiagonalCross(1f, 1f);
+            Rectangle rectangle = new Rectangle(7, 7);
 
-        Shape cross = ShapeUtilities.createDiagonalCross(1f, 1f);
-        Rectangle rectangle = new Rectangle(7, 7);
+            XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
+            XYItemRenderer renderer = xyPlot.getRenderer();
+            renderer.setSeriesShape(0, rectangle);
+            renderer.setSeriesPaint(0, Color.RED);
+            renderer.setSeriesShape(1, cross);
+            renderer.setSeriesPaint(1, Color.darkGray);
+            renderer.setSeriesShape(2, cross);
+            renderer.setSeriesPaint(2, Color.BLACK);
+        } else {
+            jfreechart = ChartFactory.createXYLineChart(
+                    "Errors",
+                    "iteration",
+                    "error value",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true,
+                    true,
+                    false
+            );
 
-        XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
-        XYItemRenderer renderer = xyPlot.getRenderer();
-        renderer.setSeriesShape(0, rectangle);
-        renderer.setSeriesPaint(0, Color.RED);
-        renderer.setSeriesShape(1, cross);
-        renderer.setSeriesPaint(1, Color.darkGray);
-        renderer.setSeriesShape(2, cross);
-        renderer.setSeriesPaint(2, Color.BLACK);
-
+            XYPlot xyPlot = (XYPlot) jfreechart.getPlot();
+            XYItemRenderer renderer = xyPlot.getRenderer();
+            renderer.setSeriesPaint(2, Color.BLACK);
+        }
 
         return new ChartPanel(jfreechart);
     }

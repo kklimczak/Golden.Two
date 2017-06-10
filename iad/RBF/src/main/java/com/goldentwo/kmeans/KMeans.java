@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 public class KMeans {
 
-    private final Logger LOG = Logger.getLogger(getClass().getName());
-
     private List<Point> points;
     private List<List<Cluster>> allRepetitionClustersForgy = new ArrayList<>();
     private List<Cluster> currentRepetitionClusterForgy = new ArrayList<>();
@@ -31,7 +29,7 @@ public class KMeans {
     }
 
     public void run() {
-        LOG.log(Level.SEVERE, "Clusters calculating started...");
+        System.out.println("Clusters calculating started...");
         long timeBefore = System.currentTimeMillis();
         for (int i = 0; i < repeats; i++) {
             cleanUp();
@@ -41,7 +39,7 @@ public class KMeans {
         findRepetitionWithLeastError();
 
         long timeAfter = System.currentTimeMillis();
-        LOG.log(Level.SEVERE, "Clusters calculated after " + (timeAfter - timeBefore) + "ms");
+        System.out.println("Clusters calculated after " + (timeAfter - timeBefore) + "ms");
     }
 
     public List<Point> getCalculaterdClustersCenters() {

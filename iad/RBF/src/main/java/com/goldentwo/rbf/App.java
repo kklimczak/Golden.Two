@@ -7,6 +7,7 @@ public class App {
         Network network = new Network();
         network.run();
 
-        network.plotApproximation();
+        network.plotResult();
+        network.plotError();
     }
 }
