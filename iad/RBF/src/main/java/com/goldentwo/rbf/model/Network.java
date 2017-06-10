@@ -8,6 +8,7 @@ import com.goldentwo.rbf.model.layers.OutputLayer;
 import com.goldentwo.rbf.model.neurons.RadianNeuron;
 import com.goldentwo.rbf.model.other.Point;
 import com.goldentwo.rbf.utils.FileUtil;
+import com.goldentwo.utils.AppProperties;
 import lombok.Data;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -25,12 +26,17 @@ public class Network {
 
     private KMeans kMeans;
 
-    public Network(int hiddenLayerSize) {
+    public Network() {
         inputLayer.setPoints(FileUtil.loadPointsFromFile("approximation_train.txt"));
+
+        int hiddenLayerSize = Integer.parseInt(AppProperties.getProperty("hidden.size"));
         kMeans = new KMeans(inputLayer.getPoints(), hiddenLayerSize, 5);
     }
 
-    public void run(int epoch, double learningRate) {
+    public void run() {
+        int epoch = Integer.parseInt(AppProperties.getProperty("epoch"));
+        double learningRate = Double.parseDouble(AppProperties.getProperty("learning.rate"));
+
         trainHiddenLayer();
         trainOutputLayer(epoch, learningRate);
     }
