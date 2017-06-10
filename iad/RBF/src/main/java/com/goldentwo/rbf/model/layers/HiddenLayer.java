@@ -4,7 +4,6 @@ import com.goldentwo.rbf.model.neurons.RadianNeuron;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,28 @@ import java.util.List;
 public class HiddenLayer {
     private List<RadianNeuron> neurons = new ArrayList<>();
 
-    public List<Double> getLayerOutput(){
-        throw new NotImplementedException();
+    public List<Double> calculateOutput(double input) {
+        List<Double> output = new ArrayList<>();
+        for (RadianNeuron neuron : neurons) {
+            output.add(neuron.calculateOutput(input));
+        }
+
+        return output;
+    }
+
+    public void addNeuron(RadianNeuron radianNeuron) {
+        neurons.add(radianNeuron);
+    }
+
+    public void calculateSigmas() {
+        List<RadianNeuron> sort = new ArrayList<>(neurons);
+        for (RadianNeuron radianNeuron : neurons) {
+            sort.sort((rn1, rn2) -> (int) (dist(rn1, radianNeuron) - dist(rn2, radianNeuron)));
+            radianNeuron.calculateUnitWidth(sort.subList(1, 3));
+        }
+    }
+
+    private double dist(RadianNeuron from, RadianNeuron to) {
+        return Math.abs(from.getUnitCenter() - to.getUnitCenter());
     }
 }

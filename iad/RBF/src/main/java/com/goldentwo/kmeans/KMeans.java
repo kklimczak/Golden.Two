@@ -6,13 +6,13 @@ import com.goldentwo.rbf.model.other.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class KMeans {
 
     private final Logger LOG = Logger.getLogger(getClass().getName());
-
 
     private List<Point> points;
     private List<List<Cluster>> allRepetitionClustersForgy = new ArrayList<>();
@@ -31,12 +31,17 @@ public class KMeans {
     }
 
     public void run() {
+        LOG.log(Level.SEVERE, "Clusters calculating started...");
+        long timeBefore = System.currentTimeMillis();
         for (int i = 0; i < repeats; i++) {
             cleanUp();
             proceed();
             allRepetitionClustersForgy.add(new ArrayList<>(currentRepetitionClusterForgy));
         }
         findRepetitionWithLeastError();
+
+        long timeAfter = System.currentTimeMillis();
+        LOG.log(Level.SEVERE, "Clusters calculated after " + (timeAfter - timeBefore) + "ms");
     }
 
     public List<Point> getCalculaterdClustersCenters() {
@@ -191,5 +196,9 @@ public class KMeans {
                 centroid.setLocation(centroidX, centroidY);
             }
         }
+    }
+
+    public int getClustersNumb() {
+        return clustersNumb;
     }
 }
