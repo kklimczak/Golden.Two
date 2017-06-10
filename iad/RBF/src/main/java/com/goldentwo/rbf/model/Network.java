@@ -1,10 +1,10 @@
-package com.goldentwo.model;
+package com.goldentwo.rbf.model;
 
-import com.goldentwo.model.layers.HiddenLayer;
-import com.goldentwo.model.layers.InputLayer;
-import com.goldentwo.model.layers.OutputLayer;
-import com.goldentwo.model.other.Point;
-import com.goldentwo.utils.FileUtil;
+import com.goldentwo.rbf.model.layers.HiddenLayer;
+import com.goldentwo.rbf.model.layers.InputLayer;
+import com.goldentwo.rbf.model.layers.OutputLayer;
+import com.goldentwo.rbf.model.other.Point;
+import com.goldentwo.rbf.utils.FileUtil;
 import lombok.Data;
 
 import java.util.List;

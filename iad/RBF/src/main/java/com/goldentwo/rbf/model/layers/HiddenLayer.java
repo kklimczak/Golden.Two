@@ -1,6 +1,6 @@
-package com.goldentwo.model.layers;
+package com.goldentwo.rbf.model.layers;
 
-import com.goldentwo.model.neurons.RadianNeuron;
+import com.goldentwo.rbf.model.neurons.RadianNeuron;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

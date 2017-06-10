@@ -1,6 +1,6 @@
-package com.goldentwo;
+package com.goldentwo.rbf;
 
-import com.goldentwo.model.Network;
+import com.goldentwo.rbf.model.Network;
 
 public class App {
     public static void main(String[] args) {

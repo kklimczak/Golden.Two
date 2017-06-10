@@ -1,4 +1,4 @@
-package com.goldentwo.model.layers;
+package com.goldentwo.rbf.model.layers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

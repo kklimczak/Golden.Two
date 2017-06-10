@@ -1,4 +1,4 @@
-package com.goldentwo.model.other;
+package com.goldentwo.rbf.model.other;
 
 import lombok.AllArgsConstructor;
 
@@ -9,6 +9,10 @@ public class Point extends Point2D {
 
     private double x;
     private double y;
+
+    public Point(Point p) {
+        setLocation(p.getX(), p.getY());
+    }
 
     @Override
     public double getX() {

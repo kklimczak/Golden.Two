@@ -1,6 +1,6 @@
-package com.goldentwo.utils;
+package com.goldentwo.rbf.utils;
 
-import com.goldentwo.model.other.Point;
+import com.goldentwo.rbf.model.other.Point;
 
 import java.io.File;
 import java.io.FileNotFoundException;

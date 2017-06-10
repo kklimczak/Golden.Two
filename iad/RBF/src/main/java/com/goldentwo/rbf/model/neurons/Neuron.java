@@ -1,4 +1,4 @@
-package com.goldentwo.model.neurons;
+package com.goldentwo.rbf.model.neurons;
 
 import lombok.Data;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
