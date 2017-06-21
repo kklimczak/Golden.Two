@@ -1,6 +1,5 @@
 package com.goldentwo.rbf.model.neurons;
 
-import com.goldentwo.rbf.model.other.Point;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +32,6 @@ public class RadianNeuron {
 
     private double gaussianActivation(double x) {
         double distance = Math.abs(x - unitCenter);
-        return Math.exp(-((distance * distance) / (unitWidth * unitWidth)));
+        return Math.exp(-((distance * distance) / (2 * (unitWidth * unitWidth))));
     }
 }
