@@ -31,7 +31,15 @@ public class Network {
     private KMeans kMeans;
 
     public Network() {
-        inputLayer.setPoints(FileUtil.loadPointsFromFile("approximation_train.txt"));
+        String trainingSetFile;
+
+        if (AppProperties.getProperty("training.set").equals("easy")) {
+            trainingSetFile = "approximation_train_easy.txt";
+        } else {
+            trainingSetFile = "approximation_train.txt";
+        }
+
+        inputLayer.setPoints(FileUtil.loadPointsFromFile(trainingSetFile));
 
         int hiddenLayerSize = Integer.parseInt(AppProperties.getProperty("hidden.size"));
 
