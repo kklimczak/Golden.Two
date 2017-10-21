@@ -28,10 +28,10 @@ public class HiddenLayer {
     }
 
     public void calculateSigmas() {
-        List<RadianNeuron> sort = new ArrayList<>(neurons);
+        List<RadianNeuron> distanceSorted = new ArrayList<>(neurons);
         for (RadianNeuron radianNeuron : neurons) {
-            sort.sort((rn1, rn2) -> (int) (dist(rn1, radianNeuron) - dist(rn2, radianNeuron)));
-            radianNeuron.calculateUnitWidth(sort.subList(1, 3));
+            distanceSorted.sort((rn1, rn2) -> (int) (dist(rn1, radianNeuron) - dist(rn2, radianNeuron)));
+            radianNeuron.calculateUnitWidth(distanceSorted.subList(1, 3));
         }
     }
 

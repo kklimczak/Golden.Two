@@ -79,7 +79,7 @@ public class Network {
         double error = 10;
         for (int i = 0; i < epoch && error > epsilon; i++) {
             error = 0;
-            Collections.shuffle(points);
+//            Collections.shuffle(points);
             for (Point point : points) {
                 outputLayer.train(hiddenLayer.calculateOutput(point.getX()), point);
                 double outputDelta = point.getY() - propagate(point.getX());
