@@ -3,6 +3,7 @@ package com.goldentwo.semaphore.util;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DataGenerator {
@@ -11,8 +12,9 @@ public class DataGenerator {
 
     private static final Logger log = Logger.getLogger(DataGenerator.class.getSimpleName());
 
-    public static int[][] generateData(int width, int height) {
-        int[][] data = new int[width][height];
+    public static String[][] generateData(int width, int height) {
+        log.log(Level.INFO, "Generating 2D data with {0} width and " + height + " height", width);
+        String[][] data = new String[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 data[i][j] = CharGenerator.getChar();
@@ -24,11 +26,11 @@ public class DataGenerator {
         return data;
     }
 
-    private static void saveToFile(int[][] data) {
+    private static void saveToFile(String[][] data) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < data[0].length; i++) {
             for (int j = 0; j < data[1].length; j++) {
-                builder.append(Integer.toString(data[i][j]));
+                builder.append(data[i][j]);
                 if (j < data[1].length - 1)
                     builder.append(",");
             }

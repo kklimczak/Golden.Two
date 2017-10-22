@@ -2,14 +2,15 @@ package com.goldentwo.semaphore.util;
 
 import java.util.Random;
 
-class CharGenerator {
+public class CharGenerator {
+    public static final String CHARS = "ABCDEFGHIJ";
+
+    private static final Random RAND = new Random();
+
     private CharGenerator() {
     }
 
-    private static final String CHARS = "abcdefghijklmnopqrstuwvxyz";
-    private static Random rand = new Random();
-
-    static char getChar() {
-        return CHARS.charAt(rand.nextInt(CHARS.length()));
+    static String getChar() {
+        return String.valueOf(CHARS.charAt(RAND.nextInt(CHARS.length())));
     }
 }

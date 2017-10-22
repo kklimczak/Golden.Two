@@ -12,4 +12,14 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'jfree', name: 'jfreechart', version: '1.0.13'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'com.goldentwo.semaphore.Application'
+        )
+    }
 }
