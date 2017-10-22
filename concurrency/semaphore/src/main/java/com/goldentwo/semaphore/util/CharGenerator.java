@@ -10,7 +10,7 @@ public class CharGenerator {
     private CharGenerator() {
     }
 
-    static String getChar() {
-        return String.valueOf(CHARS.charAt(RAND.nextInt(CHARS.length())));
+    static String generateChar(String chars) {
+        return String.valueOf(((CHARS + chars).charAt(RAND.nextInt(CHARS.length() + chars.length()))));
     }
 }

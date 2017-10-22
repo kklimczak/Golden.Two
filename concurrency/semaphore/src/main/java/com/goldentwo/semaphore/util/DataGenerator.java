@@ -12,18 +12,22 @@ public class DataGenerator {
 
     private static final Logger log = Logger.getLogger(DataGenerator.class.getSimpleName());
 
-    public static String[][] generateData(int width, int height) {
+    public static String[][] generateData(int width, int height, String additionalLetters) {
         log.log(Level.INFO, "Generating 2D data with {0} width and " + height + " height", width);
         String[][] data = new String[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                data[i][j] = CharGenerator.getChar();
+                data[i][j] = CharGenerator.generateChar(additionalLetters);
             }
         }
 
         saveToFile(data);
 
         return data;
+    }
+
+    public static String[][] generateData(int width, int height) {
+        return generateData(width, height, "");
     }
 
     private static void saveToFile(String[][] data) {

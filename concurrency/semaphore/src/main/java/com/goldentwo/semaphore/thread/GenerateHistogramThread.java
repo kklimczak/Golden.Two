@@ -5,6 +5,7 @@ import com.goldentwo.semaphore.model.DataModel;
 
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GenerateHistogramThread implements Runnable {
@@ -13,13 +14,16 @@ public class GenerateHistogramThread implements Runnable {
     private Semaphore workDoneSemaphore;
     private DataModel dataModel;
     private int threadsNumb;
+    private long timeMillisBefore;
 
     public GenerateHistogramThread(Semaphore workDoneSemaphore,
                                    DataModel dataModel,
-                                   int threadsNumb) {
+                                   int threadsNumb,
+                                   long timeMillisBefore) {
         this.workDoneSemaphore = workDoneSemaphore;
         this.dataModel = dataModel;
         this.threadsNumb = threadsNumb;
+        this.timeMillisBefore = timeMillisBefore;
     }
 
     @Override
@@ -35,11 +39,12 @@ public class GenerateHistogramThread implements Runnable {
             }
 
             new Histogram().generateHistogram(dataModel);
-            log.info("Done!");
+
         } catch (IOException | InterruptedException e) {
             log.warning(e.getMessage());
         } finally {
             workDoneSemaphore.release(threadsNumb);
+            log.log(Level.INFO, "Program finished after {0} ms", System.currentTimeMillis() - this.timeMillisBefore);
         }
     }
 }

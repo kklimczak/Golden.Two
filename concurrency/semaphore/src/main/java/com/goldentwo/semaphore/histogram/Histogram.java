@@ -20,25 +20,25 @@ public class Histogram {
     private static final String XAXIS = "letters";
     private static final String YAXIS = "value";
     private static final String OUTPUT_FILE_NAME = "histogram.PNG";
+    private static final int OUTPUT_FILE_WIDTH = 1000;
+    private static final int OUTPUT_FILE_HEIGHT = 600;
 
     public void generateHistogram(DataModel dataModel) throws IOException {
 
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
         dataModel
                 .getData()
                 .forEach(
-                        (key, count) -> dataset.addValue(count, key, key)
+                        (key, count) -> dataSet.addValue(count, key, key)
                 );
 
         JFreeChart chart = ChartFactory.createBarChart(PLOT_TITLE, XAXIS, YAXIS,
-                dataset, PlotOrientation.VERTICAL, SHOW, TOOL_TIPS, URLS);
+                dataSet, PlotOrientation.VERTICAL, SHOW, TOOL_TIPS, URLS);
         StackedBarRenderer renderer = new StackedBarRenderer(false);
         renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
         renderer.setBaseItemLabelsVisible(true);
         chart.getCategoryPlot().setRenderer(renderer);
-        int width = 1000;
-        int height = 600;
-        ChartUtilities.saveChartAsPNG(new File(OUTPUT_FILE_NAME), chart, width, height);
+        ChartUtilities.saveChartAsPNG(new File(OUTPUT_FILE_NAME), chart, OUTPUT_FILE_WIDTH, OUTPUT_FILE_HEIGHT);
     }
 }

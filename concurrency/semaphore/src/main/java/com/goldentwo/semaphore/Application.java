@@ -26,21 +26,30 @@ public class Application {
         DataModel dataModel = new DataModel();
         Semaphore workDoneSemaphore = new Semaphore(DEFAULT_THREADS_NUMB);
 
+        long timeMillisBefore = System.currentTimeMillis();
+
         runThreads(executor, generatedData, dataModel, workDoneSemaphore);
-        runHistogramGeneratorThread(executor, dataModel, workDoneSemaphore);
+        runHistogramGeneratorThread(executor, dataModel, workDoneSemaphore, timeMillisBefore);
 
         executor.shutdown();
     }
 
-    private static void runHistogramGeneratorThread(ExecutorService executor, DataModel dataModel, Semaphore workDoneSemaphore) {
+    private static void runHistogramGeneratorThread(ExecutorService executor,
+                                                    DataModel dataModel,
+                                                    Semaphore workDoneSemaphore,
+                                                    long timeMillisBefore) {
         executor.execute(new GenerateHistogramThread(
                 workDoneSemaphore,
                 dataModel,
-                DEFAULT_THREADS_NUMB
+                DEFAULT_THREADS_NUMB,
+                timeMillisBefore
         ));
     }
 
-    private static void runThreads(ExecutorService executor, String[][] generatedData, DataModel dataModel, Semaphore workDoneSemaphore) throws InterruptedException {
+    private static void runThreads(ExecutorService executor,
+                                   String[][] generatedData,
+                                   DataModel dataModel,
+                                   Semaphore workDoneSemaphore) throws InterruptedException {
         for (char letter : CharGenerator.CHARS.toCharArray()) {
             workDoneSemaphore.acquire();
             executor.execute(new CountingThread(
