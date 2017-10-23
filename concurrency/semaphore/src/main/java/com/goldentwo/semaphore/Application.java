@@ -20,9 +20,9 @@ public class Application {
     public static void main(String[] args) throws InterruptedException {
         log.info("Program started");
 
-        ExecutorService executor = Executors.newFixedThreadPool(DEFAULT_THREADS_NUMB + 1);
-
+        ExecutorService executor = Executors.newFixedThreadPool(2 * DEFAULT_THREADS_NUMB + 1);
         String[][] generatedData = DataGenerator.generateData(WIDTH, HEIGHT);
+
         DataModel dataModel = new DataModel();
         Semaphore workDoneSemaphore = new Semaphore(DEFAULT_THREADS_NUMB);
 
@@ -52,11 +52,23 @@ public class Application {
                                    Semaphore workDoneSemaphore) throws InterruptedException {
         for (char letter : CharGenerator.CHARS.toCharArray()) {
             workDoneSemaphore.acquire();
+            Semaphore letterSemaphore = new Semaphore(1);
+
             executor.execute(new CountingThread(
                     generatedData,
                     dataModel,
                     workDoneSemaphore,
-                    String.valueOf(letter)));
+                    letterSemaphore,
+                    String.valueOf(letter),
+                    true));
+
+            executor.execute(new CountingThread(
+                    generatedData,
+                    dataModel,
+                    workDoneSemaphore,
+                    letterSemaphore,
+                    String.valueOf(letter),
+                    false));
         }
     }
 }
