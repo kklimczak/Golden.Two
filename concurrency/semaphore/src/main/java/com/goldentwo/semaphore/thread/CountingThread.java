@@ -34,17 +34,17 @@ public class CountingThread implements Runnable {
 
     @Override
     public void run() {
-        log.log(Level.INFO, "Thread {0} started. Counting from beginning: " + this.countFromBeginning, this.letter);
+        log.log(Level.INFO, "Thread {0} started", Thread.currentThread().getName());
 
         if (this.countFromBeginning) {
-            for (int row = 0; row <= generatedData[0].length / 2; row++) {
-                for (int column = 0; column < generatedData[1].length / 2; column++) {
+            for (int row = 0; row < generatedData[0].length / 2; row++) {
+                for (int column = 0; column < generatedData[1].length; column++) {
                     countLetter(generatedData[row][column]);
                 }
             }
         } else {
-            for (int row = generatedData[0].length / 2; row >= 0; row--) {
-                for (int column = generatedData[1].length / 2; column >= 0; column--) {
+            for (int row = generatedData[0].length / 2; row < generatedData[0].length; row++) {
+                for (int column = 0; column < generatedData[1].length; column++) {
                     countLetter(generatedData[row][column]);
                 }
             }

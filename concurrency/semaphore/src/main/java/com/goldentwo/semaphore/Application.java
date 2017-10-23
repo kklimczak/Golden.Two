@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 public class Application {
     private static final Logger log = Logger.getLogger(Application.class.getSimpleName());
     private static final int DEFAULT_THREADS_NUMB = 10;
-    private static final int WIDTH = 10000;
-    private static final int HEIGHT = 1000;
+    private static final int WIDTH = 10;
+    private static final int HEIGHT = 10;
 
     public static void main(String[] args) throws InterruptedException {
         log.info("Program started");
