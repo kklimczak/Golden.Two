@@ -11,15 +11,13 @@ import java.util.concurrent.Semaphore;
 
 public class ThreadsRunner {
 
-    private static final int GENERATE_HISTOGRAM_THREAD = 1;
-
     private ThreadsRunner() {
     }
 
     public static void runThreads(String[][] generatedData,
                                   DataModel dataModel) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(
-                Application.DEFAULT_THREADS_NUMB + GENERATE_HISTOGRAM_THREAD);
+                Application.DEFAULT_THREADS_NUMB);
 
         Semaphore workDoneSemaphore = new Semaphore(Application.DEFAULT_THREADS_NUMB);
 
