@@ -19,8 +19,8 @@ public class Application {
         log.info("Program started");
 
         String[][] generatedData = DataGenerator.generateData(WIDTH, HEIGHT, ADDITIONAL_LETTERS);
-        DataModel dataModel = new DataModel();
+        DataModel dataModel = new DataModel(generatedData);
 
-        ThreadsRunner.runThreads(generatedData, dataModel);
+        ThreadsRunner.runThreads(dataModel);
     }
 }

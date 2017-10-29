@@ -8,24 +8,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataModel {
-    private Map<String, Integer> data;
+    private Map<String, Integer> counterMap;
+    private String[][] data;
 
-    public DataModel() {
-        this.data = new HashMap<>();
+    public DataModel(String[][] data) {
+        this.data = data;
+        this.counterMap = new HashMap<>();
         for (char letter : CharGenerator.CHARS.toCharArray()) {
-            data.put(String.valueOf(letter), 0);
+            counterMap.put(String.valueOf(letter), 0);
         }
     }
 
+    public String[][] getData() {
+        return data;
+    }
+
     public void incrementLetterCounter(String letter) {
-        Integer counter = this.data.get(letter);
-        this.data.put(letter, ++counter);
+        Integer counter = this.counterMap.get(letter);
+        this.counterMap.put(letter, ++counter);
     }
 
     public CategoryDataset generateCategoryDataSet() {
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
-        this.data.forEach(
+        this.counterMap.forEach(
                 (key, count) -> dataSet.addValue(count, key, key)
         );
 

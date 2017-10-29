@@ -10,20 +10,17 @@ public class CountingThread implements Runnable {
 
     private static final Logger log = Logger.getLogger(CountingThread.class.getSimpleName());
 
-    private String[][] generatedData;
     private DataModel dataModel;
     private Semaphore workDoneSemaphore;
     private Semaphore letterSemaphore;
     private String letter;
     private boolean countFromBeginning;
 
-    public CountingThread(String[][] generateData,
-                          DataModel dataModel,
+    public CountingThread(DataModel dataModel,
                           Semaphore workDoneSemaphore,
                           Semaphore letterSemaphore,
                           String letter,
                           boolean countFromBeginning) {
-        this.generatedData = generateData;
         this.dataModel = dataModel;
         this.workDoneSemaphore = workDoneSemaphore;
         this.letterSemaphore = letterSemaphore;
@@ -34,6 +31,7 @@ public class CountingThread implements Runnable {
     @Override
     public void run() {
         log.log(Level.INFO, "Thread {0} started", Thread.currentThread().getName());
+        String[][] generatedData = this.dataModel.getData();
 
         if (this.countFromBeginning) {
             for (int row = 0; row < generatedData.length / 2; row++) {
@@ -53,15 +51,16 @@ public class CountingThread implements Runnable {
     }
 
     private void incrementLetterCounter(String letter) {
-        boolean tryAcquire = false;
         if (letter.equals(this.letter)) {
-            while (!tryAcquire) {
-                tryAcquire = letterSemaphore.tryAcquire();
+            try {
+                letterSemaphore.acquire();
+                dataModel.incrementLetterCounter(this.letter);
+            } catch (InterruptedException e) {
+                log.log(Level.OFF, e.getMessage());
+                Thread.currentThread().interrupt();
+            } finally {
+                letterSemaphore.release();
             }
-
-            dataModel.incrementLetterCounter(this.letter);
-
-            letterSemaphore.release();
         }
     }
 }

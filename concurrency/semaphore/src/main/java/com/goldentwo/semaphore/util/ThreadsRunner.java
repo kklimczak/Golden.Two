@@ -14,15 +14,14 @@ public class ThreadsRunner {
     private ThreadsRunner() {
     }
 
-    public static void runThreads(String[][] generatedData,
-                                  DataModel dataModel) throws InterruptedException {
+    public static void runThreads(DataModel dataModel) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(
                 Application.DEFAULT_THREADS_NUMB);
 
         Semaphore workDoneSemaphore = new Semaphore(Application.DEFAULT_THREADS_NUMB);
 
         long timeMillisBefore = System.currentTimeMillis();
-        runCountingThreads(executor, generatedData, dataModel, workDoneSemaphore);
+        runCountingThreads(executor, dataModel, workDoneSemaphore);
         runHistogramGeneratorThread(executor, dataModel, workDoneSemaphore, timeMillisBefore);
 
         executor.shutdown();
@@ -41,7 +40,6 @@ public class ThreadsRunner {
     }
 
     private static void runCountingThreads(ExecutorService executor,
-                                           String[][] generatedData,
                                            DataModel dataModel,
                                            Semaphore workDoneSemaphore) throws InterruptedException {
         for (char letter : CharGenerator.CHARS.toCharArray()) {
@@ -49,7 +47,6 @@ public class ThreadsRunner {
             Semaphore binaryLetterSemaphore = new Semaphore(1);
 
             executor.execute(new CountingThread(
-                    generatedData,
                     dataModel,
                     workDoneSemaphore,
                     binaryLetterSemaphore,
@@ -57,7 +54,6 @@ public class ThreadsRunner {
                     true));
 
             executor.execute(new CountingThread(
-                    generatedData,
                     dataModel,
                     workDoneSemaphore,
                     binaryLetterSemaphore,
