@@ -43,9 +43,9 @@ public class ThreadsRunner {
                                            DataModel dataModel,
                                            Semaphore workDoneSemaphore) throws InterruptedException {
         for (char letter : CharGenerator.CHARS.toCharArray()) {
-            workDoneSemaphore.acquire();
             Semaphore binaryLetterSemaphore = new Semaphore(1);
 
+            workDoneSemaphore.acquire();
             executor.execute(new CountingThread(
                     dataModel,
                     workDoneSemaphore,
@@ -53,6 +53,7 @@ public class ThreadsRunner {
                     String.valueOf(letter),
                     true));
 
+            workDoneSemaphore.acquire();
             executor.execute(new CountingThread(
                     dataModel,
                     workDoneSemaphore,
