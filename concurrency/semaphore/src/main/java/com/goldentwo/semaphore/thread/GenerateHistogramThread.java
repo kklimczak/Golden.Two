@@ -34,7 +34,8 @@ public class GenerateHistogramThread implements Runnable {
             while (!tryAcquire) {
                 tryAcquire = workDoneSemaphore.tryAcquire(threadsNumb);
                 if (!tryAcquire) {
-                    Thread.sleep(10);
+                    log.info("Counting threads are still working...");
+                    Thread.sleep(20);
                 }
             }
 
