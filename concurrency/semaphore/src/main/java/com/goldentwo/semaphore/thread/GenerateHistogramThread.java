@@ -38,7 +38,7 @@ public class GenerateHistogramThread implements Runnable {
                 }
             }
 
-            new Histogram().generateHistogram(dataModel);
+            new Histogram().generateHistogram(dataModel.generateCategoryDataSet());
 
         } catch (IOException | InterruptedException e) {
             log.warning(e.getMessage());

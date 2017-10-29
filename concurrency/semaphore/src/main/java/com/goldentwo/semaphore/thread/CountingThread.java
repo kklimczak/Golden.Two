@@ -2,7 +2,6 @@ package com.goldentwo.semaphore.thread;
 
 import com.goldentwo.semaphore.model.DataModel;
 
-import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,15 +36,15 @@ public class CountingThread implements Runnable {
         log.log(Level.INFO, "Thread {0} started", Thread.currentThread().getName());
 
         if (this.countFromBeginning) {
-            for (int row = 0; row < generatedData[0].length / 2; row++) {
-                for (int column = 0; column < generatedData[1].length; column++) {
-                    countLetter(generatedData[row][column]);
+            for (int row = 0; row < generatedData.length / 2; row++) {
+                for (int column = 0; column < generatedData[row].length; column++) {
+                    incrementLetterCounter(generatedData[row][column]);
                 }
             }
         } else {
-            for (int row = generatedData[0].length / 2; row < generatedData[0].length; row++) {
-                for (int column = 0; column < generatedData[1].length; column++) {
-                    countLetter(generatedData[row][column]);
+            for (int row = generatedData.length / 2; row < generatedData.length; row++) {
+                for (int column = 0; column < generatedData[row].length; column++) {
+                    incrementLetterCounter(generatedData[row][column]);
                 }
             }
         }
@@ -53,16 +52,14 @@ public class CountingThread implements Runnable {
         workDoneSemaphore.release();
     }
 
-    private void countLetter(String letter) {
+    private void incrementLetterCounter(String letter) {
         boolean tryAcquire = false;
         if (letter.equals(this.letter)) {
             while (!tryAcquire) {
                 tryAcquire = letterSemaphore.tryAcquire();
             }
 
-            Map<String, Integer> integerMap = dataModel.getData();
-            Integer count = integerMap.get(this.letter);
-            integerMap.put(this.letter, ++count);
+            dataModel.incrementLetterCounter(this.letter);
 
             letterSemaphore.release();
         }
