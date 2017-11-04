@@ -13,7 +13,7 @@ public class DataGenerator {
     private static final Logger log = Logger.getLogger(DataGenerator.class.getSimpleName());
 
     public static String[][] generateData(int width, int height, String additionalLetters) {
-        log.log(Level.INFO, "Generating 2D data with {0} width and " + height + " height", width);
+        log.log(Level.INFO, "Generating 2D data with {0} characters.", height * width);
         String[][] data = new String[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -26,16 +26,12 @@ public class DataGenerator {
         return data;
     }
 
-    public static String[][] generateData(int width, int height) {
-        return generateData(width, height, "");
-    }
-
     private static void saveToFile(String[][] data) {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < data[0].length; i++) {
-            for (int j = 0; j < data[1].length; j++) {
-                builder.append(data[i][j]);
-                if (j < data[1].length - 1)
+        for (String[] row : data) {
+            for (int i = 0; i < row.length; i++) {
+                builder.append(row[i]);
+                if (i < row.length - 1)
                     builder.append(",");
             }
             builder.append("\n");
