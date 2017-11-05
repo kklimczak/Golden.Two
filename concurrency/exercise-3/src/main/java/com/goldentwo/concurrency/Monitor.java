@@ -4,14 +4,14 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Monitor {
+class Monitor {
     private Direction direction;
     private int counter;
     private final Lock lock;
     private final Condition north;
     private final Condition south;
 
-    public Monitor(Direction direction) {
+    Monitor(Direction direction) {
         this.direction = direction;
         counter = 0;
         lock = new ReentrantLock(true);
@@ -19,11 +19,11 @@ public class Monitor {
         south = lock.newCondition();
     }
 
-    public void dislocate(Direction carDirection) throws InterruptedException {
-        if (direction != carDirection) {
-            lock.lock();
-            try {
-                if (carDirection == Direction.SOUTH) {
+    void dislocate(Car car) throws InterruptedException {
+        lock.lock();
+        try {
+            if (direction != car.getDirection()) {
+                if (car.getDirection() == Direction.SOUTH) {
                     while (direction == Direction.NORTH) {
                         south.await();
                     }
@@ -32,11 +32,12 @@ public class Monitor {
                         north.await();
                     }
                 }
-            } finally {
-                lock.unlock();
             }
-        } else {
+
             counter++;
+            System.out.println(
+                    "Car " + car.getId() + " has driven through bridge to " +
+                    (Direction.SOUTH == car.getDirection() ? "south" : "north"));
             if (counter == 10) {
                 if (direction == Direction.SOUTH) {
                     changeDirectionToNorth();
@@ -45,26 +46,20 @@ public class Monitor {
                 }
                 counter = 0;
             }
-        }
-    }
 
-    public void changeDirectionToNorth() {
-        lock.lock();
-        try {
-            direction = Direction.NORTH;
-            north.signal();
         } finally {
             lock.unlock();
         }
+
     }
 
-    public void changeDirectionToSouth() {
-        lock.lock();
-        try {
-            direction = Direction.SOUTH;
-            south.signal();
-        } finally {
-            lock.unlock();
-        }
+    private void changeDirectionToNorth() {
+        direction = Direction.NORTH;
+        north.signalAll();
+    }
+
+    private void changeDirectionToSouth() {
+        direction = Direction.SOUTH;
+        south.signalAll();
     }
 }
