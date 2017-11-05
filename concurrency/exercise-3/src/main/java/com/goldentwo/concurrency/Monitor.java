@@ -36,8 +36,8 @@ class Monitor {
 
             counter++;
             System.out.println(
-                    "Car " + car.getId() + " has driven through bridge to " +
-                    (Direction.SOUTH == car.getDirection() ? "south" : "north"));
+                    (Direction.SOUTH == car.getDirection() ? "[N --> S]" : "[S --> N]") +
+                    " Car " + car.getId());
             if (counter == 10) {
                 if (direction == Direction.SOUTH) {
                     changeDirectionToNorth();
