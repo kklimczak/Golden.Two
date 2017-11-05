@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Monitor
 {
 	private char direction;
+	private int counter = 0;
 	private final Lock lock;
 	private final Condition north;
 	private final Condition south;
@@ -22,10 +23,8 @@ public class Monitor
 
 	public void dislocate(char car_direction) throws InterruptedException
 	{
-		if(car_direction != direction)
-		{
+		if(car_direction != direction) {
 			lock.lock();
-
 			try {
 				
 				if(car_direction == 'S') while(direction == 'N') south.await();
@@ -33,6 +32,16 @@ public class Monitor
 
 			} finally {
 				lock.unlock();
+			}
+		} else {
+			counter++;
+			if (counter == 10) {
+				if (direction == 'N') {
+					change_direction_to_south();
+				} else {
+					change_direction_to_north();
+				}
+				counter = 0;
 			}
 		}
 	}

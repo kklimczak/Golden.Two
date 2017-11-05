@@ -32,8 +32,8 @@ public class Chronometer implements Runnable
 		if(s % 2 == 0 && s != last) 
 		{
 			last = s; 
-			if(monitor.get_direction() == 'S') monitor.change_direction_to_north();
-			else monitor.change_direction_to_south();
+//			if(monitor.get_direction() == 'S') monitor.change_direction_to_north();
+//			else monitor.change_direction_to_south();
 			System.out.println(s +" seconds ("+monitor.get_direction()+")");
 		}
 

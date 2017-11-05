@@ -43,6 +43,8 @@ public class Car implements Runnable
 		OneLaneBridge.set_completed((OneLaneBridge.get_completed()) + 1);
 		if((OneLaneBridge.get_completed()) == OneLaneBridge.get_all_cars()) OneLaneBridge.set_finish(true);
 
+		System.out.println(OneLaneBridge.get_completed());
+
 		System.out.println("Car " + number + " has arrived at home!");
 	}
 
