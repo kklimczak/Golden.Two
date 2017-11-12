@@ -1,10 +1,11 @@
 import App from './app';
 import HeaderComponent from "./components/header/header.component";
+import MainComponent from "./components/main/main.component";
 
 
 function bootstrap() {
     new App({
-        components: [HeaderComponent],
+        components: [HeaderComponent, MainComponent],
         styles: require('./styles/app.scss')
     });
 }
