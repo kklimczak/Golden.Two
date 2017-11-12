@@ -27,6 +27,7 @@ $header-wrapper-color: white;
         margin: 0;
         @include breakpoint(small only) {
           justify-content: center;
+          font-size: 12px;
         }
         li {
           display: inline-block;
