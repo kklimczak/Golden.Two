@@ -1,3 +1,31 @@
+$header-wrapper-bg-color: #1779ba;
+$header-wrapper-color: white;
+
 .header {
-  background: red;
+  .bar {
+    font-size: 14px;
+    padding: 5px;
+  }
+  .wrapper {
+    background: $header-wrapper-bg-color;
+    color: $header-wrapper-color;
+    .logo {
+      padding: 15px;
+    }
+    nav {
+      .menu {
+        margin: 0;
+        li {
+          display: inline-block;
+          padding: 15px;
+          transition: 0.3s ease;
+          border-left: 1px solid darken($header-wrapper-bg-color, 5%);
+          &:hover {
+            background: darken($header-wrapper-bg-color, 10%);
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
 }

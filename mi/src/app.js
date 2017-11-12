@@ -1,5 +1,3 @@
-import HeaderComponent from './components/header/header.component';
-
 export default class App {
 
     constructor(options) {
@@ -15,7 +13,6 @@ export default class App {
 
     component(component) {
         this.components.push(component);
-        console.log(this);
     }
 
     run() {
