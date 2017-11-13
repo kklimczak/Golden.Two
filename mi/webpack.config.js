@@ -52,6 +52,9 @@ module.exports = {
                 from: 'src/offers.html'
             },
             {
+                from: 'src/contact.html'
+            },
+            {
                 from: 'src/assets'
             }
         ])
