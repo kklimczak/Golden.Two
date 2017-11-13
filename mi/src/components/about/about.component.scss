@@ -1,6 +1,70 @@
 .about {
   padding: 30px 0;
   h2 {
-    margin-bottom: 30px;
+    margin: 30px 0;
+  }
+
+  h4 {
+    margin: 60px 0 90px;
+  }
+
+  h3 {
+    font-size: 300%;
+  }
+
+  @media screen and (max-width: 640px) {
+    h3 {
+      font-size: 150%;
+    }
+  }
+
+  span {
+    display: block;
+  }
+
+  section {
+    &.overview {
+      margin: 60px 0 90px;
+    }
+
+    &.goal {
+      margin: 90px 0 60px;
+      font-size: 1.125rem;
+    }
+
+    &.team {
+      font-size: 1.125rem;
+    }
+
+    &.summary {
+      padding: 0 !important;
+      position: relative;
+      margin: 180px 0;
+      width: 100vw;
+      left: calc(-50vw + 50%);
+    }
+
+    .img-container {
+      position: relative;
+      text-align: center;
+      color: white;
+    }
+
+    .img-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .line-separator {
+    height:1px;
+    background:#717171;
+    border-bottom:1px solid #313030;
+  }
+
+  .margin-bottom {
+    margin-bottom: 60px;
   }
 }
