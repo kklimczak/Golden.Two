@@ -49,6 +49,9 @@ module.exports = {
                 from: 'src/about.html'
             },
             {
+                from: 'src/offers.html'
+            },
+            {
                 from: 'src/assets'
             }
         ])
