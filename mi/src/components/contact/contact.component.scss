@@ -1,0 +1,33 @@
+.contact {
+  padding: 30px 0;
+  h2 {
+    margin-bottom: 30px;
+  }
+  .submit {
+    padding: 15px;
+    background: #1779ba;
+    border-radius: 3px;
+    border: none;
+    color: white;
+    transition: 0.3s ease;
+    margin-bottom: 15px;
+    &:hover {
+      background: darken(#1779ba, 10%);
+      cursor: pointer;
+    }
+  }
+
+  .google-maps {
+    position: relative;
+    padding-bottom: 75%; // This is the aspect ratio
+    height: 0;
+    overflow: hidden;
+  }
+  .google-maps iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
