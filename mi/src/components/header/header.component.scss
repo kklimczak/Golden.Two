@@ -16,6 +16,7 @@ $header-wrapper-color: white;
     color: $header-wrapper-color;
     .logo {
       padding: 15px;
+      line-height: 1.8rem;
       font-weight: 600;
       @include breakpoint(small only) {
         text-align: center;
@@ -38,6 +39,11 @@ $header-wrapper-color: white;
             &:first-child {
               border-left: none;
             }
+          }
+          a {
+            padding: 0;
+            color: white;
+            line-height: 1.8rem;
           }
           &:hover {
             background: darken($header-wrapper-bg-color, 10%);

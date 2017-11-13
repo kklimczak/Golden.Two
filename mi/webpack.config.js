@@ -46,6 +46,9 @@ module.exports = {
                 from: 'src/index.html'
             },
             {
+                from: 'src/about.html'
+            },
+            {
                 from: 'src/assets'
             }
         ])
