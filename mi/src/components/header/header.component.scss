@@ -32,7 +32,6 @@ $header-wrapper-color: white;
         }
         li {
           display: inline-block;
-          padding: 15px;
           transition: 0.3s ease;
           border-left: 1px solid darken($header-wrapper-bg-color, 5%);
           @include breakpoint(small only) {
@@ -41,7 +40,7 @@ $header-wrapper-color: white;
             }
           }
           a {
-            padding: 0;
+            padding: 15px;
             color: white;
             line-height: 1.8rem;
           }
