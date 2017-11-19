@@ -5,3 +5,7 @@
 @import "settings";
 
 @include foundation-everything();
+
+html, body {
+  overflow-x: hidden;
+}
