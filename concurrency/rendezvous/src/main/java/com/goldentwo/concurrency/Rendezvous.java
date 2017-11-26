@@ -8,27 +8,28 @@ class Rendezvous implements Runnable {
     private final BlockingQueue<Car> northQueue;
 
     private Direction direction;
-    private int counter;
     private int carsToDislocate;
 
     Rendezvous(Direction direction,
                int cardToDislocate) {
         this.direction = direction;
         this.carsToDislocate = cardToDislocate;
-        southQueue = new SynchronousQueue<>(true);
-        northQueue = new SynchronousQueue<>(true);
-        counter = 0;
+        this.southQueue = new SynchronousQueue<>(true);
+        this.northQueue = new SynchronousQueue<>(true);
     }
 
     @Override
     public void run() {
         while (carsToDislocate != 0) {
-            if (counter == 10) {
+            if (didTenCarsDislocate()) {
                 changeDirection();
-                counter = 0;
             }
             dislocate();
         }
+    }
+
+    private boolean didTenCarsDislocate() {
+        return carsToDislocate % 10 == 0;
     }
 
     private void dislocate() {
@@ -41,7 +42,6 @@ class Rendezvous implements Runnable {
                 car = southQueue.take();
                 System.out.println("[N --> S] Car" + car.getId());
             }
-            counter++;
             carsToDislocate--;
         } catch (InterruptedException ex) {
             ex.printStackTrace();

@@ -20,8 +20,7 @@ public class Car implements Runnable {
     @Override
     public void run() {
         try {
-            int sleepTime = RANDOM.nextInt(5000);
-            sleep(sleepTime);
+            sleep(RANDOM.nextInt(5000));
             if (direction == Direction.NORTH) {
                 rendezvous.addToNorthQueue(this);
             } else {
