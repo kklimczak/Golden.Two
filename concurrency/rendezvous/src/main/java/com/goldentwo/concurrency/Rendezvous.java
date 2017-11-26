@@ -33,14 +33,11 @@ class Rendezvous implements Runnable {
     }
 
     private void dislocate() {
-        Car car;
         try {
             if (direction == Direction.NORTH) {
-                car = northQueue.take();
-                System.out.println("[S --> N] Car" + car.getId());
+                this.northQueue.take();
             } else {
-                car = southQueue.take();
-                System.out.println("[N --> S] Car" + car.getId());
+                this.southQueue.take();
             }
             carsToDislocate--;
         } catch (InterruptedException ex) {

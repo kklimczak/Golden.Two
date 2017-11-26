@@ -26,6 +26,10 @@ public class Car implements Runnable {
             } else {
                 rendezvous.addToSouthQueue(this);
             }
+            System.out.println(this.direction == Direction.NORTH
+                    ? "[S --> N] Car" + this.id
+                    : "[N --> S] Car" + this.id
+            );
         } catch (InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
